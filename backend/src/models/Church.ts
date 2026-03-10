@@ -66,7 +66,7 @@ export class Church {
   @Column({ type: 'jsonb' })
   address!: ChurchAddress;
 
-  @Column({ type: 'geography', spatialFeatureType: 'Point', srid: 4326 })
+  @Column({ type: 'geography', spatialFeatureType: 'Point', srid: 4326, select: false })
   @Index({ spatial: true })
   location!: string; // PostGIS geography point
 

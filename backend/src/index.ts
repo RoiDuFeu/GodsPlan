@@ -4,6 +4,7 @@ import helmet from 'helmet';
 import dotenv from 'dotenv';
 import { initializeDatabase } from './config/database';
 import churchRoutes from './routes/churches';
+import churchSimpleRoutes from './routes/churches-simple';
 
 dotenv.config();
 
@@ -34,6 +35,7 @@ app.get('/health', (req: Request, res: Response) => {
 
 // API Routes
 app.use(`${API_PREFIX}/churches`, churchRoutes);
+app.use(`${API_PREFIX}/churches-simple`, churchSimpleRoutes); // Temporary: bypasses TypeORM geography issue
 
 // 404 handler
 app.use((req: Request, res: Response) => {

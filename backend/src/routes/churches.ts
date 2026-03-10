@@ -26,6 +26,26 @@ router.get('/', async (req: Request, res: Response) => {
     }
     
     queryBuilder
+      .select([
+        'church.id',
+        'church.name',
+        'church.description',
+        'church.address',
+        'church.latitude',
+        'church.longitude',
+        'church.contact',
+        'church.massSchedules',
+        'church.rites',
+        'church.languages',
+        'church.accessibility',
+        'church.photos',
+        'church.dataSources',
+        'church.reliabilityScore',
+        'church.isActive',
+        'church.createdAt',
+        'church.updatedAt',
+        'church.lastVerified',
+      ])
       .where('church.isActive = :isActive', { isActive: true })
       .orderBy('church.name', 'ASC')
       .skip(Number(offset))
@@ -76,6 +96,26 @@ router.get('/nearby', async (req: Request, res: Response) => {
     // PostGIS query to find churches within radius
     const churches = await churchRepository
       .createQueryBuilder('church')
+      .select([
+        'church.id',
+        'church.name',
+        'church.description',
+        'church.address',
+        'church.latitude',
+        'church.longitude',
+        'church.contact',
+        'church.massSchedules',
+        'church.rites',
+        'church.languages',
+        'church.accessibility',
+        'church.photos',
+        'church.dataSources',
+        'church.reliabilityScore',
+        'church.isActive',
+        'church.createdAt',
+        'church.updatedAt',
+        'church.lastVerified',
+      ])
       .where('church.isActive = :isActive', { isActive: true })
       .andWhere(
         `ST_DWithin(
