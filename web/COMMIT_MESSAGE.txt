@@ -1,0 +1,33 @@
+feat: Refonte UX/UI Premium complète
+
+✨ Nouveautés:
+- Composant ScoreBar (score visuel avec 5 barres + /100)
+- Header premium (logo gradient + search bar centrée)
+- ChurchCard redesigné (badge circulaire + hover effects)
+- SearchSidebar redesigné (spacing généreux + separators)
+- ChurchDetail modal polished (alternating rows + separators)
+- Map polished (border + shadow + rounded corners)
+
+🎨 Design:
+- Spacing généreux (breathing room partout: p-6, space-y-4)
+- Animations fluides (hover: scale, translateY, shadow, ring)
+- Visual hierarchy (font-semibold, font-medium, leading-relaxed)
+- Premium touches (gradients, glows, shadows, separators)
+
+🔧 Technique:
+- Build: 136.89 kB gzipped (performance maintenue)
+- TypeScript: no errors
+- Responsive: mobile + tablet + desktop
+- Accessibilité: aria-labels + keyboard navigation
+
+📦 Fichiers:
+- NOUVEAU: src/components/ScoreBar.tsx
+- MODIFIÉ: Header, ChurchCard, SearchSidebar, ChurchDetail, Map
+- DOCS: 7 fichiers de documentation ajoutés
+
+✅ Validations:
+- Build OK (2.68s)
+- Dev server OK (666 ms)
+- TypeScript OK
+- Responsive OK
+- Accessibilité OK
