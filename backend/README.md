@@ -100,20 +100,36 @@ Get detailed information for a specific church.
 ### Running Scrapers Manually
 
 ```bash
-npm run scrape
+# Google enrichment only
+npm run scrape:google
+
+# Google enrichment with local fixtures (no API key needed)
+npm run scrape:google -- --fixtures --church "Notre-Dame,Sacré-Cœur"
+
+# Full run (messes.info + Google)
+npm run scrape -- --with-messes
 ```
 
-This will:
-1. Scrape church data from configured sources (Messes.info, etc.)
-2. Geocode addresses using OpenStreetMap Nominatim
-3. Calculate reliability scores based on data completeness
-4. Save/update churches in the database
+Useful flags:
+- `--google-only` (already used by `scrape:google`)
+- `--with-messes` to scrape/refresh messes.info first
+- `--fixtures` to use local Google fixtures (for dev/tests)
+- `--church "Name1,Name2"` to target specific churches
+- `--limit N` to restrict number of churches
+
+This pipeline:
+1. Loads churches from DB (or refreshes with messes.info if requested)
+2. Enriches each church with Google data (name/address/GPS/hours/photos/reviews/rating)
+3. Computes cross-source confidence score (Google vs messes.info)
+4. Stores source metadata and scores in `churches.dataSources`
+5. Updates `churches.reliabilityScore`
+6. Generates `GOOGLE_ENRICHMENT_REPORT.md`
 
 ### Scraper Sources
 
 - **Messes.info** - Primary source for mass schedules in France
+- **Google Places API** - Enrichment source (address/GPS/hours/photos/reviews/rating)
 - **Diocèse de Paris** (TODO) - Official diocese website
-- **Google Maps** (TODO) - Supplementary data
 
 ### Adding a New Scraper
 
@@ -164,6 +180,8 @@ Key variables:
 - `POSTGRES_*` - Database connection
 - `PORT` - API port (default: 3000)
 - `SCRAPE_INTERVAL_HOURS` - Auto-scrape interval (default: 24)
+- `GOOGLE_PLACES_API_KEY` - Required for live Google Places enrichment
+- `GOOGLE_SCRAPER_USE_FIXTURES=true` - Force local fixtures mode (dev/tests)
 
 ## 📊 Database Schema
 

@@ -45,10 +45,11 @@ export interface ChurchAccessibility {
 }
 
 export interface DataSource {
-  name: string; // e.g., "messes.info", "diocese-paris"
+  name: string; // e.g., "messes.info", "diocese-paris", "google-places"
   url?: string;
   lastScraped: Date;
   reliability: number; // 0-100 score
+  metadata?: Record<string, unknown>;
 }
 
 @Entity('churches')
@@ -68,7 +69,7 @@ export class Church {
 
   @Column({ type: 'geography', spatialFeatureType: 'Point', srid: 4326, select: false })
   @Index({ spatial: true })
-  location!: string; // PostGIS geography point
+  location!: { type: 'Point'; coordinates: [number, number] }; // PostGIS geography point
 
   @Column({ type: 'decimal', precision: 10, scale: 7 })
   latitude!: number;
@@ -83,8 +84,7 @@ export class Church {
   massSchedules!: MassSchedule[];
 
   @Column({
-    type: 'enum',
-    enum: ChurchRite,
+    type: 'varchar',
     array: true,
     default: [ChurchRite.FRENCH_PAUL_VI],
   })

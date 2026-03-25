@@ -9,6 +9,14 @@ export interface ScraperConfig {
   rateLimit?: number; // milliseconds between requests
 }
 
+export interface ScrapedReview {
+  authorName?: string;
+  rating?: number;
+  text?: string;
+  relativeTimeDescription?: string;
+  time?: number;
+}
+
 export interface ScrapedChurch {
   name: string;
   address: {
@@ -35,13 +43,17 @@ export interface ScrapedChurch {
   languages?: string[];
   description?: string;
   photos?: string[];
+  openingHours?: string[];
+  rating?: number;
+  userRatingsTotal?: number;
+  reviews?: ScrapedReview[];
   sourceUrl: string;
 }
 
 export abstract class BaseScraper {
   protected config: ScraperConfig;
   protected axios: AxiosInstance;
-  protected lastRequestTime: number = 0;
+  protected lastRequestTime = 0;
 
   constructor(config: ScraperConfig) {
     this.config = {
@@ -62,27 +74,21 @@ export abstract class BaseScraper {
     });
   }
 
-  /**
-   * Rate limiting: wait before making a request
-   */
   protected async rateLimit(): Promise<void> {
     const now = Date.now();
     const timeSinceLastRequest = now - this.lastRequestTime;
-    
+
     if (timeSinceLastRequest < this.config.rateLimit!) {
       const waitTime = this.config.rateLimit! - timeSinceLastRequest;
       await new Promise((resolve) => setTimeout(resolve, waitTime));
     }
-    
+
     this.lastRequestTime = Date.now();
   }
 
-  /**
-   * Fetch HTML and return Cheerio instance
-   */
   protected async fetchPage(url: string): Promise<cheerio.CheerioAPI> {
     await this.rateLimit();
-    
+
     try {
       const response = await this.axios.get(url);
       return cheerio.load(response.data);
@@ -92,28 +98,18 @@ export abstract class BaseScraper {
     }
   }
 
-  /**
-   * Abstract method: scrape list of church URLs
-   */
   abstract scrapeChurchList(): Promise<string[]>;
-
-  /**
-   * Abstract method: scrape detailed information for a church
-   */
   abstract scrapeChurchDetails(url: string): Promise<ScrapedChurch | null>;
 
-  /**
-   * Run the full scraping process
-   */
   async scrape(): Promise<ScrapedChurch[]> {
     console.log(`🔍 Starting ${this.config.name} scraper...`);
-    
+
     try {
       const churchUrls = await this.scrapeChurchList();
       console.log(`📋 Found ${churchUrls.length} churches to scrape`);
-      
+
       const churches: ScrapedChurch[] = [];
-      
+
       for (const url of churchUrls) {
         try {
           const church = await this.scrapeChurchDetails(url);
@@ -125,7 +121,7 @@ export abstract class BaseScraper {
           console.error(`❌ Failed to scrape ${url}:`, error);
         }
       }
-      
+
       console.log(`✅ ${this.config.name} scraper completed: ${churches.length} churches`);
       return churches;
     } catch (error) {
