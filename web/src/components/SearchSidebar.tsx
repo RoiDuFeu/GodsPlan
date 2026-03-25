@@ -1,9 +1,11 @@
-import { useState, useEffect } from 'react';
-import { Search, MapPin, Loader2 } from 'lucide-react';
-import { Input } from './ui/input';
-import { Button } from './ui/button';
-import { ChurchCard } from './ChurchCard';
-import { useChurchStore } from '../store/useChurchStore';
+import { useEffect, useState } from 'react';
+import { MapPin, Loader2, Church } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import { Separator } from '@/components/ui/separator';
+import { ChurchCard } from '@/components/ChurchCard';
+import { ChurchListSkeleton } from '@/components/ChurchListSkeleton';
+import { useChurchStore } from '@/store/useChurchStore';
 
 interface SearchSidebarProps {
   onChurchSelect: (churchId: string) => void;
@@ -14,9 +16,7 @@ export function SearchSidebar({ onChurchSelect }: SearchSidebarProps) {
     churches,
     isLoading,
     error,
-    searchQuery,
     userLocation,
-    setSearchQuery,
     setUserLocation,
     loadChurches,
     loadNearbyChurches,
@@ -58,83 +58,92 @@ export function SearchSidebar({ onChurchSelect }: SearchSidebarProps) {
   };
 
   return (
-    <div className="w-full md:w-96 h-full bg-background border-r flex flex-col">
-      {/* Header */}
-      <div className="p-4 border-b">
-        <h1 className="text-2xl font-bold mb-4">GodsPlan</h1>
-        
-        {/* Search bar */}
-        <div className="relative mb-3">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-          <Input
-            type="text"
-            placeholder="Rechercher une église..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="pl-9"
-            aria-label="Rechercher une église"
-          />
+    <div className="flex h-full flex-col bg-background border-r">
+      {/* Sticky Header */}
+      <div className="flex-shrink-0 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+        <div className="p-6 space-y-4">
+          {/* Geolocation button */}
+          <Button
+            onClick={handleGeolocation}
+            disabled={isLocating}
+            variant={userLocation ? "default" : "outline"}
+            className="w-full justify-start gap-2.5 h-12 shadow-sm"
+            aria-label="Trouver les églises à proximité"
+          >
+            {isLocating ? (
+              <>
+                <Loader2 className="w-4 h-4 animate-spin" />
+                <span className="font-medium">Localisation en cours...</span>
+              </>
+            ) : userLocation ? (
+              <>
+                <MapPin className="w-4 h-4" />
+                <span className="font-medium">Actualiser ma position</span>
+              </>
+            ) : (
+              <>
+                <MapPin className="w-4 h-4" />
+                <span className="font-medium">Me localiser</span>
+              </>
+            )}
+          </Button>
         </div>
-
-        {/* Geolocation button */}
-        <Button
-          onClick={handleGeolocation}
-          disabled={isLocating}
-          variant="outline"
-          className="w-full"
-          aria-label="Trouver les églises à proximité"
-        >
-          {isLocating ? (
-            <>
-              <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-              Localisation...
-            </>
-          ) : (
-            <>
-              <MapPin className="w-4 h-4 mr-2" />
-              {userLocation ? 'Actualiser ma position' : 'Me localiser'}
-            </>
-          )}
-        </Button>
       </div>
 
       {/* Results */}
-      <div className="flex-1 overflow-y-auto">
-        {error && (
-          <div className="p-4 text-sm text-destructive bg-destructive/10 border-b">
-            {error}
-          </div>
-        )}
+      <ScrollArea className="flex-1">
+        <div className="p-6">
+          {error && (
+            <div className="mb-4 rounded-lg border-2 border-destructive/50 bg-destructive/10 p-4 text-sm text-destructive">
+              <p className="font-semibold">Erreur</p>
+              <p className="text-xs mt-1 leading-relaxed">{error}</p>
+            </div>
+          )}
 
-        {isLoading && !churches.length && (
-          <div className="flex items-center justify-center p-8">
-            <Loader2 className="w-6 h-6 animate-spin text-muted-foreground" />
-          </div>
-        )}
-
-        {!isLoading && !error && filteredChurches.length === 0 && searchQuery && (
-          <div className="p-4 text-sm text-muted-foreground text-center">
-            Aucune église trouvée pour "{searchQuery}"
-          </div>
-        )}
-
-        <div className="p-4 space-y-3">
-          {filteredChurches.map((church) => (
-            <ChurchCard
-              key={church.id}
-              church={church}
-              onClick={() => onChurchSelect(church.id)}
-              isSelected={selectedChurch?.id === church.id}
-            />
-          ))}
+          {isLoading && !churches.length ? (
+            <ChurchListSkeleton />
+          ) : filteredChurches.length === 0 ? (
+            <div className="flex flex-col items-center justify-center py-16 text-center px-4">
+              <div className="rounded-full bg-muted p-6 mb-6">
+                <Church className="h-10 w-10 text-muted-foreground" />
+              </div>
+              <h3 className="font-semibold text-lg mb-2 leading-tight">Aucune église trouvée</h3>
+              <p className="text-sm text-muted-foreground max-w-[280px] leading-relaxed">
+                Essayez de vous localiser ou modifiez votre recherche pour découvrir des églises à proximité
+              </p>
+            </div>
+          ) : (
+            <div className="space-y-4 animate-slide-in">
+              {filteredChurches.map((church, index) => (
+                <div key={church.id}>
+                  <ChurchCard
+                    church={church}
+                    onClick={() => onChurchSelect(church.id)}
+                    isSelected={selectedChurch?.id === church.id}
+                  />
+                  {/* Separator entre les cards (sauf après la dernière) */}
+                  {index < filteredChurches.length - 1 && (
+                    <Separator className="my-4" />
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
         </div>
+      </ScrollArea>
 
-        {!isLoading && churches.length > 0 && (
-          <div className="p-4 text-xs text-muted-foreground text-center border-t">
-            {filteredChurches.length} église{filteredChurches.length > 1 ? 's' : ''} affichée{filteredChurches.length > 1 ? 's' : ''}
+      {/* Footer Stats */}
+      {!isLoading && filteredChurches.length > 0 && (
+        <>
+          <Separator />
+          <div className="flex-shrink-0 p-4 text-center bg-muted/30">
+            <p className="text-sm text-muted-foreground leading-relaxed">
+              <span className="font-semibold text-foreground">{filteredChurches.length}</span>
+              {' '}église{filteredChurches.length > 1 ? 's' : ''} affichée{filteredChurches.length > 1 ? 's' : ''}
+            </p>
           </div>
-        )}
-      </div>
+        </>
+      )}
     </div>
   );
 }

@@ -1,6 +1,6 @@
 import type { Church, ChurchListItem, NearbySearchParams } from './types';
 
-const API_BASE_URL = 'http://localhost:3001/api/v1';
+const API_BASE_URL = 'https://godsplan-api.montparnas.fr/api/v1';
 
 export class ApiError extends Error {
   status?: number;
