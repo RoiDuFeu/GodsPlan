@@ -1,0 +1,20 @@
+{
+  "timestamp": "2026-03-27T16:07:37.342Z",
+  "total": 10,
+  "active": 10,
+  "coverage": {
+    "coordinates": 1,
+    "schedules": 0.7,
+    "phone": 0.8,
+    "website": 1,
+    "photos": 0
+  },
+  "avgSchedulesPerChurch": 2.2,
+  "avgPhotosPerChurch": 0,
+  "avgReliabilityScore": 83.3,
+  "sources": {
+    "messes.info": 0,
+    "google-maps": 0,
+    "both": 2
+  }
+}

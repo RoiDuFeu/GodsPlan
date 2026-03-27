@@ -1,0 +1,22 @@
+{
+  "35 rue du chevaleret, 75013 paris, france": {
+    "lat": 48.8269122,
+    "lng": 2.3774825,
+    "cachedAt": "2026-03-27T15:44:12.591Z"
+  },
+  "place du panthéon, 75005 paris, france": {
+    "lat": 48.8464478,
+    "lng": 2.3448919,
+    "cachedAt": "2026-03-27T15:44:13.588Z"
+  },
+  "23 rue cler, 75007 paris, france": {
+    "lat": 48.8578533,
+    "lng": 2.3059507,
+    "cachedAt": "2026-03-27T15:44:14.628Z"
+  },
+  "10 rue saint-martin, 75004 paris, france": {
+    "lat": 48.8577687,
+    "lng": 2.3496492,
+    "cachedAt": "2026-03-27T15:44:16.000Z"
+  }
+}

@@ -11,7 +11,7 @@ export const AppDataSource = new DataSource({
   username: process.env.POSTGRES_USER || 'godsplan',
   password: process.env.POSTGRES_PASSWORD || 'godsplan_dev',
   database: process.env.POSTGRES_DB || 'godsplan',
-  synchronize: process.env.NODE_ENV === 'development', // Auto-sync schema in dev only
+  synchronize: true, // Auto-sync schema (set to false in production after first run)
   logging: process.env.NODE_ENV === 'development',
   entities: [path.join(__dirname, '../models/**/*.{ts,js}')],
   migrations: [path.join(__dirname, '../migrations/**/*.{ts,js}')],

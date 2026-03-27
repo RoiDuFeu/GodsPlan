@@ -1,0 +1,93 @@
+#!/usr/bin/env tsx
+
+import { MessesInfoScraper } from './scrapers/MessesInfoScraper';
+
+async function runTest() {
+  console.log('🚀 Testing MessesInfoScraper');
+  console.log('═'.repeat(60));
+
+  const scraper = new MessesInfoScraper();
+
+  try {
+    console.log('\n📋 Step 1: Fetching church list...');
+    const urls = await scraper.scrapeChurchList();
+    console.log(`✅ Found ${urls.length} churches`);
+
+    if (urls.length === 0) {
+      console.log('❌ No churches found, aborting test');
+      process.exit(1);
+    }
+
+    // Test first 5 churches
+    const testUrls = urls.slice(0, 5);
+    console.log(`\n🔍 Testing first 5 churches:\n`);
+
+    let totalSchedules = 0;
+    let churchesWithSchedules = 0;
+    let churchesWithoutSchedules = 0;
+
+    for (const url of testUrls) {
+      console.log(`\n${'─'.repeat(60)}`);
+      console.log(`📍 ${url}`);
+
+      try {
+        const church = await scraper.scrapeChurchDetails(url);
+
+        if (!church) {
+          console.log('❌ Failed to scrape church');
+          continue;
+        }
+
+        const scheduleCount = church.massSchedules?.length || 0;
+        totalSchedules += scheduleCount;
+
+        if (scheduleCount > 0) {
+          churchesWithSchedules++;
+        } else {
+          churchesWithoutSchedules++;
+        }
+
+        console.log(`✅ ${church.name}`);
+        console.log(`   Address: ${church.address.street}, ${church.address.postalCode} ${church.address.city}`);
+        console.log(`   📅 Schedules: ${scheduleCount}`);
+        console.log(`   🙏 Rites: ${church.rites?.join(', ') || 'none'}`);
+        console.log(`   🗣️  Languages: ${church.languages?.join(', ') || 'none'}`);
+        console.log(`   📞 Phone: ${church.contact?.phone || '❌'}`);
+        console.log(`   🌐 Website: ${church.contact?.website || '❌'}`);
+        console.log(`   📧 Email: ${church.contact?.email || '❌'}`);
+
+        if (scheduleCount > 0) {
+          console.log(`\n   📅 Schedule details:`);
+          church.massSchedules!.slice(0, 3).forEach((s, i) => {
+            const days = ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'];
+            console.log(`      ${i + 1}. ${days[s.dayOfWeek]} ${s.time} - ${s.rite}`);
+            if (s.note) {
+              console.log(`         Note: ${s.note}`);
+            }
+          });
+          if (scheduleCount > 3) {
+            console.log(`      ... and ${scheduleCount - 3} more`);
+          }
+        }
+      } catch (error) {
+        console.log(`❌ Error: ${error instanceof Error ? error.message : String(error)}`);
+      }
+    }
+
+    console.log(`\n\n${'═'.repeat(60)}`);
+    console.log('📊 SUMMARY REPORT');
+    console.log('═'.repeat(60));
+    console.log(`✅ Churches with schedules: ${churchesWithSchedules}/${testUrls.length} (${Math.round((churchesWithSchedules / testUrls.length) * 100)}%)`);
+    console.log(`❌ Churches without schedules: ${churchesWithoutSchedules}/${testUrls.length} (${Math.round((churchesWithoutSchedules / testUrls.length) * 100)}%)`);
+    console.log(`📅 Total schedules: ${totalSchedules}`);
+    console.log(`📊 Average schedules/church: ${(totalSchedules / testUrls.length).toFixed(1)}`);
+    console.log('═'.repeat(60));
+
+    process.exit(0);
+  } catch (error) {
+    console.error('💥 Fatal error:', error);
+    process.exit(1);
+  }
+}
+
+runTest();

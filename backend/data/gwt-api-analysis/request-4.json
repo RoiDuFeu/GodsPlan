@@ -1,0 +1,34 @@
+{
+  "url": "https://www.messes.info/gwtRequest",
+  "method": "POST",
+  "headers": {
+    "x-gwt-permutation": "13830B2F5C82EC00266FEF2C5B38D0BE",
+    "sec-ch-ua-platform": "\"Linux\"",
+    "referer": "https://www.messes.info/lieu/6-sainte-clothilde",
+    "accept-language": "en-US,en;q=0.9",
+    "sec-ch-ua": "\"Not-A.Brand\";v=\"24\", \"Chromium\";v=\"146\"",
+    "sec-ch-ua-mobile": "?0",
+    "pageurl": "https://www.messes.info/lieu/6-sainte-clothilde",
+    "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/146.0.0.0 Safari/537.36",
+    "content-type": "application/json; charset=UTF-8",
+    "accept": "*/*",
+    "cookie": "infoEgliseFormat=gwt; _pk_ses..27d9=1; _pk_id.6.27d9=5ef1e4a871df8e63.1774627280.; _pk_ses.6.27d9=1; didomi_token=eyJ1c2VyX2lkIjoiMTlkMzAwNzUtNTYzNy02YzEzLThjZDUtZGE5ODk0MGFkM2U1IiwiY3JlYXRlZCI6IjIwMjYtMDMtMjdUMTY6MDE6MjAuMjI3WiIsInVwZGF0ZWQiOiIyMDI2LTAzLTI3VDE2OjAxOjIwLjIyOFoiLCJ2ZXJzaW9uIjpudWxsfQ==; _ga=GA1.2.1959818294.1774627280; _gid=GA1.2.242301406.1774627280; _gat_UA-12886932-9=1; _ga_D0KPCFM5PR=GS2.2.s1774627281$o1$g0$t1774627287$j60$l0$h0",
+    "origin": "https://www.messes.info"
+  },
+  "postData": "{\"F\":\"cef.kephas.shared.request.AppRequestFactory\",\"I\":[{\"O\":\"byK5HXBii1__f1hnIyBfLn0mBtE=\"},{\"O\":\"mpVsggZv0gUZFkRBsH9wQy4qeUc=\"}]}",
+  "response": {
+    "status": 200,
+    "headers": {
+      "access-control-allow-origin": "https://www.messes.info",
+      "cache-control": "no-cache",
+      "content-encoding": "gzip",
+      "content-length": "47",
+      "content-type": "application/json;charset=utf-8",
+      "date": "Fri, 27 Mar 2026 16:01:31 GMT",
+      "server": "Google Frontend",
+      "vary": "Accept-Encoding",
+      "x-cloud-trace-context": "2d9c710d351096783e99488fec208f50"
+    },
+    "body": "{\"S\":[true,true],\"I\":[null,null]}"
+  }
+}

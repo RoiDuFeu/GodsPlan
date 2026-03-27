@@ -1,0 +1,156 @@
+#!/usr/bin/env tsx
+
+import { GoogleMapsScraper } from './scrapers/GoogleMapsScraper';
+import { Church } from './models/Church';
+
+// 3 églises de test pour validation rapide
+const testChurches: Partial<Church>[] = [
+  {
+    name: 'Cathédrale Notre-Dame de Paris',
+    address: {
+      street: '6 Parvis Notre-Dame',
+      postalCode: '75004',
+      city: 'Paris',
+    },
+  },
+  {
+    name: 'Église Saint-Sulpice',
+    address: {
+      street: 'Place Saint-Sulpice',
+      postalCode: '75006',
+      city: 'Paris',
+    },
+  },
+  {
+    name: 'Église de la Madeleine',
+    address: {
+      street: 'Place de la Madeleine',
+      postalCode: '75008',
+      city: 'Paris',
+    },
+  },
+];
+
+interface TestResult {
+  name: string;
+  success: boolean;
+  hasPhone: boolean;
+  hasWebsite: boolean;
+  hasEmail: boolean;
+  photoCount: number;
+  hasRating: boolean;
+  error?: string;
+}
+
+async function runTest() {
+  console.log('🚀 Starting Google Maps HTML Scraper Quick Test');
+  console.log(`Testing ${testChurches.length} churches...\n`);
+
+  const scraper = new GoogleMapsScraper({
+    useFixtures: false,
+    headless: true,
+    rateLimitMs: 3000,
+    timeoutMs: 15000,
+    maxPhotos: 8,
+    maxRetries: 2,
+  });
+
+  const results: TestResult[] = [];
+  let successCount = 0;
+
+  for (let i = 0; i < testChurches.length; i++) {
+    const church = testChurches[i];
+    const num = i + 1;
+
+    console.log(`\n[${num}/${testChurches.length}] Testing: ${church.name}`);
+    console.log('─'.repeat(60));
+
+    try {
+      const scraped = await scraper.enrichChurch(church as Church);
+
+      if (!scraped) {
+        results.push({
+          name: church.name!,
+          success: false,
+          hasPhone: false,
+          hasWebsite: false,
+          hasEmail: false,
+          photoCount: 0,
+          hasRating: false,
+          error: 'No data returned',
+        });
+        console.log('❌ Failed: No data returned');
+        continue;
+      }
+
+      const hasPhone = !!scraped.contact?.phone;
+      const hasWebsite = !!scraped.contact?.website;
+      const hasEmail = !!scraped.contact?.email;
+      const photoCount = scraped.photos?.length || 0;
+      const hasRating = !!scraped.rating;
+
+      results.push({
+        name: church.name!,
+        success: true,
+        hasPhone,
+        hasWebsite,
+        hasEmail,
+        photoCount,
+        hasRating,
+      });
+
+      successCount++;
+
+      console.log(`✅ Success:`);
+      console.log(`   📞 Phone: ${hasPhone ? scraped.contact!.phone : '❌ Not found'}`);
+      console.log(`   🌐 Website: ${hasWebsite ? scraped.contact!.website : '❌ Not found'}`);
+      console.log(`   📧 Email: ${hasEmail ? scraped.contact!.email : '❌ Not found'}`);
+      console.log(`   📸 Photos: ${photoCount}`);
+      console.log(`   ⭐ Rating: ${hasRating ? `${scraped.rating} (${scraped.userRatingsTotal} reviews)` : '❌ Not found'}`);
+      console.log(`   🗺️  Place ID: ${scraped.placeId || '❌'}`);
+
+    } catch (error) {
+      results.push({
+        name: church.name!,
+        success: false,
+        hasPhone: false,
+        hasWebsite: false,
+        hasEmail: false,
+        photoCount: 0,
+        hasRating: false,
+        error: error instanceof Error ? error.message : String(error),
+      });
+
+      console.log(`❌ Failed: ${error instanceof Error ? error.message : String(error)}`);
+    }
+  }
+
+  await scraper.close();
+
+  // Summary report
+  console.log('\n\n' + '═'.repeat(60));
+  console.log('📊 QUICK TEST REPORT');
+  console.log('═'.repeat(60));
+
+  const phoneCount = results.filter((r) => r.hasPhone).length;
+  const websiteCount = results.filter((r) => r.hasWebsite).length;
+  const emailCount = results.filter((r) => r.hasEmail).length;
+  const photoTotal = results.reduce((sum, r) => sum + r.photoCount, 0);
+  const ratingCount = results.filter((r) => r.hasRating).length;
+
+  console.log(`\n✅ Success rate: ${successCount}/${testChurches.length} (${Math.round((successCount / testChurches.length) * 100)}%)`);
+  console.log(`\n📞 Phone numbers: ${phoneCount}/${testChurches.length} (${Math.round((phoneCount / testChurches.length) * 100)}%)`);
+  console.log(`🌐 Websites: ${websiteCount}/${testChurches.length} (${Math.round((websiteCount / testChurches.length) * 100)}%)`);
+  console.log(`📧 Emails: ${emailCount}/${testChurches.length} (${Math.round((emailCount / testChurches.length) * 100)}%)`);
+  console.log(`📸 Photos: ${photoTotal} total (avg ${Math.round(photoTotal / testChurches.length)} per church)`);
+  console.log(`⭐ Ratings: ${ratingCount}/${testChurches.length} (${Math.round((ratingCount / testChurches.length) * 100)}%)`);
+
+  console.log('\n' + '═'.repeat(60));
+
+  process.exit(successCount === testChurches.length ? 0 : 1);
+}
+
+runTest().catch((error) => {
+  console.error('💥 Fatal error:', error);
+  process.exit(1);
+});
