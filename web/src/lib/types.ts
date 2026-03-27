@@ -5,6 +5,13 @@ export interface Address {
   district?: string;
 }
 
+export interface ConfessionSchedule {
+  dayOfWeek: number; // 0=Sunday, 1=Monday, ..., 6=Saturday
+  startTime: string;
+  endTime: string;
+  note?: string;
+}
+
 export interface Church {
   id: string;
   name: string;
@@ -12,6 +19,7 @@ export interface Church {
   latitude: string;
   longitude: string;
   massSchedules: MassSchedule[];
+  confessionSchedules?: ConfessionSchedule[];
   dataSources: DataSource[];
   reliabilityScore: number;
   createdAt: string;
@@ -53,6 +61,7 @@ export interface ChurchListItem {
   longitude: string;
   reliabilityScore: number;
   distance?: number; // in meters, computed client-side
+  nextMassTime?: string; // e.g. "18:30"
 }
 
 export interface NearbySearchParams {

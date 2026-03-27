@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&amp;family=Manrope:wght@200;300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "secondary": "#a7c8ff",
+            "outline": "#8d919a",
+            "on-primary": "#3c2f00",
+            "on-surface-variant": "#c3c6d1",
+            "surface-container-lowest": "#0d0e13",
+            "on-error-container": "#ffdad6",
+            "on-secondary-container": "#93b6f1",
+            "error": "#ffb4ab",
+            "surface-dim": "#121318",
+            "on-tertiary": "#2f3132",
+            "surface-variant": "#34343a",
+            "surface-container-high": "#292a2f",
+            "on-tertiary-container": "#9a9b9d",
+            "on-background": "#e3e1e9",
+            "surface-container": "#1e1f25",
+            "surface-tint": "#e9c349",
+            "tertiary-fixed": "#e2e2e4",
+            "on-primary-container": "#bb981f",
+            "primary-fixed": "#ffe088",
+            "on-secondary": "#003061",
+            "on-surface": "#e3e1e9",
+            "surface-container-highest": "#34343a",
+            "on-tertiary-fixed-variant": "#454749",
+            "primary-fixed-dim": "#e9c349",
+            "secondary-fixed": "#d5e3ff",
+            "inverse-surface": "#e3e1e9",
+            "tertiary-fixed-dim": "#c6c6c8",
+            "on-secondary-fixed": "#001b3c",
+            "surface": "#121318",
+            "on-secondary-fixed-variant": "#1f477b",
+            "outline-variant": "#43474f",
+            "background": "#121318",
+            "on-primary-fixed": "#241a00",
+            "on-error": "#690005",
+            "tertiary-container": "#313335",
+            "surface-bright": "#38393f",
+            "tertiary": "#c6c6c8",
+            "error-container": "#93000a",
+            "surface-container-low": "#1a1b21",
+            "on-primary-fixed-variant": "#574500",
+            "secondary-container": "#1f477b",
+            "primary": "#e9c349",
+            "primary-container": "#403200",
+            "secondary-fixed-dim": "#a7c8ff",
+            "inverse-primary": "#735c00",
+            "on-tertiary-fixed": "#1a1c1d",
+            "inverse-on-surface": "#2f3036"
+          },
+          fontFamily: {
+            "headline": ["Manrope"],
+            "body": ["Inter"],
+            "label": ["Inter"]
+          },
+          borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+        },
+      },
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+    }
+    .glass-card {
+      background: rgba(30, 31, 37, 0.7);
+      backdrop-filter: blur(24px);
+    }
+    .editorial-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+    }
+    @media (max-width: 768px) {
+      .editorial-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body class="bg-surface-container-lowest font-body text-on-surface overflow-x-hidden">
+<!-- Main Viewport Wrapper -->
+<div class="relative min-h-screen flex items-center justify-center py-12 px-6 overflow-hidden">
+<!-- Background Image with Soft Gold Overlay -->
+<div class="absolute inset-0 z-0">
+<img class="w-full h-full object-cover opacity-40 scale-105" data-alt="atmospheric dark moody gothic cathedral interior with sunlight streaming through stained glass creating golden dust motes" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAaqNGIGVMvxI7qEGbMKJOgixaO1fgi0eEImjSpQWPPrWFy7XauvPYlvh847a7m50o2xhXXTOWtqbZRyGpwunFdRpous11B7eMUbv_pOuYM782Tafz8zb-IH-osQusF9geqRPMmkiegEAnbD9Ei75dRX78m1Ra6VwGEVTOp-5pxl7GFK3XQ1SfZnVC1ItAdcnOx6IAoyMgQNH7U3Ht4Bu9MDOiSOU4Aqyq9x9cTG3segmWUGlUw3lrr0tzDpmxAAkD5w7kYwJBcB6g"/>
+<div class="absolute inset-0 bg-gradient-to-b from-[#121318]/90 via-transparent to-[#121318]"></div>
+<div class="absolute inset-0 bg-[#403200]/10 mix-blend-overlay"></div>
+</div>
+<!-- Registration Container -->
+<div class="relative z-10 w-full max-w-5xl editorial-grid glass-card rounded-xl overflow-hidden shadow-2xl border border-white/5">
+<!-- Left Column: Visual & Branding -->
+<div class="hidden md:flex flex-col justify-between p-12 bg-secondary-container/30 relative overflow-hidden">
+<div class="relative z-10">
+<div class="text-primary font-headline text-3xl font-extrabold tracking-tighter mb-8">
+            Sovereign Essence
+          </div>
+<h1 class="font-headline text-display-lg text-5xl font-light leading-tight mb-6 tracking-tight text-white">
+            Enter the <span class="text-primary font-bold">Sanctuary</span>
+</h1>
+<p class="text-on-surface-variant text-lg font-light max-w-xs leading-relaxed opacity-80">
+            A curated space for the divine pursuit of wisdom and stillness. Begin your journey into the sacred archives.
+          </p>
+</div>
+<div class="relative z-10">
+<div class="flex items-center gap-4 text-primary mb-2">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">auto_stories</span>
+<span class="font-label text-[10px] uppercase tracking-[0.2em] font-semibold text-secondary">Sacred Protocol</span>
+</div>
+<div class="text-on-surface-variant text-sm font-light italic">
+            "The soul is the mirror of the infinite."
+          </div>
+</div>
+<!-- Decorative Element -->
+<div class="absolute -bottom-20 -right-20 w-80 h-80 bg-primary/10 rounded-full blur-[100px]"></div>
+</div>
+<!-- Right Column: Form -->
+<div class="p-8 md:p-12 lg:p-16 flex flex-col justify-center bg-surface-dim/40">
+<div class="mb-10 text-center md:text-left">
+<h2 class="font-headline text-2xl font-semibold text-white mb-2">Create Account</h2>
+<p class="text-on-surface-variant text-sm font-light">Establish your presence within the Divine Plan.</p>
+</div>
+<form action="#" class="space-y-8">
+<!-- Full Name -->
+<div class="relative group">
+<label class="block font-label text-[11px] uppercase tracking-[0.1em] text-outline mb-1">Full Name</label>
+<input class="w-full bg-transparent border-0 border-b-2 border-surface-variant py-3 px-0 text-on-surface focus:ring-0 focus:border-primary transition-all duration-400 font-light placeholder:text-surface-variant/50" placeholder="Constantine Valerius" type="text"/>
+</div>
+<!-- Email -->
+<div class="relative group">
+<label class="block font-label text-[11px] uppercase tracking-[0.1em] text-outline mb-1">Sacred Contact (Email)</label>
+<input class="w-full bg-transparent border-0 border-b-2 border-surface-variant py-3 px-0 text-on-surface focus:ring-0 focus:border-primary transition-all duration-400 font-light placeholder:text-surface-variant/50" placeholder="seeker@sovereign.essence" type="email"/>
+</div>
+<!-- Password -->
+<div class="relative group">
+<label class="block font-label text-[11px] uppercase tracking-[0.1em] text-outline mb-1">Password</label>
+<input class="w-full bg-transparent border-0 border-b-2 border-surface-variant py-3 px-0 text-on-surface focus:ring-0 focus:border-primary transition-all duration-400 font-light placeholder:text-surface-variant/50" placeholder="••••••••••••" type="password"/>
+</div>
+<!-- Preferred Language/Rite -->
+<div>
+<label class="block font-label text-[11px] uppercase tracking-[0.1em] text-outline mb-4">Preferred Language / Rite</label>
+<div class="grid grid-cols-2 gap-3">
+<button class="flex items-center justify-between px-4 py-3 rounded-lg border border-outline-variant/20 bg-surface-container-high/40 hover:bg-surface-container-highest transition-colors group" type="button">
+<span class="text-xs font-medium text-on-surface">Latin</span>
+<span class="material-symbols-outlined text-primary text-sm opacity-0 group-focus:opacity-100 transition-opacity">check_circle</span>
+</button>
+<button class="flex items-center justify-between px-4 py-3 rounded-lg border border-outline-variant/20 bg-surface-container-high/40 hover:bg-surface-container-highest transition-colors group" type="button">
+<span class="text-xs font-medium text-on-surface">French</span>
+<span class="material-symbols-outlined text-primary text-sm opacity-0 group-focus:opacity-100 transition-opacity">check_circle</span>
+</button>
+<button class="flex items-center justify-between px-4 py-3 rounded-lg border border-outline-variant/20 bg-surface-container-high/40 hover:bg-surface-container-highest transition-colors group" type="button">
+<span class="text-xs font-medium text-on-surface">English</span>
+<span class="material-symbols-outlined text-primary text-sm opacity-0 group-focus:opacity-100 transition-opacity">check_circle</span>
+</button>
+<button class="flex items-center justify-between px-4 py-3 rounded-lg border border-outline-variant/20 bg-surface-container-high/40 hover:bg-surface-container-highest transition-colors group" type="button">
+<span class="text-xs font-medium text-on-surface">Greek</span>
+<span class="material-symbols-outlined text-primary text-sm opacity-0 group-focus:opacity-100 transition-opacity">check_circle</span>
+</button>
+</div>
+</div>
+<!-- Submit Button -->
+<div class="pt-4">
+<button class="w-full bg-on-secondary-fixed-variant hover:bg-secondary-container text-primary font-headline font-bold py-4 rounded-lg flex items-center justify-center gap-2 group transition-all duration-500 shadow-lg shadow-black/40" type="submit">
+              Create Account
+              <span class="material-symbols-outlined group-hover:translate-x-1 transition-transform">arrow_right_alt</span>
+</button>
+</div>
+<!-- Footer Link -->
+<div class="text-center pt-2">
+<p class="text-on-surface-variant text-xs font-light tracking-wide">
+              Already have an account? 
+              <a class="text-primary font-semibold hover:underline underline-offset-4 ml-1 transition-all" href="#">Sign In</a>
+</p>
+</div>
+</form>
+</div>
+</div>
+<!-- Background Metadata Decor -->
+<div class="absolute bottom-8 left-8 hidden lg:block">
+<div class="flex flex-col gap-1">
+<span class="font-label text-[9px] uppercase tracking-[0.3em] text-outline">Established</span>
+<span class="font-headline text-xs font-bold text-on-surface-variant tracking-widest">MMXXIV</span>
+</div>
+</div>
+<div class="absolute top-8 right-8 hidden lg:block">
+<div class="flex items-center gap-6">
+<a class="font-label text-[9px] uppercase tracking-[0.2em] text-on-surface-variant hover:text-primary transition-colors" href="#">Documentation</a>
+<a class="font-label text-[9px] uppercase tracking-[0.2em] text-on-surface-variant hover:text-primary transition-colors" href="#">Privacy</a>
+<a class="font-label text-[9px] uppercase tracking-[0.2em] text-on-surface-variant hover:text-primary transition-colors" href="#">The Order</a>
+</div>
+</div>
+</div>
+</body></html>

@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;family=Manrope:wght@200;300;400;500;600;700;800&amp;family=Lora:ital,wght@0,400;0,500;1,400&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    }
+    .serif-text {
+      font-family: 'Lora', serif;
+    }
+    .glass-effect {
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+    }
+    /* Hide scrollbar but keep functionality */
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+  </style>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "secondary-container": "#1f477b",
+            "on-background": "#e3e1e9",
+            "surface-container-lowest": "#0d0e13",
+            "surface-container-high": "#292a2f",
+            "surface-bright": "#38393f",
+            "on-secondary": "#003061",
+            "background": "#121318",
+            "primary-fixed-dim": "#e9c349",
+            "on-tertiary-fixed-variant": "#454749",
+            "tertiary-container": "#313335",
+            "surface-tint": "#e9c349",
+            "primary-fixed": "#ffe088",
+            "on-secondary-fixed": "#001b3c",
+            "on-primary-fixed": "#241a00",
+            "tertiary-fixed": "#e2e2e4",
+            "on-primary": "#3c2f00",
+            "outline": "#8d919a",
+            "on-secondary-container": "#93b6f1",
+            "secondary-fixed": "#d5e3ff",
+            "outline-variant": "#43474f",
+            "surface-dim": "#121318",
+            "secondary-fixed-dim": "#a7c8ff",
+            "on-tertiary-container": "#9a9b9d",
+            "on-secondary-fixed-variant": "#1f477b",
+            "primary-container": "#403200",
+            "on-primary-fixed-variant": "#574500",
+            "on-error-container": "#ffdad6",
+            "surface-container": "#1e1f25",
+            "tertiary-fixed-dim": "#c6c6c8",
+            "tertiary": "#c6c6c8",
+            "surface-container-highest": "#34343a",
+            "error-container": "#93000a",
+            "on-tertiary": "#2f3132",
+            "on-surface": "#e3e1e9",
+            "surface": "#121318",
+            "inverse-primary": "#735c00",
+            "inverse-surface": "#e3e1e9",
+            "on-surface-variant": "#c3c6d1",
+            "on-primary-container": "#bb981f",
+            "surface-variant": "#34343a",
+            "secondary": "#a7c8ff",
+            "primary": "#e9c349",
+            "on-tertiary-fixed": "#1a1c1d",
+            "inverse-on-surface": "#2f3036",
+            "error": "#ffb4ab",
+            "surface-container-low": "#1a1b21",
+            "on-error": "#690005"
+          },
+          fontFamily: {
+            "headline": ["Manrope"],
+            "body": ["Inter"],
+            "label": ["Inter"]
+          },
+          borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+        },
+      },
+    }
+  </script>
+</head>
+<body class="bg-background text-on-surface font-body selection:bg-primary/30 selection:text-primary">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 bg-[#121318]/70 backdrop-blur-3xl flex justify-between items-center px-8 h-20 w-full">
+<div class="flex items-center gap-4">
+<span class="text-2xl font-bold tracking-tighter text-[#e9c349] font-headline">GodsPlan</span>
+</div>
+<div class="hidden md:flex items-center space-x-8">
+<nav class="flex space-x-8 text-sm font-medium tracking-wide">
+<a class="text-slate-400 hover:text-[#e9c349] transition-colors duration-400" href="#">Discover</a>
+<a class="text-slate-400 hover:text-[#e9c349] transition-colors duration-400" href="#">Parishes</a>
+<a class="text-[#e9c349] font-bold" href="#">Today's Sacred Lectures</a>
+</nav>
+<div class="h-6 w-[1px] bg-outline-variant/30"></div>
+<button class="text-[#e9c349] flex items-center">
+<span class="material-symbols-outlined" data-icon="account_circle">account_circle</span>
+</button>
+</div>
+<!-- Mobile Menu Toggle (Simplified) -->
+<div class="md:hidden">
+<span class="material-symbols-outlined text-[#e9c349]" data-icon="menu">menu</span>
+</div>
+</header>
+<div class="flex min-h-screen pt-20">
+<!-- SideNavBar -->
+<aside class="hidden md:flex h-full w-72 fixed left-0 top-20 flex-col p-6 space-y-8 bg-[#121318]">
+<div class="mb-4">
+<h2 class="text-[#e9c349] font-bold font-headline uppercase tracking-[0.1em] text-[0.6875rem] mb-1">Sovereign Essence</h2>
+<p class="text-slate-500 text-[0.625rem] tracking-wider uppercase">The Digital Sanctuary</p>
+</div>
+<nav class="flex flex-col space-y-2">
+<a class="flex items-center gap-3 px-4 py-3 text-slate-400 hover:text-white hover:bg-white/5 transition-all duration-400 rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="explore">explore</span>
+<span class="font-manrope uppercase tracking-[0.1em] text-[0.6875rem]">Discover</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-400 hover:text-white hover:bg-white/5 transition-all duration-400 rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="bookmark">bookmark</span>
+<span class="font-manrope uppercase tracking-[0.1em] text-[0.6875rem]">Saved</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-400 hover:text-white hover:bg-white/5 transition-all duration-400 rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="schedule">schedule</span>
+<span class="font-manrope uppercase tracking-[0.1em] text-[0.6875rem]">Mass Times</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-[#e9c349] bg-[#403200] rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="menu_book" style="font-variation-settings: 'FILL' 1;">menu_book</span>
+<span class="font-manrope uppercase tracking-[0.1em] text-[0.6875rem]">Today's Lectures</span>
+</a>
+</nav>
+<div class="mt-auto pt-8">
+<button class="w-full bg-gradient-to-r from-[#e9c349] to-[#b38e1b] text-[#3c2f00] font-bold py-3 rounded-md text-xs uppercase tracking-widest shadow-lg shadow-primary/10 hover:shadow-primary/20 transition-all">
+          Find a Parish
+        </button>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 md:ml-72 p-8 lg:p-16 max-w-6xl mx-auto overflow-y-auto no-scrollbar">
+<!-- Sacred Header -->
+<section class="mb-24 flex flex-col lg:flex-row lg:items-end lg:justify-between gap-8">
+<div class="lg:w-2/3">
+<span class="label-sm text-primary uppercase tracking-[0.2em] font-medium block mb-4">Monday, May 15, 2024</span>
+<h1 class="text-display-lg font-headline text-on-surface leading-none tracking-tighter mb-4">The Word of Divine Purpose</h1>
+</div>
+<div class="lg:w-1/3">
+<p class="text-body-lg text-on-surface-variant font-light leading-relaxed border-l border-primary/20 pl-6 italic">
+            "Your word is a lamp to my feet and a light to my path." Today we reflect on the transition of spirit into action.
+          </p>
+</div>
+</section>
+<!-- Readings Grid/Editorial Flow -->
+<div class="space-y-32">
+<!-- The First Reading -->
+<article class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16">
+<div class="lg:col-span-3">
+<h2 class="font-headline text-primary text-xl font-bold uppercase tracking-widest border-b border-outline-variant/20 pb-4">The First Reading</h2>
+<p class="text-slate-500 text-xs mt-4 tracking-tighter font-mono uppercase">Acts 16:11-15</p>
+</div>
+<div class="lg:col-span-9">
+<div class="serif-text text-2xl lg:text-3xl leading-[1.6] text-on-surface font-light mb-8">
+              We set sail from Troas, making a straight run for Samothrace, and on the next day to Neapolis, and from there to Philippi, a district city of Macedonia and a Roman colony. We spent some days in that city.
+            </div>
+<div class="space-y-6 text-on-surface-variant leading-relaxed max-w-2xl">
+<p>On the sabbath we went outside the city gate along the river where we thought there would be a place of prayer. We sat down and spoke to the women who had gathered there.</p>
+<p>One of them, a woman named Lydia, a dealer in purple cloth, from the city of Thyatira, a worshiper of God, listened, and the Lord opened her heart to pay attention to what Paul was saying.</p>
+</div>
+<div class="mt-12 p-8 bg-surface-container-low rounded-xl border-l-2 border-primary">
+<h4 class="text-xs uppercase tracking-widest text-primary font-bold mb-4">Reflection</h4>
+<p class="text-sm leading-relaxed text-slate-400">The "opening of the heart" is often a quiet, riverside moment rather than a thunderclap. Lydia represents the receptive spirit that hears the divine call amidst the routine of life.</p>
+</div>
+</div>
+</article>
+<!-- Responsorial Psalm -->
+<article class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16">
+<div class="lg:col-span-3">
+<h2 class="font-headline text-primary text-xl font-bold uppercase tracking-widest border-b border-outline-variant/20 pb-4">Responsorial Psalm</h2>
+<p class="text-slate-500 text-xs mt-4 tracking-tighter font-mono uppercase">Psalm 149</p>
+</div>
+<div class="lg:col-span-9 flex flex-col items-center text-center py-12 bg-surface-container-lowest rounded-full/2 relative overflow-hidden">
+<!-- Background aesthetic subtle gradient -->
+<div class="absolute inset-0 bg-gradient-to-b from-primary/5 to-transparent pointer-events-none"></div>
+<div class="relative z-10">
+<p class="text-primary text-sm uppercase tracking-widest mb-6 font-bold">The Response</p>
+<p class="serif-text text-3xl lg:text-4xl text-on-surface italic mb-12">"The Lord takes delight in his people."</p>
+<div class="space-y-8 serif-text text-xl text-on-surface-variant font-light">
+<p>Sing to the LORD a new song;<br/>of praise in the assembly of the faithful.</p>
+<p>Let Israel be glad in their maker,<br/>let the children of Zion rejoice in their king.</p>
+</div>
+</div>
+</div>
+</article>
+<!-- The Gospel -->
+<article class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16">
+<div class="lg:col-span-3">
+<div class="sticky top-28">
+<h2 class="font-headline text-primary text-xl font-bold uppercase tracking-widest border-b border-outline-variant/20 pb-4">The Gospel</h2>
+<p class="text-slate-500 text-xs mt-4 tracking-tighter font-mono uppercase">John 15:26—16:4a</p>
+<div class="mt-8">
+<img class="w-full h-48 object-cover rounded-lg grayscale opacity-40" data-alt="close-up of an ancient leather-bound bible on a dark wooden table with soft candle light illuminating the gold-edged pages" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDJapkUzhVXU-ETxjpHPda_jRWq-G8sz_rHAUU8mgFEX8fOmwVeRAFjbjTDERJGUyroW9M8qQGiuNhHuMxnlqfkCQe3W59ID7QXyN4ukx7qAyqoUzt_f50upTNCNdg60jMUKGKqi4uaBhq1uThK20JWbTQzZbq0RzWb4ud312p_wS7IbPdDEKheR-q8ckc1SN74ohZgVWM8XGnUqaF_J6JgjQQuRWNa9SCYocHNLdbAEo_rghcXLslXzWvvcLzmerGTF7IVO-N9OSo"/>
+</div>
+</div>
+</div>
+<div class="lg:col-span-9">
+<div class="flex items-center gap-4 mb-8">
+<span class="h-[1px] flex-1 bg-outline-variant/30"></span>
+<span class="material-symbols-outlined text-primary" data-icon="auto_awesome">auto_awesome</span>
+<span class="h-[1px] flex-1 bg-outline-variant/30"></span>
+</div>
+<div class="serif-text text-2xl lg:text-3xl leading-[1.6] text-on-surface font-light mb-8">
+              Jesus said to his disciples: "When the Advocate comes whom I will send you from the Father, the Spirit of truth who proceeds from the Father, he will testify to me. And you also testify, because you have been with me from the beginning."
+            </div>
+<div class="space-y-6 text-on-surface-variant leading-relaxed max-w-2xl text-lg">
+<p>"I have told you this so that you may not fall away. They will expel you from the synagogues; in fact, the hour is coming when everyone who kills you will think he is offering worship to God."</p>
+<p>"They will do this because they have not known either the Father or me. I have told you this so that when their hour comes you may remember that I told you."</p>
+</div>
+<!-- Commentary -->
+<div class="mt-20 border-t border-outline-variant/10 pt-12">
+<h3 class="font-headline text-on-surface text-lg font-bold mb-6">Navigating the World's Resistance</h3>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-12 text-on-surface-variant font-light leading-relaxed">
+<p>In this profound discourse, Jesus prepares his followers for the paradox of spiritual life: that divine truth often meets earthly opposition. The "Advocate" is not merely a comforter but a legal witness to the truth of the spirit in the face of judgment.</p>
+<p>The call is to remain steadfast in the knowledge of the Father's love, even when the structures of the world fail to recognize it. True worship is defined not by institutional compliance, but by the alignment of the heart with the Spirit of Truth.</p>
+</div>
+</div>
+</div>
+</article>
+<!-- Daily Meditation -->
+<section class="mt-40 mb-20 relative">
+<div class="absolute -top-12 left-1/2 -translate-x-1/2 text-8xl text-primary/10 font-serif leading-none">“</div>
+<div class="bg-surface-container-low rounded-3xl p-12 lg:p-20 text-center relative overflow-hidden">
+<!-- Sacred Geometric Pattern Background (Simulated) -->
+<div class="absolute inset-0 opacity-5 pointer-events-none" style="background-image: radial-gradient(circle at 2px 2px, #e9c349 1px, transparent 0); background-size: 40px 40px;"></div>
+<div class="max-w-3xl mx-auto relative z-10">
+<span class="material-symbols-outlined text-primary text-5xl mb-8" data-icon="format_quote" style="font-variation-settings: 'FILL' 1;">format_quote</span>
+<h3 class="text-3xl lg:text-5xl font-headline font-extralight tracking-tight text-on-surface mb-8 italic">
+                 "Do not let your hearts be troubled. You believe in God; believe also in me."
+               </h3>
+<div class="h-1 w-12 bg-primary mx-auto mb-6"></div>
+<p class="text-sm uppercase tracking-widest text-slate-500 font-bold">Daily Meditation</p>
+<div class="mt-16 flex justify-center gap-4">
+<button class="px-8 py-3 bg-primary text-on-primary rounded-md font-bold text-xs uppercase tracking-widest hover:bg-primary-fixed transition-colors">
+                   Journal Reflection
+                 </button>
+<button class="px-8 py-3 border border-outline-variant/30 text-on-surface rounded-md font-bold text-xs uppercase tracking-widest hover:bg-white/5 transition-colors">
+                   Share Lecture
+                 </button>
+</div>
+</div>
+</div>
+</section>
+</div>
+<!-- Footer Spacer -->
+<footer class="mt-32 pb-20 text-center border-t border-outline-variant/10 pt-16">
+<p class="text-slate-500 text-xs uppercase tracking-widest mb-2">The Sovereign Essence Sanctuary</p>
+<p class="text-[0.625rem] text-slate-600">Curated Daily for the Faithful Soul</p>
+</footer>
+</main>
+</div>
+</body></html>

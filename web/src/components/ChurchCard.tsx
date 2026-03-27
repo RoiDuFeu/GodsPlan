@@ -1,9 +1,6 @@
-import { MapPin, Church } from 'lucide-react';
 import type { ChurchListItem } from '@/lib/types';
-import { Card, CardContent } from '@/components/ui/card';
-import { ScoreBar } from '@/components/ScoreBar';
-import { formatDistance } from '@/lib/utils';
 import { cn } from '@/lib/utils';
+import { formatDistance } from '@/lib/utils';
 
 interface ChurchCardProps {
   church: ChurchListItem;
@@ -19,14 +16,11 @@ export function ChurchCard({ church, onClick, isSelected }: ChurchCardProps) {
   ].filter(Boolean).join(', ');
 
   return (
-    <Card
+    <div
       className={cn(
-        'group cursor-pointer transition-all duration-200',
-        'hover:scale-[1.02] hover:-translate-y-0.5 hover:shadow-xl',
-        'border-2 bg-card',
-        isSelected 
-          ? 'border-primary border-2 shadow-lg ring-2 ring-primary/20' 
-          : 'border-border hover:border-primary/50 hover:ring-2 hover:ring-primary/20'
+        'group bg-surface-container-low rounded-xl overflow-hidden cursor-pointer transition-all duration-500',
+        'hover:shadow-2xl hover:bg-surface-container',
+        isSelected && 'ring-2 ring-primary shadow-lg'
       )}
       onClick={onClick}
       role="button"
@@ -37,49 +31,55 @@ export function ChurchCard({ church, onClick, isSelected }: ChurchCardProps) {
           onClick?.();
         }
       }}
-      aria-label={`Église ${church.name}`}
+      aria-label={`Church ${church.name}`}
     >
-      <CardContent className="p-4">
+      <div className="p-4">
         <div className="flex items-start gap-3">
-          {/* Church Icon - Badge circulaire coloré */}
+          {/* Icon */}
           <div className={cn(
-            "flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full transition-all duration-200",
-            isSelected 
-              ? "bg-primary text-primary-foreground shadow-md" 
-              : "bg-primary/10 text-primary group-hover:bg-primary/20 group-hover:scale-110"
+            'flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full transition-all duration-300',
+            isSelected
+              ? 'bg-primary text-primary-foreground shadow-[0_0_20px_hsl(var(--primary)/0.4)]'
+              : 'bg-primary/10 text-primary group-hover:bg-primary/20 group-hover:scale-110'
           )}>
-            <Church className="h-6 w-6" />
+            <span className="material-symbols-outlined text-lg" style={{ fontVariationSettings: "'FILL' 1" }}>church</span>
           </div>
 
           {/* Content */}
-          <div className="flex-1 min-w-0 space-y-2.5">
-            {/* Nom */}
-            <h3 className="font-semibold text-base leading-tight group-hover:text-primary transition-colors">
-              {church.name}
-            </h3>
-            
-            {/* Adresse */}
-            <div className="flex items-start gap-1.5 text-sm text-muted-foreground leading-relaxed">
-              <MapPin className="w-4 h-4 mt-0.5 flex-shrink-0" />
-              <span className="line-clamp-2">{addressString}</span>
+          <div className="flex-1 min-w-0">
+            <div className="flex justify-between items-start mb-1">
+              <h3 className="font-bold text-base font-headline group-hover:text-primary transition-colors truncate">
+                {church.name}
+              </h3>
+              {church.distance !== undefined && (
+                <span className="text-xs text-muted-foreground font-label uppercase tracking-widest ml-2 whitespace-nowrap">
+                  {formatDistance(church.distance)}
+                </span>
+              )}
             </div>
 
-            {/* Footer: Score + Distance */}
-            <div className="flex items-center justify-between gap-3 pt-1">
-              {/* Score Bar */}
-              <ScoreBar score={church.reliabilityScore} />
-              
-              {/* Distance */}
-              {church.distance !== undefined && (
-                <div className="flex items-center gap-1.5 text-xs font-medium text-muted-foreground">
-                  <MapPin className="w-3.5 h-3.5" />
-                  <span>{formatDistance(church.distance)}</span>
+            {/* Address */}
+            <div className="flex items-center gap-1.5 text-sm text-on-surface-variant mb-2">
+              <span className="material-symbols-outlined text-sm opacity-60">location_on</span>
+              <span className="line-clamp-1">{addressString}</span>
+            </div>
+
+            {/* Score + Next mass */}
+            <div className="flex items-center gap-2">
+              <div className="flex items-center gap-1 bg-primary/10 px-2 py-0.5 rounded text-primary">
+                <span className="material-symbols-outlined text-xs" style={{ fontVariationSettings: "'FILL' 1" }}>verified</span>
+                <span className="text-[0.6875rem] font-bold tracking-widest">{church.reliabilityScore}%</span>
+              </div>
+              {church.nextMassTime && (
+                <div className="flex items-center gap-1 bg-secondary/10 px-2 py-0.5 rounded text-secondary">
+                  <span className="material-symbols-outlined text-xs">schedule</span>
+                  <span className="text-[0.6875rem] font-bold">{church.nextMassTime}</span>
                 </div>
               )}
             </div>
           </div>
         </div>
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   );
 }

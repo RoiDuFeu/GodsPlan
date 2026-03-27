@@ -1,0 +1,23 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__stitch__get_project",
+      "mcp__stitch__get_screen",
+      "Bash(DIR=/c/Users/RoiDuFeu/Documents/Code/GodsPlan/stitch-assets)",
+      "Bash(curl -L -o \"$DIR/screenshots/detail.png\" \"https://lh3.googleusercontent.com/aida/ADBb0uiNAecp_SMQMhKQF-jbsIVOfW_2xlhhXnqUW1eaYoO6UKqc7r6jtOKyuJR2CRvJcmhT9kdxrg-GeWywjbf6APQepBBb8exfVFiBL2keNOqREN3vyFSaWTIJvFwEmdcsOTZur6nQ4h4QNiObgRlG3WTLgP-VdoiQUn1VOGguhx3m6h6nDU--20OATyg4JvBEjiljxnEAuWIRNa3eUW1sXRBeks6ARQO38p4DdJSL2HF4GoMl0ChRSpcg9Lw\")",
+      "Bash(curl -L -o \"$DIR/screenshots/login.png\" \"https://lh3.googleusercontent.com/aida/ADBb0ui3NV5bxgR0nDGjqHfjX7JLRkjBVVmr6gZz44Cpb6PptDHxD9MqGt6VKUAz55GTZwmrQY_cjmkFQTPI3uKZwva9Z1mcKDnd2p4fQCqLLRWb_NR1kwn63LvD_pHcM2KYNHX2Pv2e1iAYwLaUaKI861V-pkX2nIFatZW125JUcGdJXRCAdhgc-I1Dr2LMTVmu8QckEqXWvLX4N-Gyq1_9nWtgV_eBdnwPKmq2fqmMll-zeavE0jAVunhf79k\")",
+      "Bash(curl -L -o \"$DIR/screenshots/register.png\" \"https://lh3.googleusercontent.com/aida/ADBb0uiIOkegHpqbcI8HJ3zx8mhvgHiYrwaBWF-N3fyfenvILLdZXTSZhJgjVQqrqNrMZMO52b5jdJUaka5yuRqB2F_-fc5MHmIf7MIrRx2MKJaQrvVqXChTS14Lme6M0t3FB0NLVH-Alw95JnRj-YKkLPDAXEg01VN8-jQkfysHQUvjnlrc63pSRmDDnN4sYyN2PZ5aWPKgmM1pTd66GbEvwYbUBSn3SyTfTdP50MpaHiH4E3BtA4VQM2HRgtQ\")",
+      "Bash(curl -L -o \"$DIR/screenshots/saved-sanctuaries.png\" \"https://lh3.googleusercontent.com/aida/ADBb0ujvNIcX0l2il3Fo8Zn37jCBZ6_NKmGvQYL6SL9lIxomM9XPIUVfb4zixJ0tkuQgRC-imlRuZtBhoqmeOoFgUk2MhUlNOZaWcD6BY1yPTbUi801nlY57Y9bBhuA2VcIL8MTw4yLNCiNThY2HTV9yyiBrPX0bPtlVVtEgca0MVIy_8AFKK-2SFIze9h6EkrXcazaIKhV-u8v8f_oyzAw0tGCbt8OEv9zo1QqS4KzPYt9yGLF2SCCxTC5Puw\")",
+      "Bash(curl -L -o \"$DIR/html/detail.html\" \"https://contribution.usercontent.google.com/download?c=CgthaWRhX2NvZGVmeBJ7Eh1hcHBfY29tcGFuaW9uX2dlbmVyYXRlZF9maWxlcxpaCiVodG1sXzFlNThkOTgyNmZkMDRhN2RhM2Q5MmE0MzVmNWU3Mzg4EgsSBxCuoPnwkwcYAZIBIwoKcHJvamVjdF9pZBIVQhM4MzE4NzkwNjMwOTA5MDkzNjAz&filename=&opi=89354086\")",
+      "Bash(curl -L -o \"$DIR/html/login.html\" \"https://contribution.usercontent.google.com/download?c=CgthaWRhX2NvZGVmeBJ7Eh1hcHBfY29tcGFuaW9uX2dlbmVyYXRlZF9maWxlcxpaCiVodG1sXzFhOWM5YjdkNjUzYjRmZTY4YjEzYjE4N2MyYTMzZTBkEgsSBxCuoPnwkwcYAZIBIwoKcHJvamVjdF9pZBIVQhM4MzE4NzkwNjMwOTA5MDkzNjAz&filename=&opi=89354086\")",
+      "Bash(curl -L -o \"$DIR/html/register.html\" \"https://contribution.usercontent.google.com/download?c=CgthaWRhX2NvZGVmeBJ7Eh1hcHBfY29tcGFuaW9uX2dlbmVyYXRlZF9maWxlcxpaCiVodG1sXzRlYmMxNjRkNDFlYjQ4MmRhNzUwODRiYTQ3MmUzMGVmEgsSBxCuoPnwkwcYAZIBIwoKcHJvamVjdF9pZBIVQhM4MzE4NzkwNjMwOTA5MDkzNjAz&filename=&opi=89354086\")",
+      "Bash(curl -L -o \"$DIR/html/saved-sanctuaries.html\" \"https://contribution.usercontent.google.com/download?c=CgthaWRhX2NvZGVmeBJ7Eh1hcHBfY29tcGFuaW9uX2dlbmVyYXRlZF9maWxlcxpaCiVodG1sX2NiZWM4NTc5NmMyYjQyNmE5NzU0MGQzYTliMjIyODYxEgsSBxCuoPnwkwcYAZIBIwoKcHJvamVjdF9pZBIVQhM4MzE4NzkwNjMwOTA5MDkzNjAz&filename=&opi=89354086\")",
+      "Bash(curl -L -o \"$DIR/html/todays-lectures.html\" \"https://contribution.usercontent.google.com/download?c=CgthaWRhX2NvZGVmeBJ7Eh1hcHBfY29tcGFuaW9uX2dlbmVyYXRlZF9maWxlcxpaCiVodG1sX2MwZjlmOGUxOWJmOTQzOGQ5Njg4YjgxYzRmN2NmYjVhEgsSBxCuoPnwkwcYAZIBIwoKcHJvamVjdF9pZBIVQhM4MzE4NzkwNjMwOTA5MDkzNjAz&filename=&opi=89354086\")",
+      "Bash(npm install:*)",
+      "Bash(npx vite:*)",
+      "Bash(npm run:*)",
+      "Bash(find C:UsersRoiDuFeuDocumentsCodeGodsPlanwebsrc -name *scroll* -o -name *landing* -o -name *home*)",
+      "mcp__Claude_Preview__preview_start"
+    ]
+  }
+}

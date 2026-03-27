@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;family=Manrope:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "secondary-container": "#1f477b",
+            "on-background": "#e3e1e9",
+            "surface-container-lowest": "#0d0e13",
+            "surface-container-high": "#292a2f",
+            "surface-bright": "#38393f",
+            "on-secondary": "#003061",
+            "background": "#121318",
+            "primary-fixed-dim": "#e9c349",
+            "on-tertiary-fixed-variant": "#454749",
+            "tertiary-container": "#313335",
+            "surface-tint": "#e9c349",
+            "primary-fixed": "#ffe088",
+            "on-secondary-fixed": "#001b3c",
+            "on-primary-fixed": "#241a00",
+            "tertiary-fixed": "#e2e2e4",
+            "on-primary": "#3c2f00",
+            "outline": "#8d919a",
+            "on-secondary-container": "#93b6f1",
+            "secondary-fixed": "#d5e3ff",
+            "outline-variant": "#43474f",
+            "surface-dim": "#121318",
+            "secondary-fixed-dim": "#a7c8ff",
+            "on-tertiary-container": "#9a9b9d",
+            "on-secondary-fixed-variant": "#1f477b",
+            "primary-container": "#403200",
+            "on-primary-fixed-variant": "#574500",
+            "on-error-container": "#ffdad6",
+            "surface-container": "#1e1f25",
+            "tertiary-fixed-dim": "#c6c6c8",
+            "tertiary": "#c6c6c8",
+            "surface-container-highest": "#34343a",
+            "error-container": "#93000a",
+            "on-tertiary": "#2f3132",
+            "on-surface": "#e3e1e9",
+            "surface": "#121318",
+            "inverse-primary": "#735c00",
+            "inverse-surface": "#e3e1e9",
+            "on-surface-variant": "#c3c6d1",
+            "on-primary-container": "#bb981f",
+            "surface-variant": "#34343a",
+            "secondary": "#a7c8ff",
+            "primary": "#e9c349",
+            "on-tertiary-fixed": "#1a1c1d",
+            "inverse-on-surface": "#2f3036",
+            "error": "#ffb4ab",
+            "surface-container-low": "#1a1b21",
+            "on-error": "#690005"
+          },
+          fontFamily: {
+            "headline": ["Manrope"],
+            "body": ["Inter"],
+            "label": ["Inter"]
+          },
+          borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+        },
+      },
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      vertical-align: middle;
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 4px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #43474f;
+      border-radius: 10px;
+    }
+  </style>
+</head>
+<body class="bg-background text-on-surface font-body selection:bg-primary-container selection:text-primary">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 bg-[#121318]/70 backdrop-blur-3xl flex justify-between items-center px-8 h-20 w-full">
+<div class="flex items-center gap-8">
+<span class="text-2xl font-bold tracking-tighter text-[#e9c349] font-headline">GodsPlan</span>
+<nav class="hidden md:flex gap-6">
+<a class="text-slate-400 hover:text-[#e9c349] transition-colors duration-400 font-medium" href="#">Liturgy</a>
+<a class="text-slate-400 hover:text-[#e9c349] transition-colors duration-400 font-medium" href="#">Community</a>
+<a class="text-[#e9c349] font-bold" href="#">Profile</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<div class="relative hidden sm:block">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm">search</span>
+<input class="bg-surface-container-low border-none rounded-full pl-10 pr-4 py-2 text-sm focus:ring-1 focus:ring-primary w-64 text-on-surface placeholder:text-slate-500" placeholder="Search archives..." type="text"/>
+</div>
+<button class="text-[#e9c349] p-2 hover:bg-white/5 rounded-full transition-all">
+<span class="material-symbols-outlined" data-icon="account_circle">account_circle</span>
+</button>
+</div>
+</header>
+<div class="flex pt-20 h-screen overflow-hidden">
+<!-- SideNavBar -->
+<aside class="h-full w-72 hidden md:flex flex-col p-6 space-y-8 bg-[#121318] shadow-2xl shadow-black/20 border-r-0 shrink-0">
+<div class="space-y-1 px-2">
+<h2 class="text-[#e9c349] font-bold font-headline tracking-tight">Sovereign Essence</h2>
+<p class="font-manrope uppercase tracking-[0.1em] text-[0.6875rem] text-slate-500">The Digital Sanctuary</p>
+</div>
+<nav class="flex-1 space-y-2">
+<a class="flex items-center gap-3 px-4 py-3 text-slate-400 hover:text-white hover:bg-white/5 transition-all duration-400 font-manrope uppercase tracking-[0.1em] text-[0.6875rem]" href="#">
+<span class="material-symbols-outlined" data-icon="explore">explore</span>
+<span>Discover</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-400 hover:text-white hover:bg-white/5 transition-all duration-400 font-manrope uppercase tracking-[0.1em] text-[0.6875rem]" href="#">
+<span class="material-symbols-outlined" data-icon="bookmark">bookmark</span>
+<span>Saved</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-400 hover:text-white hover:bg-white/5 transition-all duration-400 font-manrope uppercase tracking-[0.1em] text-[0.6875rem]" href="#">
+<span class="material-symbols-outlined" data-icon="schedule">schedule</span>
+<span>Mass Times</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-400 hover:text-white hover:bg-white/5 transition-all duration-400 font-manrope uppercase tracking-[0.1em] text-[0.6875rem]" href="#">
+<span class="material-symbols-outlined" data-icon="menu_book">menu_book</span>
+<span>Today's Lectures</span>
+</a>
+</nav>
+<div class="mt-auto">
+<button class="w-full bg-[#403200] text-[#e9c349] py-4 rounded-lg font-bold font-manrope uppercase tracking-[0.1em] text-[0.6875rem] hover:bg-[#574500] transition-colors">
+          Find a Parish
+        </button>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 overflow-y-auto custom-scrollbar bg-surface pt-12 pb-24 px-8 md:px-16 lg:px-24">
+<div class="max-w-5xl mx-auto space-y-20">
+<!-- Sacred Header / Profile Hero -->
+<section class="flex flex-col md:flex-row items-start md:items-end gap-8 border-b border-outline-variant/15 pb-12">
+<div class="relative">
+<div class="w-40 h-40 rounded-full overflow-hidden border-4 border-surface-container-high shadow-2xl">
+<img alt="Constantine Valerius" class="w-full h-full object-cover" data-alt="portrait of a distinguished man with sharp features, clean-shaven, looking thoughtfully away in soft, dramatic studio lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBLhPNM0vSWuNoB0if-uQ6_joznhebvzNhd3CBjdVDOxmzf6b7RyNkenlqA33OAwymnAp_TmML2LHBe7D2AuytraT7XkBaLzfBsRoyKG4_aaPyJrGicFZglb09eBEKlQuqhN9hK_X3X4MfUmfsT0m-2AoT-aQhJEOb44fNtK6eiazKCPxWtiHn-hgJKE9GP-ymXpKSAfck-oLx31QJPLgXMk73pdh7xl8eNUSgCkMFQ_ZUNRJwQzg2aCY7N4cqMgZBLUX3V5RGZNo4"/>
+</div>
+<div class="absolute bottom-1 right-1 bg-primary text-on-primary p-2 rounded-full shadow-lg border-4 border-surface">
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">verified</span>
+</div>
+</div>
+<div class="flex-1 space-y-2">
+<div class="flex items-center gap-4">
+<h1 class="text-display-lg font-headline font-bold tracking-tighter leading-none text-on-surface md:text-6xl text-4xl">Constantine Valerius</h1>
+<span class="px-3 py-1 bg-secondary-container text-on-secondary-container text-[0.6rem] font-bold tracking-widest uppercase rounded-full">Sovereign Member</span>
+</div>
+<p class="text-on-surface-variant font-light text-xl">c.valerius@sacredessence.org</p>
+<div class="flex items-center gap-6 pt-4">
+<div class="flex flex-col">
+<span class="font-manrope uppercase tracking-[0.1em] text-[0.6rem] text-slate-500">Member Since</span>
+<span class="text-sm font-medium">November 12, 2023</span>
+</div>
+<div class="w-px h-8 bg-outline-variant/20"></div>
+<div class="flex flex-col">
+<span class="font-manrope uppercase tracking-[0.1em] text-[0.6rem] text-slate-500">Sanctuary Tier</span>
+<span class="text-sm font-medium text-primary">Gold Guardian</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Settings Grid -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-16">
+<!-- Column 1: Account & Preferences -->
+<div class="lg:col-span-7 space-y-16">
+<!-- Account Settings -->
+<section class="space-y-8">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-primary">manage_accounts</span>
+<h2 class="text-headline-sm font-headline font-semibold tracking-tight">Account Settings</h2>
+</div>
+<div class="space-y-8">
+<div class="relative group">
+<label class="block font-manrope uppercase tracking-[0.1em] text-[0.6875rem] text-slate-500 mb-2 group-focus-within:text-primary transition-colors">Email Address</label>
+<input class="w-full bg-transparent border-0 border-b-2 border-surface-variant py-3 focus:ring-0 focus:border-primary text-on-surface transition-all" type="email" value="c.valerius@sacredessence.org"/>
+</div>
+<div class="relative group">
+<label class="block font-manrope uppercase tracking-[0.1em] text-[0.6875rem] text-slate-500 mb-2 group-focus-within:text-primary transition-colors">Password</label>
+<input class="w-full bg-transparent border-0 border-b-2 border-surface-variant py-3 focus:ring-0 focus:border-primary text-on-surface transition-all" type="password" value="••••••••••••"/>
+<button class="absolute right-0 bottom-3 text-slate-500 hover:text-primary">
+<span class="material-symbols-outlined text-lg">edit</span>
+</button>
+</div>
+</div>
+</section>
+<!-- Preferences -->
+<section class="space-y-8">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-primary">tune</span>
+<h2 class="text-headline-sm font-headline font-semibold tracking-tight">Preferences</h2>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+<div class="relative group">
+<label class="block font-manrope uppercase tracking-[0.1em] text-[0.6875rem] text-slate-500 mb-2">Preferred Rite</label>
+<select class="w-full bg-transparent border-0 border-b-2 border-surface-variant py-3 focus:ring-0 focus:border-primary text-on-surface appearance-none cursor-pointer">
+<option class="bg-surface">Roman Rite (Ordinary)</option>
+<option class="bg-surface">Tridentine Mass</option>
+<option class="bg-surface">Byzantine Rite</option>
+</select>
+</div>
+<div class="relative group">
+<label class="block font-manrope uppercase tracking-[0.1em] text-[0.6875rem] text-slate-500 mb-2">Language</label>
+<select class="w-full bg-transparent border-0 border-b-2 border-surface-variant py-3 focus:ring-0 focus:border-primary text-on-surface appearance-none cursor-pointer">
+<option class="bg-surface">English (International)</option>
+<option class="bg-surface">Latin (Ecclesiastical)</option>
+<option class="bg-surface">Greek (Koine)</option>
+</select>
+</div>
+</div>
+<!-- Theme Toggle -->
+<div class="p-6 bg-surface-container-low rounded-xl flex items-center justify-between border border-outline-variant/10">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-slate-400">dark_mode</span>
+<div>
+<p class="font-medium text-sm">Deep Sanctuary Mode</p>
+<p class="text-xs text-slate-500">Optimized for low-light evening prayer</p>
+</div>
+</div>
+<div class="w-12 h-6 bg-secondary-container rounded-full relative cursor-pointer">
+<div class="absolute right-1 top-1 w-4 h-4 bg-primary rounded-full"></div>
+</div>
+</div>
+</section>
+</div>
+<!-- Column 2: Notifications & Support -->
+<div class="lg:col-span-5 space-y-16">
+<!-- Notification Settings -->
+<section class="space-y-8">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-primary">notifications</span>
+<h2 class="text-headline-sm font-headline font-semibold tracking-tight">Notifications</h2>
+</div>
+<div class="space-y-4">
+<div class="flex items-center justify-between py-2">
+<span class="text-sm font-medium">Daily Liturgy Alerts</span>
+<input checked="" class="rounded border-outline-variant text-primary focus:ring-primary bg-transparent w-5 h-5" type="checkbox"/>
+</div>
+<div class="flex items-center justify-between py-2">
+<span class="text-sm font-medium">Parish Events &amp; Announcements</span>
+<input checked="" class="rounded border-outline-variant text-primary focus:ring-primary bg-transparent w-5 h-5" type="checkbox"/>
+</div>
+<div class="flex items-center justify-between py-2">
+<span class="text-sm font-medium">Archival Updates</span>
+<input class="rounded border-outline-variant text-primary focus:ring-primary bg-transparent w-5 h-5" type="checkbox"/>
+</div>
+</div>
+</section>
+<!-- Membership / Support -->
+<section class="p-8 bg-surface-container-low rounded-xl border border-primary/20 relative overflow-hidden group">
+<div class="absolute -right-8 -top-8 w-32 h-32 bg-primary/5 rounded-full blur-3xl transition-all group-hover:bg-primary/10"></div>
+<div class="relative z-10 space-y-6">
+<div class="flex items-center justify-between">
+<h3 class="font-headline font-bold text-primary tracking-tight">Sovereign Essence</h3>
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">shield_with_heart</span>
+</div>
+<p class="text-sm text-on-surface-variant leading-relaxed">Your contribution sustains the digital sanctuary. As a Sovereign Member, you have early access to the Vatican Archives and priority seating reservations.</p>
+<div class="pt-4 flex items-center justify-between">
+<span class="text-xs font-manrope uppercase tracking-[0.2em] text-slate-500">Auto-Renewal: Oct 2024</span>
+<a class="text-xs font-bold text-primary hover:underline decoration-primary/30 underline-offset-4 transition-all" href="#">MANAGE SUBSCRIPTION</a>
+</div>
+</div>
+</section>
+</div>
+</div>
+<!-- Footer Actions -->
+<footer class="pt-12 flex flex-col sm:flex-row items-center justify-between gap-6 border-t border-outline-variant/15">
+<button class="text-slate-400 hover:text-error transition-colors text-sm font-medium">
+            Deactivate Sanctuary Account
+          </button>
+<div class="flex items-center gap-4 w-full sm:w-auto">
+<button class="px-8 py-4 rounded-md border border-outline-variant/20 hover:bg-white/5 transition-all text-sm font-bold flex-1 sm:flex-none">
+              Cancel
+            </button>
+<button class="px-10 py-4 rounded-md bg-secondary text-on-secondary font-bold text-sm shadow-xl shadow-secondary/10 hover:shadow-primary/20 transition-all flex-1 sm:flex-none relative overflow-hidden">
+<span class="relative z-10 text-on-primary">Save Changes</span>
+<div class="absolute inset-0 bg-gradient-to-r from-primary to-primary-fixed-dim opacity-100"></div>
+</button>
+</div>
+</footer>
+</div>
+</main>
+</div>
+</body></html>

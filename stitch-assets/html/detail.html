@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "outline-variant": "#43474f",
+              "tertiary-fixed-dim": "#c6c6c8",
+              "surface-dim": "#121318",
+              "surface-variant": "#34343a",
+              "on-surface-variant": "#c3c6d1",
+              "on-primary-container": "#bb981f",
+              "on-secondary-container": "#93b6f1",
+              "surface-bright": "#38393f",
+              "secondary-container": "#1f477b",
+              "tertiary": "#c6c6c8",
+              "on-primary-fixed": "#241a00",
+              "on-secondary-fixed": "#001b3c",
+              "error-container": "#93000a",
+              "secondary": "#a7c8ff",
+              "tertiary-fixed": "#e2e2e4",
+              "on-primary-fixed-variant": "#574500",
+              "secondary-fixed-dim": "#a7c8ff",
+              "surface-container": "#1e1f25",
+              "on-background": "#e3e1e9",
+              "inverse-on-surface": "#2f3036",
+              "on-tertiary-fixed": "#1a1c1d",
+              "on-error": "#690005",
+              "primary": "#e9c349",
+              "outline": "#8d919a",
+              "secondary-fixed": "#d5e3ff",
+              "on-secondary": "#003061",
+              "surface-container-low": "#1a1b21",
+              "primary-fixed": "#ffe088",
+              "inverse-primary": "#735c00",
+              "on-surface": "#e3e1e9",
+              "on-tertiary-container": "#9a9b9d",
+              "surface": "#121318",
+              "error": "#ffb4ab",
+              "on-tertiary": "#2f3132",
+              "surface-container-highest": "#34343a",
+              "primary-fixed-dim": "#e9c349",
+              "surface-container-high": "#292a2f",
+              "on-secondary-fixed-variant": "#1f477b",
+              "background": "#121318",
+              "surface-tint": "#e9c349",
+              "on-primary": "#3c2f00",
+              "primary-container": "#403200",
+              "on-tertiary-fixed-variant": "#454749",
+              "surface-container-lowest": "#0d0e13",
+              "on-error-container": "#ffdad6",
+              "tertiary-container": "#313335",
+              "inverse-surface": "#e3e1e9"
+            },
+            fontFamily: {
+              "headline": ["Manrope"],
+              "body": ["Inter"],
+              "label": ["Inter"]
+            },
+            borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+          },
+        },
+      }
+    </script>
+<style>
+      .material-symbols-outlined {
+        font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      }
+      .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+      .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+      .custom-scrollbar::-webkit-scrollbar-thumb { background: #43474f; border-radius: 10px; }
+    </style>
+</head>
+<body class="bg-surface-container-lowest text-on-surface font-body selection:bg-primary/30">
+<!-- Top Navigation Overlay (Hidden in Focus Modal state, but part of the shell) -->
+<nav class="fixed top-0 w-full flex justify-between items-center px-8 h-20 bg-[#121318]/70 backdrop-blur-3xl z-50">
+<div class="text-[#e9c349] font-bold tracking-tighter text-2xl font-headline">GodsPlan</div>
+<div class="hidden md:flex gap-8">
+<a class="text-[#e9c349] border-b-2 border-[#e9c349] pb-1 font-headline" href="#">Discover</a>
+<a class="text-[#a7c8ff] hover:text-[#e9c349] transition-colors duration-400 font-headline" href="#">Saved</a>
+<a class="text-[#a7c8ff] hover:text-[#e9c349] transition-colors duration-400 font-headline" href="#">Mass Times</a>
+<a class="text-[#a7c8ff] hover:text-[#e9c349] transition-colors duration-400 font-headline" href="#">Pilgrimages</a>
+</div>
+<button class="text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined">dark_mode</span>
+</button>
+</nav>
+<!-- Modal Backdrop -->
+<div class="fixed inset-0 bg-background/80 backdrop-blur-md z-[60] flex items-center justify-center p-4 md:p-8">
+<!-- Sanctuary Dialog (Main Content) -->
+<main class="relative w-full max-w-5xl h-[921px] bg-surface rounded-xl shadow-2xl overflow-hidden flex flex-col md:flex-row border border-outline-variant/15">
+<!-- Close Button (Absolute) -->
+<button class="absolute top-6 right-6 z-[70] w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center text-on-surface hover:bg-surface-bright transition-all">
+<span class="material-symbols-outlined">close</span>
+</button>
+<!-- Visual Column (Hero) -->
+<section class="relative w-full md:w-5/12 h-64 md:h-full overflow-hidden">
+<div class="absolute inset-0 bg-gradient-to-t from-surface via-transparent to-transparent z-10"></div>
+<img class="absolute inset-0 w-full h-full object-cover" data-alt="dramatic wide angle view of the glowing facade of Notre-Dame de Paris cathedral at dusk with golden architectural lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAUoIutpsZjSaCeuLthLXixAX_7x2nvtwzQA97G_hxa5GkErilT1cdvY_LVV6m0zaaHiHm3HPVyrZHFhHUoI7XYguHHjm3IRhNR0KB859XVUmBxeVzzrsSbUqHHeKvIxZDfCoEB6623ZMf8JJ3HugYZubC66y4bP3ysXP-zS4Helzu2pOIW5B1UGbS3jiTx_aStlD_PulcreZ7m_7OOkgEic_mUPhDnerA87t6tM15e687OD4rjdfU-3IMkXpIXQPd6GgiOYe5qZHY"/>
+<div class="absolute bottom-8 left-8 right-8 z-20">
+<span class="inline-flex items-center justify-center p-2 bg-primary/20 backdrop-blur-xl rounded-lg mb-4">
+<span class="material-symbols-outlined text-primary" data-icon="church" style="font-variation-settings: 'FILL' 1;">church</span>
+</span>
+<h1 class="font-headline font-extrabold text-4xl text-on-surface tracking-tighter mb-1">Notre-Dame de Paris</h1>
+<p class="font-headline text-secondary tracking-wide uppercase text-xs font-semibold opacity-90">The Heart of French Spirituality</p>
+</div>
+</section>
+<!-- Content Column -->
+<section class="w-full md:w-7/12 flex flex-col h-full bg-surface-container-low custom-scrollbar overflow-y-auto">
+<!-- Action Header -->
+<div class="sticky top-0 z-30 p-8 pb-4 bg-surface-container-low/95 backdrop-blur-md flex justify-between items-center">
+<div class="flex flex-col">
+<h2 class="font-headline font-bold text-lg text-on-surface">Sanctuary Details</h2>
+<span class="text-xs font-label uppercase tracking-widest text-outline">Paris, 4th Arrondissement</span>
+</div>
+<button class="group flex items-center gap-3 px-6 py-3 bg-secondary-container text-on-secondary-container rounded-md font-bold text-sm transition-all hover:shadow-[0_0_20px_rgba(167,200,255,0.2)]">
+                        Get Routes
+                        <span class="material-symbols-outlined text-primary group-hover:translate-x-1 transition-transform" data-icon="directions">directions</span>
+</button>
+</div>
+<div class="p-8 pt-4 space-y-10">
+<!-- Mass Schedule Section -->
+<div>
+<div class="flex items-center gap-3 mb-6">
+<span class="material-symbols-outlined text-primary" data-icon="schedule">schedule</span>
+<h3 class="font-headline font-bold text-xl">Mass Schedule</h3>
+</div>
+<div class="rounded-xl border-2 border-secondary-container overflow-hidden bg-surface-container">
+<!-- Sunday -->
+<div class="p-4 border-b border-outline-variant/15 hover:bg-surface-bright transition-colors">
+<div class="flex justify-between items-start">
+<div class="flex flex-col">
+<span class="font-label text-[10px] uppercase tracking-widest text-primary mb-1">Sunday Solemnity</span>
+<div class="flex items-center gap-4">
+<span class="font-headline font-bold text-on-surface">08:30 • 10:30 • 18:30</span>
+</div>
+</div>
+<div class="text-right">
+<div class="text-xs text-on-secondary-container bg-secondary-container/30 px-2 py-1 rounded">Latin Rite</div>
+<div class="text-[10px] text-outline mt-1">French &amp; Latin</div>
+</div>
+</div>
+</div>
+<!-- Weekdays -->
+<div class="p-4 border-b border-outline-variant/15 hover:bg-surface-bright transition-colors">
+<div class="flex justify-between items-start">
+<div class="flex flex-col">
+<span class="font-label text-[10px] uppercase tracking-widest text-outline mb-1">Mon - Sat</span>
+<div class="flex items-center gap-4">
+<span class="font-headline font-bold text-on-surface">08:00 • 12:00 • 18:15</span>
+</div>
+</div>
+<div class="text-right">
+<div class="text-xs text-on-surface-variant bg-surface-variant/50 px-2 py-1 rounded">Daily Mass</div>
+<div class="text-[10px] text-outline mt-1">French</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Collapsible About -->
+<div class="group border-b border-outline-variant/15 pb-6">
+<button class="w-full flex justify-between items-center text-left">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary" data-icon="history_edu">history_edu</span>
+<h3 class="font-headline font-bold text-xl">About the Cathedral</h3>
+</div>
+<span class="material-symbols-outlined text-outline group-hover:text-primary transition-colors">expand_more</span>
+</button>
+<div class="mt-4 pr-12">
+<p class="text-on-surface-variant leading-relaxed font-body">
+                                Notre-Dame de Paris, meaning "Our Lady of Paris", is a medieval Catholic cathedral on the Île de la Cité. A masterpiece of French Gothic architecture, it is among the largest and most well-known church buildings in the Catholic Church in France, and in the world.
+                            </p>
+</div>
+</div>
+<!-- Contact Information -->
+<div class="group border-b border-outline-variant/15 pb-6">
+<button class="w-full flex justify-between items-center text-left">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary" data-icon="contact_support">contact_support</span>
+<h3 class="font-headline font-bold text-xl">Contact Information</h3>
+</div>
+<span class="material-symbols-outlined text-outline group-hover:text-primary transition-colors">expand_more</span>
+</button>
+<div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+<div class="flex items-center gap-4 p-4 rounded-lg bg-surface-container-high border border-outline-variant/5">
+<span class="material-symbols-outlined text-secondary" data-icon="call">call</span>
+<div>
+<p class="text-[10px] uppercase tracking-widest text-outline font-label">Rectorate Office</p>
+<p class="text-sm font-bold">+33 1 42 34 56 10</p>
+</div>
+</div>
+<div class="flex items-center gap-4 p-4 rounded-lg bg-surface-container-high border border-outline-variant/5">
+<span class="material-symbols-outlined text-secondary" data-icon="mail">mail</span>
+<div>
+<p class="text-[10px] uppercase tracking-widest text-outline font-label">Pilgrimage Inquiries</p>
+<p class="text-sm font-bold">accueil@notredamedeparis.fr</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Map/Location Preview -->
+<div class="rounded-xl overflow-hidden h-48 relative border border-outline-variant/15">
+<img class="absolute inset-0 w-full h-full object-cover" data-alt="abstract architectural map texture with golden lines on a deep navy background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBCgSMlulYUFDOpKRvwi61PqFCW66WQqFU96t3WFQLtD2qX_X4bfX4QT3-b__qXC1K4s0mtbZ6aGJ4brHx3Gwi3ipBh13fSaseietHKbLuBMbFdmrE23YWQkLLL5EiNKDrvoWYtGLjFPkdZTPJl1-tC7Rp9VvOoSGU0ciKokDV7VFnRgQKklIDKYQt3meImI_cmd44J6q16aPhSlO290E9qWKRU7DJjSJ_2X0ahi0bU0AIZlgnXwapOqRN01tWF5U4hTZ0wug6HAhc"/>
+<div class="absolute inset-0 bg-secondary-container/20 flex items-center justify-center">
+<div class="bg-surface/90 backdrop-blur-md px-4 py-2 rounded-full border border-primary/20 shadow-xl flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-sm" data-icon="location_on" style="font-variation-settings: 'FILL' 1;">location_on</span>
+<span class="text-xs font-bold font-headline tracking-tight">Île de la Cité, 75004 Paris</span>
+</div>
+</div>
+</div>
+<!-- Footer Data -->
+<footer class="pt-8 pb-4 flex justify-between items-center opacity-40 hover:opacity-100 transition-opacity">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-xs" data-icon="info">info</span>
+<span class="text-[10px] font-label uppercase tracking-widest">Official Diocese of Paris Data</span>
+</div>
+<span class="text-[10px] font-label uppercase tracking-widest">Last updated: Oct 2023</span>
+</footer>
+</div>
+</section>
+</main>
+</div>
+<!-- Bottom Nav (Mobile Only) -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full flex justify-around items-center h-16 pb-safe px-4 bg-[#121318]/80 backdrop-blur-2xl z-50 rounded-t-xl shadow-[0_-4px_40px_rgba(0,0,0,0.06)]">
+<div class="flex flex-col items-center justify-center text-[#e9c349] scale-105">
+<span class="material-symbols-outlined" data-icon="map" style="font-variation-settings: 'FILL' 1;">map</span>
+<span class="font-['Inter'] text-[10px] font-medium uppercase tracking-tighter">Explore</span>
+</div>
+<div class="flex flex-col items-center justify-center text-[#a7c8ff] opacity-60">
+<span class="material-symbols-outlined" data-icon="favorite">favorite</span>
+<span class="font-['Inter'] text-[10px] font-medium uppercase tracking-tighter">Saved</span>
+</div>
+<div class="flex flex-col items-center justify-center text-[#a7c8ff] opacity-60">
+<span class="material-symbols-outlined" data-icon="event">event</span>
+<span class="font-['Inter'] text-[10px] font-medium uppercase tracking-tighter">Schedule</span>
+</div>
+<div class="flex flex-col items-center justify-center text-[#a7c8ff] opacity-60">
+<span class="material-symbols-outlined" data-icon="person_2">person_2</span>
+<span class="font-['Inter'] text-[10px] font-medium uppercase tracking-tighter">Profile</span>
+</div>
+</nav>
+</body></html>

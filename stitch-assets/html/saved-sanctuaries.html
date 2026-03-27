@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&amp;family=Manrope:wght@300;400;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "secondary-container": "#1f477b",
+            "on-background": "#e3e1e9",
+            "surface-container-lowest": "#0d0e13",
+            "surface-container-high": "#292a2f",
+            "surface-bright": "#38393f",
+            "on-secondary": "#003061",
+            "background": "#121318",
+            "primary-fixed-dim": "#e9c349",
+            "on-tertiary-fixed-variant": "#454749",
+            "tertiary-container": "#313335",
+            "surface-tint": "#e9c349",
+            "primary-fixed": "#ffe088",
+            "on-secondary-fixed": "#001b3c",
+            "on-primary-fixed": "#241a00",
+            "tertiary-fixed": "#e2e2e4",
+            "on-primary": "#3c2f00",
+            "outline": "#8d919a",
+            "on-secondary-container": "#93b6f1",
+            "secondary-fixed": "#d5e3ff",
+            "outline-variant": "#43474f",
+            "surface-dim": "#121318",
+            "secondary-fixed-dim": "#a7c8ff",
+            "on-tertiary-container": "#9a9b9d",
+            "on-secondary-fixed-variant": "#1f477b",
+            "primary-container": "#403200",
+            "on-primary-fixed-variant": "#574500",
+            "on-error-container": "#ffdad6",
+            "surface-container": "#1e1f25",
+            "tertiary-fixed-dim": "#c6c6c8",
+            "tertiary": "#c6c6c8",
+            "surface-container-highest": "#34343a",
+            "error-container": "#93000a",
+            "on-tertiary": "#2f3132",
+            "on-surface": "#e3e1e9",
+            "surface": "#121318",
+            "inverse-primary": "#735c00",
+            "inverse-surface": "#e3e1e9",
+            "on-surface-variant": "#c3c6d1",
+            "on-primary-container": "#bb981f",
+            "surface-variant": "#34343a",
+            "secondary": "#a7c8ff",
+            "primary": "#e9c349",
+            "on-tertiary-fixed": "#1a1c1d",
+            "inverse-on-surface": "#2f3036",
+            "error": "#ffb4ab",
+            "surface-container-low": "#1a1b21",
+            "on-error": "#690005"
+          },
+          fontFamily: {
+            "headline": ["Manrope"],
+            "body": ["Inter"],
+            "label": ["Inter"]
+          },
+          borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+        },
+      },
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+    }
+    .glass-effect {
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+    }
+    .primary-gradient {
+      background: linear-gradient(135deg, #e9c349 0%, #bb981f 100%);
+    }
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .card-shadow-hover:hover {
+      box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.5), 0 0 20px 2px rgba(233, 195, 73, 0.05);
+    }
+  </style>
+</head>
+<body class="bg-background text-on-background font-body selection:bg-primary/30 min-h-screen">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 bg-[#121318]/70 backdrop-blur-3xl flex justify-between items-center px-8 h-20 w-full">
+<div class="flex items-center gap-4">
+<span class="text-2xl font-bold tracking-tighter text-[#e9c349] font-headline">GodsPlan</span>
+</div>
+<div class="hidden md:flex items-center gap-12 font-headline tracking-tighter text-lg">
+<a class="text-slate-400 hover:text-[#e9c349] transition-colors duration-400" href="#">Discover</a>
+<a class="text-[#e9c349] font-bold transition-colors duration-400" href="#">Saved</a>
+<a class="text-slate-400 hover:text-[#e9c349] transition-colors duration-400" href="#">Mass Times</a>
+</div>
+<div class="flex items-center gap-4">
+<div class="relative group">
+<span class="material-symbols-outlined text-on-surface cursor-pointer p-2 rounded-full hover:bg-surface-bright transition-all" data-icon="account_circle">account_circle</span>
+</div>
+</div>
+</header>
+<!-- SideNavBar -->
+<aside class="h-full w-72 fixed left-0 top-0 bg-[#121318] flex flex-col p-6 space-y-8 z-40 hidden md:flex pt-28">
+<div class="mb-6 px-2">
+<h2 class="text-[#e9c349] font-bold text-xl font-headline tracking-tight">Sovereign Essence</h2>
+<p class="font-label uppercase tracking-[0.1em] text-[0.6875rem] text-slate-400">The Digital Sanctuary</p>
+</div>
+<nav class="flex-1 space-y-2">
+<a class="flex items-center gap-4 px-4 py-3 text-slate-400 hover:text-white hover:bg-white/5 transition-all duration-400 rounded-lg group" href="#">
+<span class="material-symbols-outlined text-xl" data-icon="explore">explore</span>
+<span class="font-label uppercase tracking-[0.1em] text-[0.6875rem]">Discover</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 text-[#e9c349] bg-[#403200] rounded-lg group" href="#">
+<span class="material-symbols-outlined text-xl" data-icon="bookmark" style="font-variation-settings: 'FILL' 1;">bookmark</span>
+<span class="font-label uppercase tracking-[0.1em] text-[0.6875rem]">Saved</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 text-slate-400 hover:text-white hover:bg-white/5 transition-all duration-400 rounded-lg group" href="#">
+<span class="material-symbols-outlined text-xl" data-icon="schedule">schedule</span>
+<span class="font-label uppercase tracking-[0.1em] text-[0.6875rem]">Mass Times</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 text-slate-400 hover:text-white hover:bg-white/5 transition-all duration-400 rounded-lg group" href="#">
+<span class="material-symbols-outlined text-xl" data-icon="menu_book">menu_book</span>
+<span class="font-label uppercase tracking-[0.1em] text-[0.6875rem]">Today's Lectures</span>
+</a>
+</nav>
+<div class="pt-6">
+<button class="w-full primary-gradient text-on-primary font-bold py-3 rounded-md flex items-center justify-center gap-2 hover:opacity-90 transition-opacity">
+<span class="material-symbols-outlined text-lg" data-icon="church">church</span>
+<span class="font-label uppercase tracking-widest text-xs">Find a Parish</span>
+</button>
+</div>
+</aside>
+<!-- Main Content -->
+<main class="md:ml-72 pt-28 pb-12 px-8 min-h-screen">
+<!-- Sacred Header -->
+<header class="max-w-7xl mx-auto mb-16">
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-8">
+<h1 class="text-display-lg font-headline font-extrabold text-[#e9c349] tracking-tighter leading-none" style="font-size: 3.5rem;">
+          Saved <br/>Sanctuaries
+        </h1>
+<p class="body-lg text-on-surface-variant max-w-md font-light leading-relaxed opacity-80 border-l border-outline-variant/30 pl-6">
+          Your curated collection of spiritual refuges. A personal archive of sacred spaces where the soul finds its rhythm and quiet resonance.
+        </p>
+</div>
+</header>
+<!-- Grid Layout -->
+<div class="max-w-7xl mx-auto">
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+<!-- Church Card 1 -->
+<div class="group relative bg-surface-container-low rounded-xl overflow-hidden transition-all duration-500 transform hover:-translate-y-2 card-shadow-hover">
+<div class="relative h-64 overflow-hidden">
+<img alt="Notre-Dame de Paris" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" data-alt="stunning architectural view of Notre-Dame de Paris cathedral with intricate gothic details under a soft twilight sky" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDiLinM0CgZQ0wBOBB9-LGvATvCMz6ZTNN_zD6QnPuXVuCh08F_xfuTYuPtUrD9EhPAyqQ-Q40blRhhUignCuFr8VMpSNSrCpmoVy4pwkL1LGwHObyIWo4iWm4dMAI8-uqq7PUC2O8u860GEsFCh_L0y9qUDvafhLzN-1e5VA8MPR7R6rxi4F1mumF-FcRYaQOYN1VIRIFSL6Mu-FdjA2-IuPu1dAlAJ7hIKdprtIDaKcPOzWgSXIRFNj2UU9odT7DOSm2rzsU2c0c"/>
+<div class="absolute inset-0 bg-gradient-to-t from-surface-container-low via-transparent to-transparent"></div>
+<button class="absolute top-4 right-4 bg-background/40 backdrop-blur-md p-2 rounded-full text-[#e9c349] border border-white/10">
+<span class="material-symbols-outlined" data-icon="favorite" style="font-variation-settings: 'FILL' 1;">favorite</span>
+</button>
+</div>
+<div class="p-6">
+<div class="flex justify-between items-start mb-4">
+<h3 class="text-xl font-headline font-bold text-white tracking-tight">Notre-Dame de Paris</h3>
+<div class="flex items-center gap-1 bg-primary/10 px-2 py-1 rounded text-[#e9c349]">
+<span class="material-symbols-outlined text-xs" data-icon="verified" style="font-variation-settings: 'FILL' 1;">verified</span>
+<span class="text-[0.6875rem] font-bold tracking-widest">98%</span>
+</div>
+</div>
+<div class="space-y-3">
+<div class="flex items-center gap-2 text-on-surface-variant text-sm">
+<span class="material-symbols-outlined text-lg opacity-60" data-icon="location_on">location_on</span>
+<span>Île de la Cité, Paris • 2.4 km</span>
+</div>
+<div class="flex items-center gap-2 text-on-surface-variant text-sm">
+<span class="material-symbols-outlined text-lg opacity-60" data-icon="event_repeat">event_repeat</span>
+<span class="font-medium">Next Mass: <span class="text-white">Today at 18:30</span></span>
+</div>
+</div>
+<div class="mt-6 flex gap-3">
+<button class="flex-1 bg-surface-container-high hover:bg-surface-bright text-white text-xs font-label uppercase tracking-widest py-3 rounded-md transition-colors border border-outline-variant/10">
+                Details
+              </button>
+<button class="flex-1 primary-gradient text-on-primary text-xs font-label uppercase tracking-widest py-3 rounded-md font-bold transition-opacity hover:opacity-90">
+                Directions
+              </button>
+</div>
+</div>
+</div>
+<!-- Church Card 2 -->
+<div class="group relative bg-surface-container-low rounded-xl overflow-hidden transition-all duration-500 transform hover:-translate-y-2 card-shadow-hover">
+<div class="relative h-64 overflow-hidden">
+<img alt="Sacre-Coeur Basilica" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" data-alt="white travertine domes of the Sacré-Cœur Basilica in Paris against a deep blue evening sky with warm interior light glowing" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCINfky6Z98Xa2bXGUSjumlhQzXsadM6q_x0h7LgOFjv6auU5ANW904Bn9F1WsLjNkvVC1YP84e04R-BnBOG0piuDVzFQt-uNiTz7tXh3v_-Znkbs4ZIcN18gAsR96fz33NSmHiU8j8H-ByQlqxa8V_g8mIAJLqUYbQXThAOnqgKGV1lfosRTZ_wOIgHuUtkqzeuHwADiHgwlOfAWg7hsS9qbqtWtDJVDH7EOaGtY2xXUIdLCqDtCLtZ8QH3k64Z9X9hKTCsTBLw_I"/>
+<div class="absolute inset-0 bg-gradient-to-t from-surface-container-low via-transparent to-transparent"></div>
+<button class="absolute top-4 right-4 bg-background/40 backdrop-blur-md p-2 rounded-full text-[#e9c349] border border-white/10">
+<span class="material-symbols-outlined" data-icon="favorite" style="font-variation-settings: 'FILL' 1;">favorite</span>
+</button>
+</div>
+<div class="p-6">
+<div class="flex justify-between items-start mb-4">
+<h3 class="text-xl font-headline font-bold text-white tracking-tight">Sacré-Cœur Basilica</h3>
+<div class="flex items-center gap-1 bg-primary/10 px-2 py-1 rounded text-[#e9c349]">
+<span class="material-symbols-outlined text-xs" data-icon="verified" style="font-variation-settings: 'FILL' 1;">verified</span>
+<span class="text-[0.6875rem] font-bold tracking-widest">96%</span>
+</div>
+</div>
+<div class="space-y-3">
+<div class="flex items-center gap-2 text-on-surface-variant text-sm">
+<span class="material-symbols-outlined text-lg opacity-60" data-icon="location_on">location_on</span>
+<span>Montmartre, Paris • 4.1 km</span>
+</div>
+<div class="flex items-center gap-2 text-on-surface-variant text-sm">
+<span class="material-symbols-outlined text-lg opacity-60" data-icon="event_repeat">event_repeat</span>
+<span class="font-medium">Next Mass: <span class="text-white">Tomorrow at 07:00</span></span>
+</div>
+</div>
+<div class="mt-6 flex gap-3">
+<button class="flex-1 bg-surface-container-high hover:bg-surface-bright text-white text-xs font-label uppercase tracking-widest py-3 rounded-md transition-colors border border-outline-variant/10">
+                Details
+              </button>
+<button class="flex-1 primary-gradient text-on-primary text-xs font-label uppercase tracking-widest py-3 rounded-md font-bold transition-opacity hover:opacity-90">
+                Directions
+              </button>
+</div>
+</div>
+</div>
+<!-- Church Card 3 -->
+<div class="group relative bg-surface-container-low rounded-xl overflow-hidden transition-all duration-500 transform hover:-translate-y-2 card-shadow-hover">
+<div class="relative h-64 overflow-hidden">
+<img alt="Saint-Eustache" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" data-alt="grand interior of a gothic cathedral with towering stone columns and sunlight streaming through stained glass windows" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDSOR_RCHxUz_Sh7e3xMQIeHmBiXsep8CoJg33qs1MOJkPdn5lF8ujqXdKwwi4mVijna4FdYaWTY_IKQUsgwyJIqWaniBneumrcNJUYAxQPO84paLhHuEZpX9ZHAH3kJQEeeHF5dvNLAOaOXMGj87Y5sjVyTXKQRyxbwVmp-Ow4AGSYyHQOHE9Z8QJOgHErHM1IAJom090FD1o6aW_2XJ705esgyDQAjZvPiRRVcke1DrUqHu5biQ46ydFyxCRw7QO7IDp20u_GA8k"/>
+<div class="absolute inset-0 bg-gradient-to-t from-surface-container-low via-transparent to-transparent"></div>
+<button class="absolute top-4 right-4 bg-background/40 backdrop-blur-md p-2 rounded-full text-[#e9c349] border border-white/10">
+<span class="material-symbols-outlined" data-icon="favorite" style="font-variation-settings: 'FILL' 1;">favorite</span>
+</button>
+</div>
+<div class="p-6">
+<div class="flex justify-between items-start mb-4">
+<h3 class="text-xl font-headline font-bold text-white tracking-tight">Church of St. Eustache</h3>
+<div class="flex items-center gap-1 bg-primary/10 px-2 py-1 rounded text-[#e9c349]">
+<span class="material-symbols-outlined text-xs" data-icon="verified" style="font-variation-settings: 'FILL' 1;">verified</span>
+<span class="text-[0.6875rem] font-bold tracking-widest">94%</span>
+</div>
+</div>
+<div class="space-y-3">
+<div class="flex items-center gap-2 text-on-surface-variant text-sm">
+<span class="material-symbols-outlined text-lg opacity-60" data-icon="location_on">location_on</span>
+<span>Les Halles, Paris • 1.2 km</span>
+</div>
+<div class="flex items-center gap-2 text-on-surface-variant text-sm">
+<span class="material-symbols-outlined text-lg opacity-60" data-icon="event_repeat">event_repeat</span>
+<span class="font-medium">Next Mass: <span class="text-white">Today at 12:30</span></span>
+</div>
+</div>
+<div class="mt-6 flex gap-3">
+<button class="flex-1 bg-surface-container-high hover:bg-surface-bright text-white text-xs font-label uppercase tracking-widest py-3 rounded-md transition-colors border border-outline-variant/10">
+                Details
+              </button>
+<button class="flex-1 primary-gradient text-on-primary text-xs font-label uppercase tracking-widest py-3 rounded-md font-bold transition-opacity hover:opacity-90">
+                Directions
+              </button>
+</div>
+</div>
+</div>
+</div>
+<!-- Empty State (Hidden by default, shown if no list items exist) -->
+<div class="hidden flex flex-col items-center justify-center py-32 text-center">
+<div class="w-24 h-24 mb-8 rounded-full bg-primary/10 flex items-center justify-center border border-primary/20">
+<span class="material-symbols-outlined text-5xl text-[#e9c349]" data-icon="auto_awesome" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+</div>
+<h2 class="text-3xl font-headline font-bold text-white mb-4">No Saved Sanctuaries</h2>
+<p class="text-on-surface-variant max-w-sm mb-10 opacity-70">Begin your journey by discovering the sacred architectures and communities near you.</p>
+<button class="px-10 py-4 primary-gradient text-on-primary font-bold rounded-md font-label uppercase tracking-[0.2em] text-xs hover:shadow-lg hover:shadow-primary/20 transition-all">
+          Discover Parishes
+        </button>
+</div>
+</div>
+</main>
+<!-- Mobile Navigation -->
+<nav class="md:hidden fixed bottom-0 w-full bg-[#121318]/90 backdrop-blur-xl border-t border-white/5 flex justify-around items-center h-20 px-4 z-50">
+<a class="flex flex-col items-center gap-1 text-slate-400" href="#">
+<span class="material-symbols-outlined" data-icon="explore">explore</span>
+<span class="text-[10px] font-label uppercase tracking-widest">Discover</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-[#e9c349]" href="#">
+<span class="material-symbols-outlined" data-icon="bookmark" style="font-variation-settings: 'FILL' 1;">bookmark</span>
+<span class="text-[10px] font-label uppercase tracking-widest">Saved</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400" href="#">
+<span class="material-symbols-outlined" data-icon="schedule">schedule</span>
+<span class="text-[10px] font-label uppercase tracking-widest">Mass</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400" href="#">
+<span class="material-symbols-outlined" data-icon="account_circle">account_circle</span>
+<span class="text-[10px] font-label uppercase tracking-widest">Profile</span>
+</a>
+</nav>
+</body></html>

@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&amp;family=Manrope:wght@300;400;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "secondary": "#a7c8ff",
+                        "outline": "#8d919a",
+                        "on-primary": "#3c2f00",
+                        "on-surface-variant": "#c3c6d1",
+                        "surface-container-lowest": "#0d0e13",
+                        "on-error-container": "#ffdad6",
+                        "on-secondary-container": "#93b6f1",
+                        "error": "#ffb4ab",
+                        "surface-dim": "#121318",
+                        "on-tertiary": "#2f3132",
+                        "surface-variant": "#34343a",
+                        "surface-container-high": "#292a2f",
+                        "on-tertiary-container": "#9a9b9d",
+                        "on-background": "#e3e1e9",
+                        "surface-container": "#1e1f25",
+                        "surface-tint": "#e9c349",
+                        "tertiary-fixed": "#e2e2e4",
+                        "on-primary-container": "#bb981f",
+                        "primary-fixed": "#ffe088",
+                        "on-secondary": "#003061",
+                        "on-surface": "#e3e1e9",
+                        "surface-container-highest": "#34343a",
+                        "on-tertiary-fixed-variant": "#454749",
+                        "primary-fixed-dim": "#e9c349",
+                        "secondary-fixed": "#d5e3ff",
+                        "inverse-surface": "#e3e1e9",
+                        "tertiary-fixed-dim": "#c6c6c8",
+                        "on-secondary-fixed": "#001b3c",
+                        "surface": "#121318",
+                        "on-secondary-fixed-variant": "#1f477b",
+                        "outline-variant": "#43474f",
+                        "background": "#121318",
+                        "on-primary-fixed": "#241a00",
+                        "on-error": "#690005",
+                        "tertiary-container": "#313335",
+                        "surface-bright": "#38393f",
+                        "tertiary": "#c6c6c8",
+                        "error-container": "#93000a",
+                        "surface-container-low": "#1a1b21",
+                        "on-primary-fixed-variant": "#574500",
+                        "secondary-container": "#1f477b",
+                        "primary": "#e9c349",
+                        "primary-container": "#403200",
+                        "secondary-fixed-dim": "#a7c8ff",
+                        "inverse-primary": "#735c00",
+                        "on-tertiary-fixed": "#1a1c1d",
+                        "inverse-on-surface": "#2f3036"
+                    },
+                    fontFamily: {
+                        "headline": ["Manrope"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    },
+                    borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+                },
+            },
+        }
+    </script>
+<style>.glass-panel {
+    background: rgba(18, 19, 24, 0.7);
+    backdrop-filter: blur(24px)
+    }
+.sacred-gradient {
+    background: linear-gradient(135deg, #e9c349 0%, #bb981f 100%)
+    }
+.royal-gradient {
+    background: linear-gradient(135deg, #1f477b 0%, #001b3c 100%)
+    }
+.cathedral-bg {
+    background-image: linear-gradient(rgba(18, 19, 24, 0.8), rgba(64, 50, 0, 0.3)), url(https://lh3.googleusercontent.com/aida-public/AB6AXuDcgUJPsqi2wnNRNVgafdp9WUVWeZ8-k63GZ-j7i_slm6NFrTG5OUIA2zQrlteQX1-iX-9FCuTX-hzSS2ETZXwupxNQc_gxsFl0Vmu3fQxflME2Gp-slOiwFHRqImYaXdDNNNKs3VXQlLAx5CbRE2IYEOUM4SuuTrnfUKt5_VoUFqB_B3C3RTfNxmcVDJEVOCYbUCh0n3z1AXCR2b8rsp11-vxRbskidABTsNg1E3t6fkHTIlAO_dx1mT_EqJ4QmcyYDsVQEtDAhdA);
+    background-size: cover;
+    background-position: center
+    }
+.material-symbols-outlined {
+    font-variation-settings: "FILL" 0, "wght" 300, "GRAD" 0, "opsz" 24
+    }</style>
+</head>
+<body class="bg-background text-on-surface font-body selection:bg-primary/30 selection:text-primary">
+<main class="min-h-screen w-full flex items-center justify-center p-6 cathedral-bg" data-alt="interior of a majestic Parisian cathedral with high gothic arches, soft golden morning light streaming through stained glass, moody dark shadows">
+<!-- Login Card -->
+<div class="relative w-full max-w-[480px]">
+<!-- Asymmetrical Decorative Element -->
+<div class="absolute -top-12 -left-12 w-24 h-24 rounded-full border border-primary/20 pointer-events-none hidden md:block"></div>
+<div class="glass-panel p-10 md:p-14 rounded-xl border border-white/5 shadow-2xl relative overflow-hidden">
+<!-- Brand Identity -->
+<div class="flex flex-col items-center mb-12">
+<div class="mb-6">
+<span class="material-symbols-outlined text-4xl text-primary" style="font-variation-settings: 'FILL' 1;">church</span>
+</div>
+<h1 class="font-headline text-3xl font-bold tracking-tighter text-primary mb-2">GodsPlan</h1>
+<p class="font-label text-[10px] uppercase tracking-[0.2em] text-secondary">Your Digital Sanctuary</p>
+</div>
+<!-- Form -->
+<form class="space-y-10">
+<div class="space-y-8">
+<!-- Email Field -->
+<div class="relative group">
+<label class="block font-label text-[11px] uppercase tracking-widest text-outline-variant transition-colors group-focus-within:text-primary" for="email">
+                                Email Address
+                            </label>
+<input class="w-full bg-transparent border-0 border-b-2 border-surface-variant focus:border-primary focus:ring-0 px-0 py-3 text-on-surface placeholder-surface-variant transition-all duration-400 font-body" id="email" name="email" placeholder="seeker@sovereign.com" required="" type="email"/>
+</div>
+<!-- Password Field -->
+<div class="relative group">
+<div class="flex justify-between items-end">
+<label class="block font-label text-[11px] uppercase tracking-widest text-outline-variant transition-colors group-focus-within:text-primary" for="password">
+                                    Password
+                                </label>
+<a class="text-[10px] uppercase tracking-wider text-secondary hover:text-primary transition-colors duration-400 font-label" href="#">
+                                    Forgot Password?
+                                </a>
+</div>
+<input class="w-full bg-transparent border-0 border-b-2 border-surface-variant focus:border-primary focus:ring-0 px-0 py-3 text-on-surface placeholder-surface-variant transition-all duration-400 font-body" id="password" name="password" placeholder="••••••••" required="" type="password"/>
+</div>
+</div>
+<!-- Action Button -->
+<div class="pt-4">
+<button class="w-full royal-gradient text-primary font-headline font-bold py-5 rounded-md shadow-lg hover:shadow-primary/10 transition-all duration-400 group relative overflow-hidden" type="submit">
+<span class="relative z-10 tracking-widest uppercase text-sm">Sign In</span>
+<div class="absolute inset-0 bg-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-400"></div>
+</button>
+</div>
+</form>
+<!-- Footer Links -->
+<div class="mt-12 text-center">
+<p class="text-sm text-outline-variant font-body">
+                        New to the sanctuary? 
+                        <a class="text-primary font-semibold ml-2 hover:underline decoration-primary/30 underline-offset-4 transition-all" href="#">
+                            Create an account
+                        </a>
+</p>
+</div>
+</div>
+<!-- Accessibility Note / Metadata -->
+<div class="mt-8 flex justify-center items-center space-x-6">
+<div class="flex items-center space-x-2">
+<span class="w-1 h-1 rounded-full bg-primary/40"></span>
+<span class="font-label text-[9px] uppercase tracking-[0.15em] text-outline-variant">Secure Portal</span>
+</div>
+<div class="flex items-center space-x-2">
+<span class="w-1 h-1 rounded-full bg-primary/40"></span>
+<span class="font-label text-[9px] uppercase tracking-[0.15em] text-outline-variant">Sovereign Essence v1.0</span>
+</div>
+</div>
+</div>
+</main>
+<!-- Visual Artifacts -->
+<div class="fixed top-0 right-0 p-12 pointer-events-none opacity-20">
+<span class="material-symbols-outlined text-8xl text-primary font-extralight">flare</span>
+</div>
+</body></html>
