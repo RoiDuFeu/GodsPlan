@@ -20,32 +20,21 @@ export class Liturgy {
   liturgicalColor?: string; // e.g., "violet", "blanc", "vert", "rouge"
 
   @Column({ type: 'jsonb' })
-  readingsFr!: {
+  readings!: {
     title: string;
     reference: string;
     text: string;
   }[];
 
   @Column({ type: 'jsonb', nullable: true })
-  readingsEn?: {
-    title: string;
-    reference: string;
-    text: string;
-  }[];
-
-  @Column({ type: 'jsonb', nullable: true })
-  psalmFr?: {
+  psalm?: {
     reference: string;
     refrain: string;
     text: string;
   };
 
-  @Column({ type: 'jsonb', nullable: true })
-  psalmEn?: {
-    reference: string;
-    refrain: string;
-    text: string;
-  };
+  @Column({ type: 'varchar', length: 500, nullable: true })
+  usccbLink?: string;
 
   @CreateDateColumn()
   createdAt!: Date;

@@ -37,10 +37,10 @@ export class LiturgySyncJob {
           continue;
         }
         
-        // Fetch bilingual data
-        const data = await liturgyScraper.fetchBilingualLiturgy(dateStr);
+        // Fetch from GitHub API
+        const data = await liturgyScraper.fetchDailyLiturgy(dateStr);
         
-        if (!data.fr && !data.en) {
+        if (!data) {
           console.warn(`[LiturgySyncJob] ⚠️  No liturgy data for ${dateStr}`);
           continue;
         }
@@ -48,12 +48,11 @@ export class LiturgySyncJob {
         // Store in DB
         const liturgy = liturgyRepository.create({
           date: new Date(dateStr),
-          liturgicalDay: data.fr?.liturgicalDay || data.en?.liturgicalDay || '',
-          liturgicalColor: data.fr?.liturgicalColor || data.en?.liturgicalColor || 'vert',
-          readingsFr: data.fr?.readings || [],
-          readingsEn: data.en?.readings || [],
-          psalmFr: data.fr?.psalm,
-          psalmEn: data.en?.psalm
+          liturgicalDay: data.liturgicalDay,
+          liturgicalColor: data.liturgicalColor,
+          readings: data.readings,
+          psalm: data.psalm,
+          usccbLink: data.usccbLink
         });
         
         await liturgyRepository.save(liturgy);

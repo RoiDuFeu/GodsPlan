@@ -1,211 +1,193 @@
 /**
  * LiturgyScraper.ts
  * 
- * Dual-language scraper for Catholic liturgy readings (FR + EN)
- * Sources:
- * - FR: AELF.org (Association Épiscopale Liturgique Francophone)
- * - EN: USCCB.org (United States Conference of Catholic Bishops)
+ * Fetches daily Catholic Mass readings from free GitHub API
+ * Source: https://github.com/cpbjr/catholic-readings-api
+ * 
+ * API Coverage: 2025-2026 (EN only, references to USCCB)
+ * No rate limits, no API key, hosted on GitHub Pages
  */
 
 import axios from 'axios';
-import * as cheerio from 'cheerio';
+
+const API_BASE = 'https://cpbjr.github.io/catholic-readings-api';
 
 export interface LiturgyReading {
-  title: string;
-  reference: string;
-  text: string;
+  title: string;       // e.g., "First Reading", "Gospel"
+  reference: string;   // e.g., "Isaiah 42:1-7"
+  text: string;        // Full text (not provided by API, only references)
 }
 
 export interface DailyLiturgy {
-  date: string;
-  liturgicalDay: string;
-  liturgicalColor: string;
+  date: string;              // ISO date (YYYY-MM-DD)
+  liturgicalDay: string;     // e.g., "Holy Week"
+  liturgicalColor: string;   // e.g., "purple" (not provided by API)
   readings: LiturgyReading[];
   psalm?: {
     reference: string;
     refrain: string;
     text: string;
   };
-}
-
-export interface BilingualLiturgy {
-  date: string;
-  fr: DailyLiturgy | null;
-  en: DailyLiturgy | null;
+  usccbLink: string;        // Official USCCB verification link
 }
 
 export class LiturgyScraper {
   /**
-   * Fetch liturgy in both languages
+   * Fetch daily liturgy from catholic-readings-api
+   * @param date - Date in YYYY-MM-DD format (defaults to today)
    */
-  async fetchBilingualLiturgy(date?: string): Promise<BilingualLiturgy> {
-    const targetDate = date || this.getTodayISO();
-    
-    const [fr, en] = await Promise.all([
-      this.fetchFrenchLiturgy(targetDate),
-      this.fetchEnglishLiturgy(targetDate)
-    ]);
-    
-    return { date: targetDate, fr, en };
-  }
-  
-  /**
-   * Fetch French liturgy from AELF.org
-   */
-  async fetchFrenchLiturgy(date: string): Promise<DailyLiturgy | null> {
+  async fetchDailyLiturgy(date?: string): Promise<DailyLiturgy | null> {
     try {
-      const [year, month, day] = date.split('-');
-      const url = `https://www.aelf.org/${year}-${month}-${day}/romain/messe`;
+      const targetDate = date || this.getTodayISO();
+      const [year, month, day] = targetDate.split('-');
+      const url = `${API_BASE}/readings/${year}/${month}-${day}.json`;
       
-      console.log(`[LiturgyScraper FR] Fetching ${url}...`);
+      console.log(`[LiturgyScraper] Fetching ${url}...`);
       
       const response = await axios.get(url, {
         headers: {
-          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
-          'Accept-Language': 'fr-FR,fr;q=0.9'
+          'User-Agent': 'GodsPlan/1.0 (Catholic church finder app)',
+          'Accept': 'application/json'
         },
-        timeout: 15000
+        timeout: 10000
       });
       
-      const $ = cheerio.load(response.data);
+      const data = response.data;
       
-      const liturgicalDay = $('.jour-liturgique').first().text().trim() || 
-                           $('h1').first().text().trim() || '';
-      
-      const readings: LiturgyReading[] = [];
-      let psalmData = null;
-      
-      // AELF structure: .block-single-messe contains readings
-      $('.block-single-messe .lecture, .lecture').each((i, elem) => {
-        const $section = $(elem);
-        
-        const title = $section.find('h3, .lecture-title').first().text().trim();
-        const reference = $section.find('.ref, .lecture-reference').first().text().trim();
-        
-        const textParts: string[] = [];
-        $section.find('p.contenu, .lecture-text p, .texte p').each((_, p) => {
-          const text = $(p).text().trim();
-          if (text && text.length > 5) textParts.push(text);
-        });
-        
-        const text = textParts.join('\n\n');
-        
-        if (text.length > 20 && title) {
-          if (title.toLowerCase().includes('psaume')) {
-            const refrain = $section.find('.antienne, .refrain').first().text().trim();
-            psalmData = { reference, refrain, text };
-          }
-          
-          readings.push({ title, reference, text });
-        }
-      });
-      
-      if (readings.length === 0) {
-        console.warn(`[LiturgyScraper FR] No readings found for ${date}`);
+      if (!data || !data.readings) {
+        console.warn(`[LiturgyScraper] Invalid response for ${targetDate}`);
         return null;
       }
       
-      console.log(`[LiturgyScraper FR] ✓ ${readings.length} readings`);
+      // Transform API format to our internal format
+      const readings: LiturgyReading[] = [];
       
-      return {
-        date,
-        liturgicalDay,
-        liturgicalColor: 'vert',
+      if (data.readings.firstReading) {
+        readings.push({
+          title: 'First Reading',
+          reference: data.readings.firstReading,
+          text: '' // API only provides references, not full text
+        });
+      }
+      
+      if (data.readings.psalm) {
+        readings.push({
+          title: 'Psalm',
+          reference: data.readings.psalm,
+          text: ''
+        });
+      }
+      
+      if (data.readings.secondReading) {
+        readings.push({
+          title: 'Second Reading',
+          reference: data.readings.secondReading,
+          text: ''
+        });
+      }
+      
+      if (data.readings.gospel) {
+        readings.push({
+          title: 'Gospel',
+          reference: data.readings.gospel,
+          text: ''
+        });
+      }
+      
+      const psalm = data.readings.psalm ? {
+        reference: data.readings.psalm,
+        refrain: '',
+        text: ''
+      } : undefined;
+      
+      const liturgy: DailyLiturgy = {
+        date: targetDate,
+        liturgicalDay: data.season || '',
+        liturgicalColor: this.getSeasonColor(data.season),
         readings,
-        psalm: psalmData || undefined
+        psalm,
+        usccbLink: data.usccbLink || ''
       };
       
+      console.log(`[LiturgyScraper] ✓ Fetched ${readings.length} readings for ${data.season || targetDate}`);
+      
+      return liturgy;
+      
     } catch (error: any) {
-      console.error('[LiturgyScraper FR] Error:', error.message);
+      if (error.response?.status === 404) {
+        console.warn(`[LiturgyScraper] No liturgy data for date: ${date}`);
+      } else {
+        console.error('[LiturgyScraper] Error fetching liturgy:', error.message);
+      }
       return null;
     }
   }
   
   /**
-   * Fetch English liturgy from USCCB.org
+   * Map liturgical season to color
    */
-  async fetchEnglishLiturgy(date: string): Promise<DailyLiturgy | null> {
-    try {
-      const [year, month, day] = date.split('-');
-      const url = `https://bible.usccb.org/bible/readings/${month}${day}${year.slice(2)}.cfm`;
-      
-      console.log(`[LiturgyScraper EN] Fetching ${url}...`);
-      
-      const response = await axios.get(url, {
-        headers: {
-          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
-          'Accept-Language': 'en-US,en;q=0.9'
-        },
-        timeout: 15000
-      });
-      
-      const $ = cheerio.load(response.data);
-      
-      const liturgicalDay = $('h1.page-title').first().text().trim() ||
-                           $('.b-lectionary h2').first().text().trim() || '';
-      
-      const readings: LiturgyReading[] = [];
-      let psalmData = null;
-      
-      // USCCB structure: .content-body contains readings
-      $('.content-body .address, .reading').each((i, elem) => {
-        const $section = $(elem);
-        
-        const title = $section.find('h3, .address-title').first().text().trim() ||
-                     `Reading ${i + 1}`;
-        const reference = $section.find('.bibleref, .reftxt').first().text().trim();
-        
-        const textParts: string[] = [];
-        $section.find('.body p, .text p').each((_, p) => {
-          const text = $(p).text().trim();
-          if (text && text.length > 5) textParts.push(text);
-        });
-        
-        const text = textParts.join('\n\n');
-        
-        if (text.length > 20 && title) {
-          if (title.toLowerCase().includes('psalm')) {
-            const refrain = $section.find('.refrain, .response').first().text().trim();
-            psalmData = { reference, refrain, text };
-          }
-          
-          readings.push({ title, reference, text });
-        }
-      });
-      
-      if (readings.length === 0) {
-        console.warn(`[LiturgyScraper EN] No readings found for ${date}`);
-        return null;
-      }
-      
-      console.log(`[LiturgyScraper EN] ✓ ${readings.length} readings`);
-      
-      return {
-        date,
-        liturgicalDay,
-        liturgicalColor: 'green',
-        readings,
-        psalm: psalmData || undefined
-      };
-      
-    } catch (error: any) {
-      console.error('[LiturgyScraper EN] Error:', error.message);
-      return null;
-    }
+  private getSeasonColor(season: string = ''): string {
+    const lowerSeason = season.toLowerCase();
+    
+    if (lowerSeason.includes('advent') || lowerSeason.includes('lent')) return 'purple';
+    if (lowerSeason.includes('christmas') || lowerSeason.includes('easter')) return 'white';
+    if (lowerSeason.includes('holy week')) return 'purple';
+    if (lowerSeason.includes('pentecost')) return 'red';
+    
+    return 'green'; // Ordinary Time default
   }
   
+  /**
+   * Fetch next Sunday's liturgy
+   */
+  async fetchNextSundayLiturgy(): Promise<DailyLiturgy | null> {
+    const nextSunday = this.getNextSunday();
+    return this.fetchDailyLiturgy(nextSunday);
+  }
+  
+  /**
+   * Fetch current week's Sunday liturgy
+   */
+  async fetchCurrentSundayLiturgy(): Promise<DailyLiturgy | null> {
+    const currentSunday = this.getCurrentOrPreviousSunday();
+    return this.fetchDailyLiturgy(currentSunday);
+  }
+  
+  /**
+   * Get today's date in ISO format (YYYY-MM-DD)
+   */
   private getTodayISO(): string {
     return new Date().toISOString().split('T')[0];
   }
   
+  /**
+   * Get next Sunday's date
+   */
   getNextSunday(): string {
     const today = new Date();
     const dayOfWeek = today.getDay();
     const daysUntilSunday = dayOfWeek === 0 ? 7 : (7 - dayOfWeek);
+    
     const nextSunday = new Date(today);
     nextSunday.setDate(today.getDate() + daysUntilSunday);
+    
     return nextSunday.toISOString().split('T')[0];
+  }
+  
+  /**
+   * Get current Sunday (or previous if not Sunday today)
+   */
+  private getCurrentOrPreviousSunday(): string {
+    const today = new Date();
+    const dayOfWeek = today.getDay();
+    const daysSinceSunday = dayOfWeek === 0 ? 0 : dayOfWeek;
+    
+    const sunday = new Date(today);
+    sunday.setDate(today.getDate() - daysSinceSunday);
+    
+    return sunday.toISOString().split('T')[0];
   }
 }
 
+// Export singleton instance
 export const liturgyScraper = new LiturgyScraper();

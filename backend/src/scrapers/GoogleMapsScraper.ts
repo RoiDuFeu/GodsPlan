@@ -142,7 +142,12 @@ export class GoogleMapsScraper {
       await this.waitForRateLimit();
 
       const page = await this.getPage();
-      const searchUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}`;
+      
+      // 🚀 NEW: Inject consent cookies BEFORE navigation
+      await this.bypassConsentWithCookies(page);
+
+      // Build URL with consent parameter
+      const searchUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}&hl=en`;
 
       await page.goto(searchUrl, {
         waitUntil: 'domcontentloaded',
@@ -150,6 +155,14 @@ export class GoogleMapsScraper {
       });
 
       await this.sleep(1200);
+
+      // 🚀 NEW: Try to dismiss consent banner if it appears
+      const consentDismissed = await this.tryDismissConsentBanner(page);
+      
+      if (consentDismissed) {
+        console.log(`✅ Consent banner dismissed for "${church.name}"`);
+        await this.sleep(800); // Wait for redirect/reload
+      }
 
       if (await this.isConsentOrBlockedPage(page)) {
         console.warn(`⚠️ Google Maps blocked/consent required for "${church.name}"`);
@@ -210,14 +223,98 @@ export class GoogleMapsScraper {
     if (!this.browser) {
       this.browser = await puppeteer.launch({
         headless: this.headless,
-        args: ['--no-sandbox', '--disable-setuid-sandbox'],
+        args: [
+          '--no-sandbox',
+          '--disable-setuid-sandbox',
+          '--disable-blink-features=AutomationControlled', // Hide automation
+        ],
       });
     }
 
     this.page = await this.browser.newPage();
     this.page.setDefaultTimeout(this.timeoutMs);
 
+    // Set realistic user agent
+    await this.page.setUserAgent(
+      'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36'
+    );
+
+    // Set additional headers
+    await this.page.setExtraHTTPHeaders({
+      'Accept-Language': 'en-US,en;q=0.9,fr;q=0.8',
+    });
+
     return this.page;
+  }
+
+  /**
+   * 🚀 NEW METHOD: Bypass consent by injecting pre-accepted cookies
+   * Strategy A: Most reliable and clean approach
+   */
+  private async bypassConsentWithCookies(page: Page): Promise<void> {
+    try {
+      // Multiple cookie strategies to maximize success rate
+      const cookies = [
+        {
+          name: 'CONSENT',
+          value: 'YES+cb.20210720-07-p0.en+FX+410',
+          domain: '.google.com',
+          path: '/',
+          httpOnly: false,
+          secure: true,
+          sameSite: 'Lax' as const,
+        },
+        {
+          name: 'SOCS',
+          value: 'CAESHAgBEhJnd3NfMjAyNDA5MTAtMF9SQzIaAmVuIAEaBgiA-LOsBg',
+          domain: '.google.com',
+          path: '/',
+          httpOnly: true,
+          secure: true,
+          sameSite: 'Lax' as const,
+        },
+      ];
+
+      await page.setCookie(...cookies);
+    } catch (error) {
+      console.warn('⚠️ Failed to set consent cookies:', error);
+    }
+  }
+
+  /**
+   * 🚀 NEW METHOD: Try to dismiss consent banner by clicking accept buttons
+   * Strategy B: Fallback if cookies don't work
+   */
+  private async tryDismissConsentBanner(page: Page): Promise<boolean> {
+    try {
+      // List of possible selectors for consent accept buttons (2026 selectors)
+      const acceptSelectors = [
+        'button[aria-label*="Accept"]',
+        'button[aria-label*="Accepter"]',
+        'button:has-text("Accept all")',
+        'button:has-text("Tout accepter")',
+        'form[action*="consent"] button[type="submit"]',
+        '#introAgreeButton',
+        'button[jsname="higCR"]', // Google's internal button name
+        'div[role="dialog"] button:first-of-type',
+      ];
+
+      for (const selector of acceptSelectors) {
+        try {
+          const button = await page.waitForSelector(selector, { timeout: 2000 });
+          if (button) {
+            await button.click();
+            return true;
+          }
+        } catch {
+          // Try next selector
+        }
+      }
+
+      return false;
+    } catch (error) {
+      return false;
+    }
   }
 
   private async waitForRateLimit(): Promise<void> {

@@ -9,7 +9,7 @@ const router = Router();
  */
 router.get('/', async (req: Request, res: Response) => {
   try {
-    const { city, limit = 50, offset = 0 } = req.query;
+    const { city, limit = 500, offset = 0 } = req.query;
     
     let whereClause = '"isActive" = true';
     const params: any[] = [];

@@ -133,31 +133,30 @@ async function getOrFetchLiturgy(date: string): Promise<Liturgy | null> {
 }
 
 /**
- * Helper: Fetch from both sources and store in database
+ * Helper: Fetch from GitHub API and store in database
  */
 async function fetchAndStoreLiturgy(date: string): Promise<Liturgy | null> {
   const liturgyRepository = AppDataSource.getRepository(Liturgy);
   
-  const data = await liturgyScraper.fetchBilingualLiturgy(date);
+  const data = await liturgyScraper.fetchDailyLiturgy(date);
   
-  if (!data.fr && !data.en) {
+  if (!data) {
     return null;
   }
   
   // Upsert liturgy
   const liturgy = liturgyRepository.create({
     date: new Date(date),
-    liturgicalDay: data.fr?.liturgicalDay || data.en?.liturgicalDay || '',
-    liturgicalColor: data.fr?.liturgicalColor || data.en?.liturgicalColor || 'vert',
-    readingsFr: data.fr?.readings || [],
-    readingsEn: data.en?.readings || [],
-    psalmFr: data.fr?.psalm,
-    psalmEn: data.en?.psalm
+    liturgicalDay: data.liturgicalDay,
+    liturgicalColor: data.liturgicalColor,
+    readings: data.readings,
+    psalm: data.psalm,
+    usccbLink: data.usccbLink
   });
   
   await liturgyRepository.save(liturgy);
   
-  console.log(`[Liturgy API] ✓ Stored liturgy for ${date} (FR: ${!!data.fr}, EN: ${!!data.en})`);
+  console.log(`[Liturgy API] ✓ Stored liturgy for ${date} - ${data.liturgicalDay}`);
   
   return liturgy;
 }
