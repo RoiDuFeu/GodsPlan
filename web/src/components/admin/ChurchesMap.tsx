@@ -1,7 +1,17 @@
-import { useEffect, useState } from 'react';
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+/**
+ * ChurchesMap.tsx
+ * 
+ * Map with real clustering using leaflet.markercluster directly
+ * Compatible with react-leaflet v5
+ */
+
+import { useEffect, useState, useRef } from 'react';
+import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
+import 'leaflet.markercluster/dist/MarkerCluster.css';
+import 'leaflet.markercluster/dist/MarkerCluster.Default.css';
+import 'leaflet.markercluster';
 
 // Fix for default marker icons in Leaflet
 delete (L.Icon.Default.prototype as any)._getIconUrl;
@@ -60,6 +70,113 @@ interface ChurchesMapProps {
   churches: ChurchMapData[];
 }
 
+// Component that adds clustering to the map
+function MarkerClusterLayer({ churches }: { churches: ChurchMapData[] }) {
+  const map = useMap();
+  const clusterGroupRef = useRef<L.MarkerClusterGroup | null>(null);
+
+  useEffect(() => {
+    if (!map) return;
+
+    // Create cluster group with custom icon
+    const markerClusterGroup = L.markerClusterGroup({
+      maxClusterRadius: 60,
+      spiderfyOnMaxZoom: true,
+      showCoverageOnHover: true,
+      zoomToBoundsOnClick: true,
+      disableClusteringAtZoom: 15,
+      iconCreateFunction: (cluster) => {
+        const count = cluster.getChildCount();
+        
+        // Calculate average reliability score
+        const markers = cluster.getAllChildMarkers() as any[];
+        let totalScore = 0;
+        let validScores = 0;
+        
+        markers.forEach((marker) => {
+          if (marker.options.churchScore) {
+            totalScore += marker.options.churchScore;
+            validScores++;
+          }
+        });
+        
+        const avgScore = validScores > 0 ? totalScore / validScores : 50;
+        const color = avgScore >= 80 ? '#22c55e' : avgScore >= 50 ? '#f59e0b' : '#ef4444';
+        const size = count > 50 ? 48 : count > 10 ? 42 : 36;
+        
+        return L.divIcon({
+          html: `<div style="
+            background: ${color};
+            width: ${size}px;
+            height: ${size}px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 14px;
+            border: 3px solid white;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+          ">
+            <div>
+              <div>${count}</div>
+              <div style="font-size: 9px; margin-top: -2px;">⌀${avgScore.toFixed(0)}</div>
+            </div>
+          </div>`,
+          className: 'marker-cluster-custom',
+          iconSize: L.point(size, size),
+        });
+      }
+    });
+
+    // Add all markers to cluster group
+    churches.forEach((church) => {
+      const marker = L.marker([church.lat, church.lng], {
+        icon: createCustomIcon(church.score),
+        // @ts-ignore - store score for cluster calculation
+        churchScore: church.score
+      });
+
+      marker.bindPopup(`
+        <div class="p-2" style="min-width: 200px;">
+          <h3 style="font-weight: bold; font-size: 0.875rem; margin-bottom: 0.5rem;">${church.name}</h3>
+          <div style="font-size: 0.75rem;">
+            <p style="margin-bottom: 0.25rem;">
+              <span style="font-weight: 600;">Score:</span> 
+              <span style="color: ${church.score >= 80 ? '#22c55e' : church.score >= 50 ? '#f59e0b' : '#ef4444'};">
+                ${church.score.toFixed(1)}
+              </span>
+            </p>
+            <p style="margin-bottom: 0.25rem;">
+              <span style="font-weight: 600;">Horaires:</span> ${church.schedulesCount}
+            </p>
+            ${church.phone ? `<p style="margin-bottom: 0.25rem;"><span style="font-weight: 600;">Tél:</span> ${church.phone}</p>` : ''}
+            <p style="font-size: 0.65rem; color: #6b7280; margin-top: 0.5rem;">
+              Lat: ${church.lat.toFixed(5)}, Lng: ${church.lng.toFixed(5)}
+            </p>
+          </div>
+        </div>
+      `);
+
+      markerClusterGroup.addLayer(marker);
+    });
+
+    // Add cluster group to map
+    map.addLayer(markerClusterGroup);
+    clusterGroupRef.current = markerClusterGroup;
+
+    // Cleanup on unmount
+    return () => {
+      if (clusterGroupRef.current) {
+        map.removeLayer(clusterGroupRef.current);
+      }
+    };
+  }, [map, churches]);
+
+  return null;
+}
+
 export function ChurchesMap({ churches }: ChurchesMapProps) {
   const [mapReady, setMapReady] = useState(false);
 
@@ -91,33 +208,15 @@ export function ChurchesMap({ churches }: ChurchesMapProps) {
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
         
-        {churches.map((church) => (
-          <Marker
-            key={church.id}
-            position={[church.lat, church.lng]}
-            icon={createCustomIcon(church.score)}
-          >
-            <Popup>
-              <div className="p-2 min-w-[200px]">
-                <h3 className="font-bold text-sm mb-2">{church.name}</h3>
-                <div className="text-xs space-y-1">
-                  <p>
-                    <span className="font-semibold">Score:</span> {church.score.toFixed(1)}
-                  </p>
-                  <p>
-                    <span className="font-semibold">Horaires:</span> {church.schedulesCount}
-                  </p>
-                  {church.phone && (
-                    <p>
-                      <span className="font-semibold">Tél:</span> {church.phone}
-                    </p>
-                  )}
-                </div>
-              </div>
-            </Popup>
-          </Marker>
-        ))}
+        <MarkerClusterLayer churches={churches} />
       </MapContainer>
+      
+      <style>{`
+        .marker-cluster-custom:hover {
+          transform: scale(1.1);
+          cursor: pointer;
+        }
+      `}</style>
     </div>
   );
 }
