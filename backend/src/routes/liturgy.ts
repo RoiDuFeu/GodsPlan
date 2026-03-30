@@ -133,7 +133,7 @@ async function getOrFetchLiturgy(date: string): Promise<Liturgy | null> {
 }
 
 /**
- * Helper: Fetch from GitHub API and store in database
+ * Helper: Fetch from GitHub API and store/update in database
  */
 async function fetchAndStoreLiturgy(date: string): Promise<Liturgy | null> {
   const liturgyRepository = AppDataSource.getRepository(Liturgy);
@@ -144,15 +144,27 @@ async function fetchAndStoreLiturgy(date: string): Promise<Liturgy | null> {
     return null;
   }
   
-  // Upsert liturgy
-  const liturgy = liturgyRepository.create({
-    date: new Date(date),
-    liturgicalDay: data.liturgicalDay,
-    liturgicalColor: data.liturgicalColor,
-    readings: data.readings,
-    psalm: data.psalm,
-    usccbLink: data.usccbLink
-  });
+  // Check if already exists
+  let liturgy = await liturgyRepository.findOne({ where: { date: new Date(date) } });
+  
+  if (liturgy) {
+    // Update existing
+    liturgy.liturgicalDay = data.liturgicalDay;
+    liturgy.liturgicalColor = data.liturgicalColor;
+    liturgy.readings = data.readings;
+    liturgy.psalm = data.psalm;
+    liturgy.usccbLink = data.usccbLink;
+  } else {
+    // Create new
+    liturgy = liturgyRepository.create({
+      date: new Date(date),
+      liturgicalDay: data.liturgicalDay,
+      liturgicalColor: data.liturgicalColor,
+      readings: data.readings,
+      psalm: data.psalm,
+      usccbLink: data.usccbLink
+    });
+  }
   
   await liturgyRepository.save(liturgy);
   

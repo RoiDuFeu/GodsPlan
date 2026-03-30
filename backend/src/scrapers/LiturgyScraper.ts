@@ -1,14 +1,18 @@
 /**
  * LiturgyScraper.ts
  * 
- * Fetches daily Catholic Mass readings from free GitHub API
- * Source: https://github.com/cpbjr/catholic-readings-api
+ * Fetches daily Catholic Mass readings with full text
+ * 
+ * Two-step process:
+ * 1. Get references from catholic-readings-api (GitHub)
+ * 2. Scrape full text from USCCB.org
  * 
  * API Coverage: 2025-2026 (EN only, references to USCCB)
  * No rate limits, no API key, hosted on GitHub Pages
  */
 
 import axios from 'axios';
+import * as cheerio from 'cheerio';
 
 const API_BASE = 'https://cpbjr.github.io/catholic-readings-api';
 
@@ -109,7 +113,12 @@ export class LiturgyScraper {
         usccbLink: data.usccbLink || ''
       };
       
-      console.log(`[LiturgyScraper] ✓ Fetched ${readings.length} readings for ${data.season || targetDate}`);
+      console.log(`[LiturgyScraper] ✓ Fetched ${readings.length} readings (references only)`);
+      
+      // Now fetch full text from USCCB
+      if (data.usccbLink) {
+        await this.enrichWithFullText(liturgy, data.usccbLink);
+      }
       
       return liturgy;
       
@@ -120,6 +129,89 @@ export class LiturgyScraper {
         console.error('[LiturgyScraper] Error fetching liturgy:', error.message);
       }
       return null;
+    }
+  }
+  
+  /**
+   * Fetch full text from USCCB markdown and enrich readings
+   */
+  private async enrichWithFullText(liturgy: DailyLiturgy, usccbLink: string): Promise<void> {
+    try {
+      console.log(`[LiturgyScraper] Fetching full text from USCCB markdown...`);
+      
+      // USCCB provides markdown version at .cfm.md
+      const markdownUrl = `${usccbLink}.md`;
+      
+      const response = await axios.get(markdownUrl, {
+        headers: {
+          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
+          'Accept': 'text/markdown,text/plain'
+        },
+        timeout: 15000
+      });
+      
+      const markdown = response.data;
+      
+      // Parse markdown sections
+      // Format: ### Reading 1 \n [Isaiah 42:1-7](...) \n\n text...
+      const sections = markdown.split(/^###\s+/m).filter(Boolean);
+      
+      sections.forEach((section: string) => {
+        const lines = section.split('\n');
+        const title = lines[0].trim();
+        
+        // Extract text (skip title and reference lines)
+        const textLines = lines.slice(1)
+          .filter((line: string) => 
+            line.trim() && 
+            !line.startsWith('[') &&
+            !line.includes('Lectionary:') &&
+            line.length > 5
+          );
+        
+        const fullText = textLines.join('\n').trim();
+        
+        if (!fullText) return;
+        
+        // Match by title
+        if (title.toLowerCase().includes('reading 1') || 
+            title.toLowerCase().includes('first reading')) {
+          const reading = liturgy.readings.find(r => r.title === 'First Reading');
+          if (reading) reading.text = fullText;
+          
+        } else if (title.toLowerCase().includes('reading 2') || 
+                   title.toLowerCase().includes('second reading')) {
+          const reading = liturgy.readings.find(r => r.title === 'Second Reading');
+          if (reading) reading.text = fullText;
+          
+        } else if (title.toLowerCase().includes('responsorial psalm') ||
+                   title.toLowerCase().includes('psalm')) {
+          const psalmReading = liturgy.readings.find(r => r.title === 'Psalm');
+          if (psalmReading) psalmReading.text = fullText;
+          
+          // Update psalm object
+          if (liturgy.psalm) {
+            liturgy.psalm.text = fullText;
+            
+            // Extract refrain (line starting with R. or R/ or Refrain:)
+            const refrainMatch = fullText.match(/^R[.\/]\s*(.+?)$/m);
+            if (refrainMatch) {
+              liturgy.psalm.refrain = refrainMatch[1].trim();
+            }
+          }
+          
+        } else if (title.toLowerCase().includes('gospel')) {
+          const reading = liturgy.readings.find(r => r.title === 'Gospel');
+          if (reading) reading.text = fullText;
+        }
+      });
+      
+      const enrichedCount = liturgy.readings.filter(r => r.text.length > 0).length;
+      console.log(`[LiturgyScraper] ✓ Enriched ${enrichedCount}/${liturgy.readings.length} readings with full text`);
+      
+    } catch (error: any) {
+      console.error('[LiturgyScraper] Failed to fetch full text from USCCB:', error.message);
+      // Don't throw - we still have references even if text fetch fails
     }
   }
   
