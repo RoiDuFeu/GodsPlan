@@ -12,7 +12,6 @@
  */
 
 import axios from 'axios';
-import * as cheerio from 'cheerio';
 
 const API_BASE = 'https://cpbjr.github.io/catholic-readings-api';
 

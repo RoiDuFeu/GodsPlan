@@ -121,8 +121,8 @@ async function getOrFetchLiturgy(date: string): Promise<Liturgy | null> {
   const liturgyRepository = AppDataSource.getRepository(Liturgy);
   
   // Try to get from database
-  let liturgy = await liturgyRepository.findOne({ where: { date: new Date(date) } });
-  
+  let liturgy = await liturgyRepository.findOne({ where: { date: date as any } });
+
   if (!liturgy) {
     // Not in DB, fetch from AELF and store
     console.log(`[Liturgy API] Cache miss for ${date}, fetching from AELF...`);
@@ -145,8 +145,8 @@ async function fetchAndStoreLiturgy(date: string): Promise<Liturgy | null> {
   }
   
   // Check if already exists
-  let liturgy = await liturgyRepository.findOne({ where: { date: new Date(date) } });
-  
+  let liturgy = await liturgyRepository.findOne({ where: { date: date as any } });
+
   if (liturgy) {
     // Update existing
     liturgy.liturgicalDay = data.liturgicalDay;
@@ -157,7 +157,7 @@ async function fetchAndStoreLiturgy(date: string): Promise<Liturgy | null> {
   } else {
     // Create new
     liturgy = liturgyRepository.create({
-      date: new Date(date),
+      date: date as any,
       liturgicalDay: data.liturgicalDay,
       liturgicalColor: data.liturgicalColor,
       readings: data.readings,

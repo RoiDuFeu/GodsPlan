@@ -27,8 +27,8 @@ export class LiturgySyncJob {
       
       try {
         // Check if already in DB
-        const existing = await liturgyRepository.findOne({ 
-          where: { date: new Date(dateStr) } 
+        const existing = await liturgyRepository.findOne({
+          where: { date: dateStr as any }
         });
         
         if (existing) {
@@ -47,7 +47,7 @@ export class LiturgySyncJob {
         
         // Store in DB
         const liturgy = liturgyRepository.create({
-          date: new Date(dateStr),
+          date: dateStr as any,
           liturgicalDay: data.liturgicalDay,
           liturgicalColor: data.liturgicalColor,
           readings: data.readings,
