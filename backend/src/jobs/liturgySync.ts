@@ -31,10 +31,14 @@ export class LiturgySyncJob {
           where: { date: dateStr as any }
         });
         
-        if (existing) {
+        if (existing && existing.readings.every((r: { text: string }) => r.text && r.text.length > 0)) {
           console.log(`[LiturgySyncJob] ⏭️  ${dateStr} already synced`);
           skipCount++;
           continue;
+        }
+
+        if (existing) {
+          console.log(`[LiturgySyncJob] 🔄 ${dateStr} has empty text, re-enriching...`);
         }
         
         // Fetch from GitHub API

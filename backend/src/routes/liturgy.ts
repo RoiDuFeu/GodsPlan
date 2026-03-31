@@ -124,9 +124,13 @@ async function getOrFetchLiturgy(date: string): Promise<Liturgy | null> {
   let liturgy = await liturgyRepository.findOne({ where: { date: date as any } });
 
   if (!liturgy) {
-    // Not in DB, fetch from AELF and store
-    console.log(`[Liturgy API] Cache miss for ${date}, fetching from AELF...`);
+    // Not in DB, fetch and store
+    console.log(`[Liturgy API] Cache miss for ${date}, fetching...`);
     liturgy = await fetchAndStoreLiturgy(date);
+  } else if (liturgy.readings.some(r => !r.text || r.text.length === 0)) {
+    // Cached but missing full text — re-enrich
+    console.log(`[Liturgy API] Re-enriching ${date} (empty text detected)...`);
+    liturgy = await fetchAndStoreLiturgy(date) ?? liturgy;
   }
   
   return liturgy;

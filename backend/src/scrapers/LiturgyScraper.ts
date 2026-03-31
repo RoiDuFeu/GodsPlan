@@ -161,11 +161,11 @@ export class LiturgyScraper {
         
         // Extract text (skip title and reference lines)
         const textLines = lines.slice(1)
-          .filter((line: string) => 
-            line.trim() && 
-            !line.startsWith('[') &&
+          .filter((line: string) =>
+            line.trim() &&
+            !line.trim().startsWith('[') &&
             !line.includes('Lectionary:') &&
-            line.length > 5
+            line.trim().length > 5
           );
         
         const fullText = textLines.join('\n').trim();
