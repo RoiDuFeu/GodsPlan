@@ -159,15 +159,30 @@ export class LiturgyScraper {
         const lines = section.split('\n');
         const title = lines[0].trim();
         
-        // Extract text (skip title and reference lines)
+        // Extract text: skip title, reference links, and USCCB footer junk
         const textLines = lines.slice(1)
-          .filter((line: string) =>
-            line.trim() &&
-            !line.trim().startsWith('[') &&
-            !line.includes('Lectionary:') &&
-            line.trim().length > 5
-          );
-        
+          .filter((line: string) => {
+            const trimmed = line.trim();
+            if (!trimmed) return false;
+            if (trimmed.startsWith('[') && trimmed.includes('](')) return false;
+            if (trimmed.startsWith('- [')) return false;
+            if (trimmed.includes('Lectionary:') || trimmed.includes('Lectionary for Mass')) return false;
+            if (trimmed.includes('Copyright') || trimmed.includes('copyright')) return false;
+            if (trimmed.includes('SUBSCRIBE') || trimmed.includes('Privacy Policy')) return false;
+            if (trimmed.includes('LISTEN PODCAST') || trimmed.includes('VIEW REFLECTION')) return false;
+            if (trimmed.includes('En Español') || trimmed.includes('View Calendar')) return false;
+            if (trimmed.includes('Daily Readings E-mails') || trimmed.includes('I Agree that')) return false;
+            if (trimmed.startsWith('##')) return false;
+            if (trimmed.length <= 5) return false;
+            return true;
+          })
+          .map((line: string) => {
+            // Strip markdown bold markers and inline links
+            return line
+              .replace(/\*\*(.*?)\*\*/g, '$1')
+              .replace(/\[([^\]]*)\]\([^)]*\)/g, '$1');
+          });
+
         const fullText = textLines.join('\n').trim();
         
         if (!fullText) return;
@@ -196,10 +211,11 @@ export class LiturgyScraper {
           if (liturgy.psalm) {
             liturgy.psalm.text = fullText;
             
-            // Extract refrain (line starting with R. or R/ or Refrain:)
+            // Extract refrain (first line starting with R. or R/)
             const refrainMatch = fullText.match(/^R[.\/]\s*(.+?)$/m);
             if (refrainMatch) {
-              liturgy.psalm.refrain = refrainMatch[1].trim();
+              liturgy.psalm.refrain = refrainMatch[1].trim()
+                .replace(/\*\*(.*?)\*\*/g, '$1');
             }
           }
           
