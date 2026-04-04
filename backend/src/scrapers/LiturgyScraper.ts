@@ -172,19 +172,23 @@ export class LiturgyScraper {
         
         if (!fullText) return;
         
-        // Match by title
-        if (title.toLowerCase().includes('reading 1') || 
-            title.toLowerCase().includes('first reading')) {
+        // Match by title (USCCB uses Roman numerals: "Reading I", "Reading II")
+        // Check "reading ii" before "reading i" since "reading ii" contains "reading i"
+        const lowerTitle = title.toLowerCase();
+        if (lowerTitle.includes('reading 2') ||
+            lowerTitle.includes('reading ii') ||
+            lowerTitle.includes('second reading')) {
+          const reading = liturgy.readings.find(r => r.title === 'Second Reading');
+          if (reading) reading.text = fullText;
+
+        } else if (lowerTitle.includes('reading 1') ||
+                   lowerTitle.includes('reading i') ||
+                   lowerTitle.includes('first reading')) {
           const reading = liturgy.readings.find(r => r.title === 'First Reading');
           if (reading) reading.text = fullText;
           
-        } else if (title.toLowerCase().includes('reading 2') || 
-                   title.toLowerCase().includes('second reading')) {
-          const reading = liturgy.readings.find(r => r.title === 'Second Reading');
-          if (reading) reading.text = fullText;
-          
-        } else if (title.toLowerCase().includes('responsorial psalm') ||
-                   title.toLowerCase().includes('psalm')) {
+        } else if (lowerTitle.includes('responsorial psalm') ||
+                   lowerTitle.includes('psalm')) {
           const psalmReading = liturgy.readings.find(r => r.title === 'Psalm');
           if (psalmReading) psalmReading.text = fullText;
           
@@ -199,7 +203,7 @@ export class LiturgyScraper {
             }
           }
           
-        } else if (title.toLowerCase().includes('gospel')) {
+        } else if (lowerTitle.includes('gospel')) {
           const reading = liturgy.readings.find(r => r.title === 'Gospel');
           if (reading) reading.text = fullText;
         }
