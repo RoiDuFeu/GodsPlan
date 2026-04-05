@@ -1,0 +1,401 @@
+[
+  {
+    "name": "Cathédrale Notre-Dame de Paris",
+    "source_url": "https://www.notredamedeparis.fr",
+    "phone": null,
+    "email": null,
+    "address": null,
+    "priest_name": null,
+    "mass_times": [
+      {
+        "day": "Vendredi",
+        "time": "07:50",
+        "context": "Cathédrale Notre-Dame de Paris - site officiel Skip to content Notre-Dame de Paris Cathédrale Notre-"
+      },
+      {
+        "day": "Vendredi",
+        "time": "19:00",
+        "context": "Cathédrale Notre-Dame de Paris - site officiel Skip to content Notre-Dame de Paris Cathédrale Notre-"
+      },
+      {
+        "day": "Vendredi",
+        "time": "22:00",
+        "context": "Cathédrale Notre-Dame de Paris - site officiel Skip to content Notre-Dame de Paris Cathédrale Notre-"
+      },
+      {
+        "day": "Dimanche",
+        "time": "08:15",
+        "context": "Cathédrale Notre-Dame de Paris - site officiel Skip to content Notre-Dame de Paris Cathédrale Notre-"
+      },
+      {
+        "day": "Dimanche",
+        "time": "19:30",
+        "context": "Cathédrale Notre-Dame de Paris - site officiel Skip to content Notre-Dame de Paris Cathédrale Notre-"
+      },
+      {
+        "day": null,
+        "time": "08:30",
+        "context": "Programme du jour Sélectionner une date 05 avril 2026 Pâques, Résurrection du Seigneur Saint Vincent"
+      },
+      {
+        "day": null,
+        "time": "09:20",
+        "context": "Programme du jour Sélectionner une date 05 avril 2026 Pâques, Résurrection du Seigneur Saint Vincent"
+      },
+      {
+        "day": null,
+        "time": "09:30",
+        "context": "note : --> 9:30 - 9:50 Laudes activity_production : Laudes extra_description : note : --> 10:00 - 11"
+      },
+      {
+        "day": null,
+        "time": "09:50",
+        "context": "note : --> 9:30 - 9:50 Laudes activity_production : Laudes extra_description : note : --> 10:00 - 11"
+      },
+      {
+        "day": null,
+        "time": "10:00",
+        "context": "note : --> 9:30 - 9:50 Laudes activity_production : Laudes extra_description : note : --> 10:00 - 11"
+      },
+      {
+        "day": null,
+        "time": "11:15",
+        "context": "note : --> 9:30 - 9:50 Laudes activity_production : Laudes extra_description : note : --> 10:00 - 11"
+      },
+      {
+        "day": null,
+        "time": "11:30",
+        "context": "note : --> 9:30 - 9:50 Laudes activity_production : Laudes extra_description : note : --> 10:00 - 11"
+      },
+      {
+        "day": null,
+        "time": "12:45",
+        "context": "note : --> 9:30 - 9:50 Laudes activity_production : Laudes extra_description : note : --> 10:00 - 11"
+      },
+      {
+        "day": null,
+        "time": "17:15",
+        "context": "note : --> 17:15 - 17:45 Vêpres activity_production : Vêpres extra_description : note : --> 18:00 - "
+      },
+      {
+        "day": null,
+        "time": "17:45",
+        "context": "note : --> 17:15 - 17:45 Vêpres activity_production : Vêpres extra_description : note : --> 18:00 - "
+      },
+      {
+        "day": null,
+        "time": "18:00",
+        "context": "note : --> 17:15 - 17:45 Vêpres activity_production : Vêpres extra_description : note : --> 18:00 - "
+      },
+      {
+        "day": null,
+        "time": "19:15",
+        "context": "note : --> 17:15 - 17:45 Vêpres activity_production : Vêpres extra_description : note : --> 18:00 - "
+      }
+    ],
+    "confession_times": [],
+    "upcoming_events": [],
+    "extraction_confidence": 0.3,
+    "extracted_at": "2026-04-05T03:22:12.942283"
+  },
+  {
+    "name": "Basilique du Sacré-Cœur de Montmartre",
+    "source_url": "https://www.sacre-coeur-montmartre.com",
+    "phone": "01 53 41 89 00",
+    "email": null,
+    "address": null,
+    "priest_name": null,
+    "mass_times": [
+      {
+        "day": "Dimanche",
+        "time": "06:30",
+        "context": "En savoir plus Programme du jour dimanche 05 avril 2026 Messes, offices, confessions et célébrations"
+      },
+      {
+        "day": "Dimanche",
+        "time": "07:00",
+        "context": "En savoir plus Programme du jour dimanche 05 avril 2026 Messes, offices, confessions et célébrations"
+      },
+      {
+        "day": "Dimanche",
+        "time": "09:00",
+        "context": "En savoir plus Programme du jour dimanche 05 avril 2026 Messes, offices, confessions et célébrations"
+      },
+      {
+        "day": "Dimanche",
+        "time": "10:00",
+        "context": "En savoir plus Programme du jour dimanche 05 avril 2026 Messes, offices, confessions et célébrations"
+      },
+      {
+        "day": "Dimanche",
+        "time": "12:00",
+        "context": "En savoir plus Programme du jour dimanche 05 avril 2026 Messes, offices, confessions et célébrations"
+      },
+      {
+        "day": "Dimanche",
+        "time": "11:00",
+        "context": "En savoir plus Programme du jour dimanche 05 avril 2026 Messes, offices, confessions et célébrations"
+      },
+      {
+        "day": "Dimanche",
+        "time": "15:30",
+        "context": "En savoir plus Programme du jour dimanche 05 avril 2026 Messes, offices, confessions et célébrations"
+      },
+      {
+        "day": "Dimanche",
+        "time": "19:00",
+        "context": "En savoir plus Programme du jour dimanche 05 avril 2026 Messes, offices, confessions et célébrations"
+      },
+      {
+        "day": "Dimanche",
+        "time": "16:00",
+        "context": "En savoir plus Programme du jour dimanche 05 avril 2026 Messes, offices, confessions et célébrations"
+      },
+      {
+        "day": "Dimanche",
+        "time": "16:30",
+        "context": "En savoir plus Programme du jour dimanche 05 avril 2026 Messes, offices, confessions et célébrations"
+      },
+      {
+        "day": "Dimanche",
+        "time": "18:00",
+        "context": "En savoir plus Programme du jour dimanche 05 avril 2026 Messes, offices, confessions et célébrations"
+      },
+      {
+        "day": "Dimanche",
+        "time": "21:00",
+        "context": "En savoir plus Programme du jour dimanche 05 avril 2026 Messes, offices, confessions et célébrations"
+      },
+      {
+        "day": "Dimanche",
+        "time": "21:30",
+        "context": "En savoir plus Programme du jour dimanche 05 avril 2026 Messes, offices, confessions et célébrations"
+      },
+      {
+        "day": "Dimanche",
+        "time": "22:00",
+        "context": "En savoir plus Programme du jour dimanche 05 avril 2026 Messes, offices, confessions et célébrations"
+      },
+      {
+        "day": "Dimanche",
+        "time": "10:30",
+        "context": "En savoir plus Programme du jour dimanche 05 avril 2026 Messes, offices, confessions et célébrations"
+      },
+      {
+        "day": "Dimanche",
+        "time": "14:30",
+        "context": "En savoir plus Programme du jour dimanche 05 avril 2026 Messes, offices, confessions et célébrations"
+      }
+    ],
+    "confession_times": [],
+    "upcoming_events": [
+      {
+        "date": "11 novembre",
+        "description": "Basilique du Sacré-Cœur Faire un don Contact Boutique en ligne Messes & offices EN DIRECT Vivre l’année de la Paix à la basilique Faire un don Contact"
+      },
+      {
+        "date": "05 avril",
+        "description": "En savoir plus Programme du jour dimanche 05 avril 2026 Messes, offices, confessions et célébrations Messes, offices, confessions et célébrations 6h30"
+      },
+      {
+        "date": "08 janvier",
+        "description": "Au niveau de la réception de&hellip; À la une Les actualités Toutes les actualités 08 janvier 2026 Intention de prière mensuelle du pape Léon XIV 25 j"
+      }
+    ],
+    "extraction_confidence": 0.5,
+    "extracted_at": "2026-04-05T03:22:13.834819"
+  },
+  {
+    "name": "Église de la Madeleine",
+    "source_url": "https://www.eglise-lamadeleine.com",
+    "phone": "01 44 51 69 00",
+    "email": null,
+    "address": null,
+    "priest_name": "Naoum Khoury",
+    "mass_times": [
+      {
+        "day": "Vendredi",
+        "time": "09:30",
+        "context": "Sainte Marie-Madeleine à Paris &#8211; Paroisse catholique à Paris Afficher/masquer la navigation Ac"
+      },
+      {
+        "day": "Vendredi",
+        "time": "19:00",
+        "context": "Sainte Marie-Madeleine à Paris &#8211; Paroisse catholique à Paris Afficher/masquer la navigation Ac"
+      },
+      {
+        "day": "Dimanche",
+        "time": "18:00",
+        "context": "Sainte Marie-Madeleine à Paris &#8211; Paroisse catholique à Paris Afficher/masquer la navigation Ac"
+      },
+      {
+        "day": "Dimanche",
+        "time": "10:30",
+        "context": "Sainte Marie-Madeleine à Paris &#8211; Paroisse catholique à Paris Afficher/masquer la navigation Ac"
+      },
+      {
+        "day": "Lundi",
+        "time": "09:30",
+        "context": "Aller au contenu Accueil Sanctuaire Pèlerinage et Visites La Gazette Infos Pratiques La Paroisse You"
+      },
+      {
+        "day": "Lundi",
+        "time": "19:00",
+        "context": "Aller au contenu Accueil Sanctuaire Pèlerinage et Visites La Gazette Infos Pratiques La Paroisse You"
+      },
+      {
+        "day": "Vendredi",
+        "time": "12:30",
+        "context": "Aller au contenu Accueil Sanctuaire Pèlerinage et Visites La Gazette Infos Pratiques La Paroisse You"
+      },
+      {
+        "day": "Vendredi",
+        "time": "17:00",
+        "context": "Aller au contenu Accueil Sanctuaire Pèlerinage et Visites La Gazette Infos Pratiques La Paroisse You"
+      },
+      {
+        "day": "Vendredi",
+        "time": "18:30",
+        "context": "Aller au contenu Accueil Sanctuaire Pèlerinage et Visites La Gazette Infos Pratiques La Paroisse You"
+      },
+      {
+        "day": "Samedi",
+        "time": "16:30",
+        "context": "Aller au contenu Accueil Sanctuaire Pèlerinage et Visites La Gazette Infos Pratiques La Paroisse You"
+      },
+      {
+        "day": "Samedi",
+        "time": "17:30",
+        "context": "Aller au contenu Accueil Sanctuaire Pèlerinage et Visites La Gazette Infos Pratiques La Paroisse You"
+      },
+      {
+        "day": "Dimanche",
+        "time": "09:30",
+        "context": "Secrétariat 14 rue de Surène 75008 Paris Heures d’ouverture Du lundi au dimanche : 9h30 - 19h00 Mess"
+      },
+      {
+        "day": "Dimanche",
+        "time": "19:00",
+        "context": "Secrétariat 14 rue de Surène 75008 Paris Heures d’ouverture Du lundi au dimanche : 9h30 - 19h00 Mess"
+      },
+      {
+        "day": "Samedi",
+        "time": "18:00",
+        "context": "Secrétariat 14 rue de Surène 75008 Paris Heures d’ouverture Du lundi au dimanche : 9h30 - 19h00 Mess"
+      }
+    ],
+    "confession_times": [],
+    "upcoming_events": [
+      {
+        "date": "05 avril",
+        "description": "Rejoignez-nous Homelies Dimanche de la Résurrection du Seigneur &#8211; 05 avril 2026 Lire la suite Feuilles Paroissiale Messe, Dimanche de la Résurre"
+      }
+    ],
+    "extraction_confidence": 0.6499999999999999,
+    "extracted_at": "2026-04-05T03:22:14.443341"
+  },
+  {
+    "name": "Église Saint-Eustache",
+    "source_url": "https://www.saint-eustache.org",
+    "phone": "06 33 62 98 06",
+    "email": null,
+    "address": null,
+    "priest_name": "Pierre Vivarès",
+    "mass_times": [
+      {
+        "day": "Vendredi",
+        "time": "19:00",
+        "context": "horaires des messes Agenda Musique &amp; Culture HORAIRES DES MESSES Du lundi au vendredi : 7 h30 (S"
+      },
+      {
+        "day": "Samedi",
+        "time": "18:30",
+        "context": "horaires des messes Agenda Musique &amp; Culture HORAIRES DES MESSES Du lundi au vendredi : 7 h30 (S"
+      },
+      {
+        "day": "Dimanche",
+        "time": "11:00",
+        "context": "horaires des messes Agenda Musique &amp; Culture HORAIRES DES MESSES Du lundi au vendredi : 7 h30 (S"
+      },
+      {
+        "day": "Dimanche",
+        "time": "18:30",
+        "context": "horaires des messes Agenda Musique &amp; Culture HORAIRES DES MESSES Du lundi au vendredi : 7 h30 (S"
+      },
+      {
+        "day": "Dimanche",
+        "time": "18:00",
+        "context": "horaires des messes Agenda Musique &amp; Culture HORAIRES DES MESSES Du lundi au vendredi : 7 h30 (S"
+      },
+      {
+        "day": "Vendredi",
+        "time": "13:30",
+        "context": "horaires des messes Agenda Musique &amp; Culture HORAIRES DES MESSES Du lundi au vendredi : 7 h30 (S"
+      },
+      {
+        "day": "Vendredi",
+        "time": "16:00",
+        "context": "horaires des messes Agenda Musique &amp; Culture HORAIRES DES MESSES Du lundi au vendredi : 7 h30 (S"
+      },
+      {
+        "day": "Vendredi",
+        "time": "18:00",
+        "context": "horaires des messes Agenda Musique &amp; Culture HORAIRES DES MESSES Du lundi au vendredi : 7 h30 (S"
+      },
+      {
+        "day": "Samedi",
+        "time": "10:00",
+        "context": "horaires des messes Agenda Musique &amp; Culture HORAIRES DES MESSES Du lundi au vendredi : 7 h30 (S"
+      },
+      {
+        "day": "Samedi",
+        "time": "12:00",
+        "context": "horaires des messes Agenda Musique &amp; Culture HORAIRES DES MESSES Du lundi au vendredi : 7 h30 (S"
+      },
+      {
+        "day": "Samedi",
+        "time": "16:30",
+        "context": "horaires des messes Agenda Musique &amp; Culture HORAIRES DES MESSES Du lundi au vendredi : 7 h30 (S"
+      },
+      {
+        "day": "Samedi",
+        "time": "20:30",
+        "context": "horaires des messes Agenda Musique &amp; Culture HORAIRES DES MESSES Du lundi au vendredi : 7 h30 (S"
+      },
+      {
+        "day": "Jeudi",
+        "time": "08:00",
+        "context": "horaires des messes Agenda Musique &amp; Culture HORAIRES DES MESSES Du lundi au vendredi : 7 h30 (S"
+      },
+      {
+        "day": "Jeudi",
+        "time": "19:00",
+        "context": "horaires des messes Agenda Musique &amp; Culture HORAIRES DES MESSES Du lundi au vendredi : 7 h30 (S"
+      },
+      {
+        "day": "Vendredi",
+        "time": "08:00",
+        "context": "horaires des messes Agenda Musique &amp; Culture HORAIRES DES MESSES Du lundi au vendredi : 7 h30 (S"
+      },
+      {
+        "day": "Vendredi",
+        "time": "12:15",
+        "context": "horaires des messes Agenda Musique &amp; Culture HORAIRES DES MESSES Du lundi au vendredi : 7 h30 (S"
+      },
+      {
+        "day": "Samedi",
+        "time": "08:00",
+        "context": "horaires des messes Agenda Musique &amp; Culture HORAIRES DES MESSES Du lundi au vendredi : 7 h30 (S"
+      }
+    ],
+    "confession_times": [],
+    "upcoming_events": [
+      {
+        "date": "3 avril",
+        "description": "horaires des messes Agenda Musique &amp; Culture HORAIRES DES MESSES Du lundi au vendredi : 7 h30 (SAUF pendant vacances scolaires) et 19h Samedi : 18"
+      }
+    ],
+    "extraction_confidence": 0.6499999999999999,
+    "extracted_at": "2026-04-05T03:22:14.615562"
+  }
+]

@@ -1,0 +1,54 @@
+[
+  {
+    "name": "FIRST COMMUNITY CHURCH OF GOD",
+    "source_url": "https://mccny.org/",
+    "phone": null,
+    "email": null,
+    "address": null,
+    "priest_name": null,
+    "mass_times": [],
+    "confession_times": [],
+    "upcoming_events": [],
+    "extraction_confidence": 0.0,
+    "extracted_at": "2026-04-05T02:51:36.922444"
+  },
+  {
+    "name": "Chapelle de l'Agneau-de-Dieu (Gare de Lyon)",
+    "source_url": "https://eglise.catholique.fr/sengager-dans-la-societe/eglise-medias/444055-applications-mobiles-de-leglise-catholique-france/?utm_source=redirection&utm_medium=url_cef&utm_campaign=messesinfo#screenshots-android",
+    "phone": null,
+    "email": null,
+    "address": null,
+    "priest_name": null,
+    "mass_times": [],
+    "confession_times": [],
+    "upcoming_events": [],
+    "extraction_confidence": 0.0,
+    "extracted_at": "2026-04-05T02:51:37.055926"
+  },
+  {
+    "name": "Chapelle de Picpus (Sanctuaire Notre-Dame de Paix et Saint-Michel)",
+    "source_url": "https://eglise.catholique.fr/sengager-dans-la-societe/eglise-medias/444055-applications-mobiles-de-leglise-catholique-france/?utm_source=redirection&utm_medium=url_cef&utm_campaign=messesinfo#screenshots-android",
+    "phone": null,
+    "email": null,
+    "address": null,
+    "priest_name": null,
+    "mass_times": [],
+    "confession_times": [],
+    "upcoming_events": [],
+    "extraction_confidence": 0.0,
+    "extracted_at": "2026-04-05T02:51:37.178787"
+  },
+  {
+    "name": "Chapelle des Petites Sœurs des Pauvres",
+    "source_url": "https://eglise.catholique.fr/sengager-dans-la-societe/eglise-medias/444055-applications-mobiles-de-leglise-catholique-france/?utm_source=redirection&utm_medium=url_cef&utm_campaign=messesinfo#screenshots-android",
+    "phone": null,
+    "email": null,
+    "address": null,
+    "priest_name": null,
+    "mass_times": [],
+    "confession_times": [],
+    "upcoming_events": [],
+    "extraction_confidence": 0.0,
+    "extracted_at": "2026-04-05T02:51:37.303713"
+  }
+]

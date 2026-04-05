@@ -1,0 +1,12 @@
+[
+  {
+    "name": "Test Church 1 - Saint-Pierre",
+    "city": "Paris",
+    "website": "file:///home/ocadmin/.openclaw/workspace/GodsPlan/backend/test-church.html"
+  },
+  {
+    "name": "Test Church 2 - Notre-Dame",
+    "city": "Lyon",
+    "website": "https://httpbin.org/html"
+  }
+]

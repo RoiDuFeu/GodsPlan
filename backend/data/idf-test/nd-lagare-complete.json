@@ -1,0 +1,26 @@
+[
+  {
+    "name": "Notre-Dame de La-Gare",
+    "city": "Paris",
+    "street": "Place Jeanne-d'Arc",
+    "postal_code": "75013",
+    "latitude": 48.8359,
+    "longitude": 2.3737,
+    "phone": "01 45 83 47 34",
+    "email": "paroisse@notredamedelagare.fr",
+    "source_url": "https://notredamedelagare.fr/",
+    "priest_name": null,
+    "mass_times": [
+      {"day": "Mardi", "time": "17:30", "context": "En période scolaire"},
+      {"day": "Mardi", "time": "18:45", "context": "En période scolaire"},
+      {"day": "Vendredi", "time": "10:45", "context": "En période scolaire"},
+      {"day": "Vendredi", "time": "12:00", "context": "En période scolaire"}
+    ],
+    "confession_times": [],
+    "upcoming_events": [
+      {"date": "3 avril", "description": "Bienvenue ! Calendrier de la paroisse"}
+    ],
+    "extraction_confidence": 0.7,
+    "extracted_at": "2026-04-05T02:51:56.592443"
+  }
+]

@@ -1,258 +1,171 @@
-# GodsPlan 🙏
+# NYC Churches Dataset - GodsPlan
 
-**Trouvez des églises et horaires de messes à Paris**
+Hybrid dataset combining IRS tax-exempt organization data with OpenStreetMap enrichment.
 
-Application web moderne pour découvrir les églises catholiques, consulter les horaires de messes, et trouver les sanctuaires proches de vous avec géolocalisation et itinéraires.
+## 📊 Dataset Summary
 
-🌐 **Live:** https://godsplan.montparnas.fr  
-📊 **Admin Dashboard:** https://godsplan.montparnas.fr/admindashboard
+- **Total Records**: 5,080+ NYC churches and places of worship
+- **Sources**: IRS EO-BMF (Exempt Organizations Business Master File)
+- **Coverage**: All 5 NYC boroughs (Manhattan, Brooklyn, Bronx, Queens, Staten Island)
+- **Format**: JSON with structured address, coordinates, contact info
 
----
+## 🗂️ Files
 
-## 🚀 Stack Technique
+### Data Files
+- `data/churches-nyc.json` - Base dataset (IRS data, ~4,881 records)
+- `data/churches-nyc-geocoded.json` - Enriched with lat/lon coordinates
+- `data/cache/` - Cached intermediate results
 
-### Frontend
-- **React 18** + TypeScript + Vite
-- **Tailwind CSS** + shadcn/ui components
-- **Leaflet** pour la carte interactive
-- **Chart.js** pour les graphiques admin
-- **i18n** (Français / English)
-- Dark mode support
+### Scripts
+- `build_churches_final.py` - Build base dataset from IRS data
+- `geocode_batch.py` - Add geocoding (lat/lon) with resume capability
+- `geocode_churches.py` - Single-run geocoder (for testing)
 
-### Backend
-- **Node.js** + Express + TypeScript
-- **PostgreSQL 16** + PostGIS (données géographiques)
-- **TypeORM** (ORM)
-- **PM2** (process manager)
+## 🚀 Quick Start
 
-### Scrapers
-- **messes.info** → Horaires de messes
-- **Google Maps HTML** → Téléphones, sites web, photos, ratings (sans API)
-- **Nominatim** → Géocodage automatique (100% coverage GPS)
-
----
-
-## 📦 Installation
-
-### Prérequis
-- Node.js 18+
-- PostgreSQL 16 + PostGIS
-- PM2 (optionnel, pour production)
-
-### 1. Clone & Install
-
+### 1. Build Base Dataset (Already Complete)
 ```bash
-git clone https://github.com/RoiDuFeu/GodsPlan.git
-cd GodsPlan
-
-# Backend
-cd backend
-npm install
-
-# Frontend
-cd ../web
-npm install
+python3 build_churches_final.py
 ```
+Output: `data/churches-nyc.json`
 
-### 2. Configuration Base de Données
-
+### 2. Add Geocoding (Optional, ~90 minutes)
 ```bash
-# Créer l'utilisateur et la base
-sudo -u postgres psql -p 5433 << EOF
-CREATE USER godsplan WITH PASSWORD 'votre_mot_de_passe';
-CREATE DATABASE godsplan_db OWNER godsplan;
-GRANT ALL PRIVILEGES ON DATABASE godsplan_db TO godsplan;
-\c godsplan_db
-CREATE EXTENSION IF NOT EXISTS postgis;
-EOF
+# Full geocoding with resume capability
+python3 geocode_batch.py
+
+# Or test with sample first
+python3 geocode_churches.py --sample 100
 ```
 
-### 3. Configuration
+### 3. Use the Data
+```python
+import json
 
-**Backend `.env` :**
+with open('GodsPlan/data/churches-nyc.json', 'r') as f:
+    churches = json.load(f)
+
+# Filter by borough
+brooklyn_churches = [c for c in churches if c['city'] == 'Brooklyn']
+
+# Find churches with coordinates
+geocoded = [c for c in churches if c['lat']]
+```
+
+## 📋 Data Schema
+
+Each record contains:
+
+```json
+{
+  "name": "CHURCH NAME",
+  "address": "123 MAIN ST, Brooklyn, NY 11201",
+  "city": "Brooklyn",
+  "zip": "11201",
+  "lat": 40.6942,           // null if not geocoded
+  "lon": -73.9894,          // null if not geocoded
+  "website": "...",         // null if unavailable
+  "phone": "...",           // null if unavailable
+  "denomination": "...",    // null if unavailable
+  "religion": "christian",  // null if unavailable
+  "source": "IRS|OSM|hybrid|IRS+geocoded",
+  "match_confidence": 0.85  // for hybrid matches only
+}
+```
+
+## 🏙️ Borough Breakdown
+
+| Borough       | Count |
+|--------------|-------|
+| Brooklyn     | 2,735 |
+| Bronx        | 877   |
+| Manhattan    | 1,021 |
+| Staten Island| 237   |
+| Queens       | 211   |
+
+## 🔍 Data Sources
+
+### IRS EO-BMF
+- **Source**: https://www.irs.gov/pub/irs-soi/eo_ny.csv
+- **Coverage**: Tax-exempt religious organizations in New York State
+- **Filtered for**: NYC cities + worship-related keywords
+- **Keywords**: church, worship, chapel, cathedral, synagogue, mosque, temple, etc.
+
+### OpenStreetMap (via Nominatim)
+- **API**: https://nominatim.openstreetmap.org
+- **Used for**: Geocoding addresses → lat/lon coordinates
+- **Rate limit**: 1 request/second (respected in batch script)
+- **Success rate**: ~70% geocoding match
+
+## ⚙️ Technical Details
+
+### Geocoding Strategy
+1. Uses Nominatim (OSM) for address-based geocoding
+2. Respects 1 req/sec API limit with 1.1s delay
+3. Checkpoint system: saves progress every 100 records
+4. Resume capability if interrupted
+5. Silent failure on geocoding errors (keeps record without coords)
+
+### Matching Logic
+- Fuzzy name matching (75% weight)
+- Address normalization (25% weight)
+- Match threshold: 0.65 similarity
+- Handles abbreviations (St→Street, Ave→Avenue, etc.)
+
+## 🛠️ Maintenance
+
+### Update Dataset
 ```bash
-cd backend
-cp .env.example .env  # Créer depuis le template ci-dessous
+# Re-download IRS data (updates monthly)
+rm data/cache/eo_ny.csv
+python3 build_churches_final.py
+
+# Re-geocode new records
+python3 geocode_batch.py
 ```
 
-```env
-PORT=3001
-NODE_ENV=production
-API_PREFIX=/api/v1
-
-# Database
-POSTGRES_HOST=localhost
-POSTGRES_PORT=5433
-POSTGRES_USER=godsplan
-POSTGRES_PASSWORD=votre_mot_de_passe
-POSTGRES_DB=godsplan_db
-
-# Scraping (optionnel)
-GOOGLE_MAPS_API_KEY=
-SCRAPE_USER_AGENT=GodsPlan/1.0 (contact@godsplan.app)
-```
-
-### 4. Build & Deploy
-
+### Resume Interrupted Geocoding
+The batch geocoder automatically resumes from checkpoint:
 ```bash
-# Option A : Script automatique (recommandé)
-chmod +x deploy-production.sh
-./deploy-production.sh
-
-# Option B : Manuel
-cd backend && npm run build
-cd ../web && npm run build
-cp -r web/dist backend/public
-cd backend
-pm2 start npm --name "godsplan-api" -- run start
-pm2 save
+# If interrupted, just run again
+python3 geocode_batch.py
 ```
 
----
+## 📈 Future Enhancements
 
-## 📊 Scraping & Population de la Base
+Potential improvements:
+- [ ] Add denomination enrichment via church websites
+- [ ] Service times scraping
+- [ ] Capacity/size estimates
+- [ ] Historical data (founding year)
+- [ ] Photos/images from Google Places API
+- [ ] Social media links
+- [ ] Denomination taxonomy standardization
 
-### Scraper toutes les églises de Paris
+## 🤝 Contributing
 
-```bash
-cd backend
-npm run scrape -- --with-messes
-```
+To improve the dataset:
+1. Add more worship keywords in `build_churches_final.py`
+2. Improve address normalization in matching logic
+3. Add fallback geocoding services (Google, Mapbox)
+4. Contribute manual corrections for geocoding failures
 
-**Ce qui est scrapé :**
-- ✅ 208 églises de Paris
-- ✅ Horaires de messes (jour, heure, rite, langue)
-- ✅ Coordonnées GPS (géocodage automatique si manquant)
-- ✅ Téléphones, sites web (Google Maps)
-- ✅ Photos haute résolution (Google Maps)
-- ✅ Ratings et reviews (Google Maps)
+## 📄 License
 
-**Temps estimé :** ~10-15 minutes
+Data sources:
+- IRS data: Public domain (U.S. government)
+- OpenStreetMap: ODbL (Open Database License)
 
-### Monitoring du scraping
+Combined dataset: Use with attribution to sources.
 
-```bash
-# Dashboard CLI temps réel
-npm run dashboard
+## 🔗 Related
 
-# Voir les logs
-pm2 logs godsplan-api
-
-# Stats JSON (historique)
-npm run stats
-```
-
----
-
-## 🌐 Déploiement Production
-
-### Avec Cloudflare Tunnel
-
-**Tunnels requis :**
-- `godsplan.montparnas.fr` → `localhost:3001` (frontend + backend)
-- `godsplan-api.montparnas.fr` → `localhost:3001` (API publique)
-
-**Nginx (alternatif) :**
-
-Voir `DEPLOYMENT.md` pour la config nginx complète.
+- IRS EO Data: https://www.irs.gov/charities-non-profits/tax-exempt-organization-search-bulk-data-downloads
+- OSM Nominatim: https://nominatim.org/release-docs/latest/
+- GodsPlan Project: [Add link]
 
 ---
 
-## 📖 Documentation
-
-- **[DEPLOYMENT.md](DEPLOYMENT.md)** - Guide de déploiement complet
-- **[ADMIN_DASHBOARD.md](ADMIN_DASHBOARD.md)** - Dashboard admin
-- **[MONITORING_DASHBOARD.md](MONITORING_DASHBOARD.md)** - Monitoring CLI
-- **[GEOCODING.md](backend/GEOCODING.md)** - Service de géocodage
-- **[MODEL_ALIGNMENT.md](backend/MODEL_ALIGNMENT.md)** - Structure données
-
----
-
-## 🔧 Développement
-
-### Backend
-
-```bash
-cd backend
-npm run dev  # Port 3001 avec hot-reload
-```
-
-### Frontend
-
-```bash
-cd web
-npm run dev  # Port 5173 avec hot-reload
-```
-
-**API :** http://localhost:3001/api/v1  
-**Frontend dev :** http://localhost:5173
-
----
-
-## 🎯 Features
-
-### Pour les utilisateurs
-- 🗺️ **Carte interactive** de toutes les églises de Paris
-- 📅 **Horaires de messes** détaillés (jour, heure, rite, langue)
-- 📍 **Géolocalisation** et recherche à proximité
-- 🧭 **Itinéraires** Google Maps
-- 📞 **Contacts** (téléphone, site web)
-- 📸 **Photos** des églises
-- 🌙 **Dark mode**
-- 🌍 **i18n** (FR/EN)
-
-### Pour les admins
-- 📊 **Dashboard** temps réel avec métriques
-- 📈 **Graphiques** de couverture et qualité
-- 🗺️ **Carte admin** avec marqueurs colorés par score
-- ⚡ **Actions** : Scraping, Google Maps enrichment, Rapports
-- 🔄 **Auto-refresh** 10s
-- 📋 **Table** triable et filtrable
-
----
-
-## 📊 Métriques Actuelles
-
-| Métrique | Valeur |
-|----------|--------|
-| Églises total | 208 |
-| Coordonnées GPS | 100% ✅ |
-| Horaires de messes | ~70% |
-| Téléphones | ~90% |
-| Sites web | 100% ✅ |
-| Photos | 100% ✅ |
-| Score fiabilité moyen | 56-83/100 |
-
----
-
-## 🤝 Contribution
-
-1. Fork le projet
-2. Crée une branche (`git checkout -b feature/amazing-feature`)
-3. Commit (`git commit -m 'feat: Add amazing feature'`)
-4. Push (`git push origin feature/amazing-feature`)
-5. Ouvre une Pull Request
-
----
-
-## 📝 License
-
-MIT
-
----
-
-## 👤 Auteur
-
-**Marc** - [RoiDuFeu](https://github.com/RoiDuFeu)
-
-**Avec l'aide de :** Artemis 🌙 (AI Assistant)
-
----
-
-## 🙏 Remerciements
-
-- [messes.info](https://www.messes.info) - Source principale des horaires
-- Google Maps - Données enrichies (téléphones, photos, ratings)
-- OpenStreetMap / Nominatim - Géocodage
-- shadcn/ui - Composants UI
-- Leaflet - Carte interactive
+**Status**: ✅ Base dataset ready (5,080 churches)  
+**Geocoding**: 🟡 Optional (run `geocode_batch.py` for coordinates)  
+**Last Updated**: 2026-03-28

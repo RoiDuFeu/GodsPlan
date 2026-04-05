@@ -1,0 +1,33 @@
+[2026-04-05 03:22:10] WARNING: This logic is deprecated now, and have no effect; It will be removed with v0.3. Use `Fetcher.configure()` instead before fetching
+[2026-04-05 03:22:10] WARNING: Attempt 1 failed: Failed to perform, curl: (6) Could not resolve host: www.paroisse-saint-sulpice-paris.fr. See https://curl.se/libcurl/c/libcurl-errors.html first for more details.. Retrying in 1 seconds...
+[2026-04-05 03:22:11] WARNING: Attempt 2 failed: Failed to perform, curl: (6) Could not resolve host: www.paroisse-saint-sulpice-paris.fr. See https://curl.se/libcurl/c/libcurl-errors.html first for more details.. Retrying in 1 seconds...
+[2026-04-05 03:22:12] ERROR: Failed after 3 attempts: Failed to perform, curl: (6) Could not resolve host: www.paroisse-saint-sulpice-paris.fr. See https://curl.se/libcurl/c/libcurl-errors.html first for more details.
+[2026-04-05 03:22:12] INFO: Fetched (200) <GET https://www.notredamedeparis.fr/> (referer: https://www.google.com/search?q=notredamedeparis)
+/home/ocadmin/.openclaw/workspace/GodsPlan/backend/./scripts/ml-extractor.py:69: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  self.extracted_at = datetime.utcnow().isoformat()
+[2026-04-05 03:22:13] INFO: Fetched (200) <GET https://www.sacre-coeur-montmartre.com/> (referer: https://www.google.com/search?q=sacre-coeur-montmartre)
+[2026-04-05 03:22:14] INFO: Fetched (200) <GET https://lamadeleineparis.fr/> (referer: https://www.google.com/search?q=eglise-lamadeleine)
+[2026-04-05 03:22:14] INFO: Fetched (200) <GET https://www.saint-eustache.org/> (referer: https://www.google.com/search?q=saint-eustache)
+======================================================================
+🤖 ML Church Data Extractor
+======================================================================
+
+📦 Batch processing: data/test-batch-known-churches.json
+🔍 [1/5] Processing: Église Saint-Sulpice
+❌ Failed to fetch https://www.paroisse-saint-sulpice-paris.fr: Failed to perform, curl: (6) Could not resolve host: www.paroisse-saint-sulpice-paris.fr. See https://curl.se/libcurl/c/libcurl-errors.html first for more details.
+   ❌ Failed to fetch
+🔍 [2/5] Processing: Cathédrale Notre-Dame de Paris
+   ✅ Confidence: 30.00%
+🔍 [3/5] Processing: Basilique du Sacré-Cœur de Montmartre
+   ✅ Confidence: 50.00%
+🔍 [4/5] Processing: Église de la Madeleine
+   ✅ Confidence: 65.00%
+🔍 [5/5] Processing: Église Saint-Eustache
+   ✅ Confidence: 65.00%
+
+💾 Saved 4 results to: data/test-enriched-5churches.json
+📊 Average confidence: 52.50%
+
+======================================================================
+✅ Done
+======================================================================

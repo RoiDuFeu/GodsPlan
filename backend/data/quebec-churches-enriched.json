@@ -1,0 +1,4430 @@
+[
+  {
+    "name": "Oratoire Saint-Joseph du Mont-Royal",
+    "address": {
+      "street": "6105 Jardin du chemin de la croix",
+      "postalCode": "H3V 1H4",
+      "city": "Montréal"
+    },
+    "latitude": 45.491667,
+    "longitude": -73.616667,
+    "massSchedules": [
+      {
+        "dayOfWeek": 0,
+        "time": "10:00",
+        "rite": "french_paul_vi",
+        "language": "French",
+        "notes": "Horaire à confirmer"
+      }
+    ],
+    "rites": [
+      "french_paul_vi"
+    ],
+    "languages": [
+      "French"
+    ],
+    "description": "Église catholique située à Montréal",
+    "sourceUrl": "https://www.wikidata.org/wiki/Q284716"
+  },
+  {
+    "name": "Chapelle Notre-Dame-de-Bon-Secours de Montréal",
+    "address": {
+      "street": "402 Rue Saint-Paul Est",
+      "postalCode": "H2Y 1H2",
+      "city": "Montréal"
+    },
+    "latitude": 45.509825,
+    "longitude": -73.551073,
+    "massSchedules": [
+      {
+        "dayOfWeek": 0,
+        "time": "10:00",
+        "rite": "french_paul_vi",
+        "language": "French",
+        "notes": "Horaire à confirmer"
+      }
+    ],
+    "rites": [
+      "french_paul_vi"
+    ],
+    "languages": [
+      "French"
+    ],
+    "description": "Église catholique située à Montréal",
+    "sourceUrl": "https://www.wikidata.org/wiki/Q524833"
+  },
+  {
+    "name": "Basilique Notre-Dame de Montréal",
+    "address": {
+      "street": "110 Rue Notre-Dame Ouest",
+      "postalCode": "H2Y 1T1",
+      "city": "Montréal"
+    },
+    "latitude": 45.504444444,
+    "longitude": -73.556111111,
+    "massSchedules": [
+      {
+        "dayOfWeek": 0,
+        "time": "10:00",
+        "rite": "french_paul_vi",
+        "language": "French",
+        "notes": "Horaire à confirmer"
+      }
+    ],
+    "rites": [
+      "french_paul_vi"
+    ],
+    "languages": [
+      "French"
+    ],
+    "description": "Église catholique située à Ville-Marie",
+    "sourceUrl": "https://www.wikidata.org/wiki/Q887686"
+  },
+  {
+    "name": "Basilique-cathédrale Marie-Reine-du-Monde de Montréal",
+    "address": {
+      "street": "1085 Rue de la Cathédrale",
+      "postalCode": "H3B 2V3",
+      "city": "Montréal"
+    },
+    "latitude": 45.4991,
+    "longitude": -73.5683,
+    "massSchedules": [
+      {
+        "dayOfWeek": 0,
+        "time": "10:00",
+        "rite": "french_paul_vi",
+        "language": "French",
+        "notes": "Horaire à confirmer"
+      }
+    ],
+    "rites": [
+      "french_paul_vi"
+    ],
+    "languages": [
+      "French"
+    ],
+    "description": "Église catholique située à Ville-Marie",
+    "sourceUrl": "https://www.wikidata.org/wiki/Q1151330"
+  },
+  {
+    "name": "Basilique Saint-Patrick de Montréal",
+    "address": {
+      "street": "1110 Rue Saint-Alexandre",
+      "postalCode": "H2Z 1P8",
+      "city": "Montréal"
+    },
+    "latitude": 45.503611111,
+    "longitude": -73.564722222,
+    "massSchedules": [
+      {
+        "dayOfWeek": 0,
+        "time": "10:00",
+        "rite": "french_paul_vi",
+        "language": "French",
+        "notes": "Horaire à confirmer"
+      }
+    ],
+    "rites": [
+      "french_paul_vi"
+    ],
+    "languages": [
+      "French"
+    ],
+    "description": "Église catholique située à Ville-Marie",
+    "sourceUrl": "https://www.wikidata.org/wiki/Q1317109"
+  },
+  {
+    "name": "Église Nativité-de-la-Sainte-Vierge-d'Hochelaga",
+    "address": {
+      "street": "1855 Rue Dézéry",
+      "postalCode": "H1W 2R8",
+      "city": "Montréal"
+    },
+    "latitude": 45.5411,
+    "longitude": -73.5464,
+    "massSchedules": [
+      {
+        "dayOfWeek": 0,
+        "time": "10:00",
+        "rite": "french_paul_vi",
+        "language": "French",
+        "notes": "Horaire à confirmer"
+      }
+    ],
+    "rites": [
+      "french_paul_vi"
+    ],
+    "languages": [
+      "French"
+    ],
+    "description": "Église catholique située à Montréal",
+    "sourceUrl": "https://www.wikidata.org/wiki/Q3580185"
+  },
+  {
+    "name": "Église Notre-Dame-de-Grâce",
+    "address": {
+      "street": "5333 Avenue Notre-Dame-de-Grâce",
+      "postalCode": "H4A 1L2",
+      "city": "Montréal"
+    },
+    "latitude": 45.4771,
+    "longitude": -73.6168,
+    "massSchedules": [
+      {
+        "dayOfWeek": 0,
+        "time": "10:00",
+        "rite": "french_paul_vi",
+        "language": "French",
+        "notes": "Horaire à confirmer"
+      }
+    ],
+    "rites": [
+      "french_paul_vi"
+    ],
+    "languages": [
+      "French"
+    ],
+    "description": "Église catholique située à Montréal",
+    "sourceUrl": "https://www.wikidata.org/wiki/Q3580207"
+  },
+  {
+    "name": "Église Notre-Dame-des-Sept-Douleurs",
+    "address": {
+      "street": "284 Rue de l'Église",
+      "postalCode": "H4G 1R8",
+      "city": "Montréal"
+    },
+    "latitude": 45.46256,
+    "longitude": -73.56755,
+    "massSchedules": [
+      {
+        "dayOfWeek": 0,
+        "time": "10:00",
+        "rite": "french_paul_vi",
+        "language": "French",
+        "notes": "Horaire à confirmer"
+      }
+    ],
+    "rites": [
+      "french_paul_vi"
+    ],
+    "languages": [
+      "French"
+    ],
+    "description": "Église catholique située à Montréal",
+    "sourceUrl": "https://www.wikidata.org/wiki/Q3580394"
+  },
+  {
+    "name": "Église Saint-Arsène de Montréal",
+    "address": {
+      "street": "1015 Rue Bélanger",
+      "postalCode": "H2S 1H1",
+      "city": "Montréal"
+    },
+    "latitude": 45.5409,
+    "longitude": -73.6093,
+    "massSchedules": [
+      {
+        "dayOfWeek": 0,
+        "time": "10:00",
+        "rite": "french_paul_vi",
+        "language": "French",
+        "notes": "Horaire à confirmer"
+      }
+    ],
+    "rites": [
+      "french_paul_vi"
+    ],
+    "languages": [
+      "French"
+    ],
+    "description": "Église catholique située à Montréal",
+    "sourceUrl": "https://www.wikidata.org/wiki/Q3580965"
+  },
+  {
+    "name": "Église Saint-Enfant-Jésus du Mile-End",
+    "address": {
+      "street": "5039 Rue Saint-Dominique",
+      "postalCode": "H2T 1G9",
+      "city": "Montréal"
+    },
+    "latitude": 45.523487,
+    "longitude": -73.591325,
+    "massSchedules": [
+      {
+        "dayOfWeek": 0,
+        "time": "10:00",
+        "rite": "french_paul_vi",
+        "language": "French",
+        "notes": "Horaire à confirmer"
+      }
+    ],
+    "rites": [
+      "french_paul_vi"
+    ],
+    "languages": [
+      "French"
+    ],
+    "description": "Église catholique située à Montréal",
+    "sourceUrl": "https://www.wikidata.org/wiki/Q3581397"
+  },
+  {
+    "name": "Église Saint-Jean-Baptiste de Montréal",
+    "address": {
+      "street": "309 Rue Rachel Est",
+      "postalCode": "H2W 0A1",
+      "city": "Montréal"
+    },
+    "latitude": 45.5214,
+    "longitude": -73.5797,
+    "massSchedules": [
+      {
+        "dayOfWeek": 0,
+        "time": "10:00",
+        "rite": "french_paul_vi",
+        "language": "French",
+        "notes": "Horaire à confirmer"
+      }
+    ],
+    "rites": [
+      "french_paul_vi"
+    ],
+    "languages": [
+      "French"
+    ],
+    "description": "Église catholique située à Montréal",
+    "sourceUrl": "https://www.wikidata.org/wiki/Q3581988"
+  },
+  {
+    "name": "Église Saint-Jean-Berchmans",
+    "address": {
+      "street": "5945 Rue Cartier",
+      "postalCode": "H2G 2V4",
+      "city": "Montréal"
+    },
+    "latitude": 45.5419,
+    "longitude": -73.5911,
+    "massSchedules": [
+      {
+        "dayOfWeek": 0,
+        "time": "10:00",
+        "rite": "french_paul_vi",
+        "language": "French",
+        "notes": "Horaire à confirmer"
+      }
+    ],
+    "rites": [
+      "french_paul_vi"
+    ],
+    "languages": [
+      "French"
+    ],
+    "description": "Église catholique située à Montréal",
+    "sourceUrl": "https://www.wikidata.org/wiki/Q3582051"
+  },
+  {
+    "name": "Église Saint-Joachim de Pointe-Claire",
+    "address": {
+      "street": "Avenue Sainte-Anne",
+      "postalCode": "H9S 4P6",
+      "city": "Pointe-Claire"
+    },
+    "latitude": 45.426946,
+    "longitude": -73.825258,
+    "massSchedules": [
+      {
+        "dayOfWeek": 0,
+        "time": "10:00",
+        "rite": "french_paul_vi",
+        "language": "French",
+        "notes": "Horaire à confirmer"
+      }
+    ],
+    "rites": [
+      "french_paul_vi"
+    ],
+    "languages": [
+      "French"
+    ],
+    "description": "Église catholique située à Pointe-Claire",
+    "sourceUrl": "https://www.wikidata.org/wiki/Q3582124"
+  },
+  {
+    "name": "Église Saint-Pierre-Claver",
+    "address": {
+      "street": "2033 Boulevard Saint-Joseph Est",
+      "postalCode": "H2H 1E4",
+      "city": "Montréal"
+    },
+    "latitude": 45.5373,
+    "longitude": -73.5779,
+    "massSchedules": [
+      {
+        "dayOfWeek": 0,
+        "time": "10:00",
+        "rite": "french_paul_vi",
+        "language": "French",
+        "notes": "Horaire à confirmer"
+      }
+    ],
+    "rites": [
+      "french_paul_vi"
+    ],
+    "languages": [
+      "French"
+    ],
+    "description": "Église catholique située à Montréal",
+    "sourceUrl": "https://www.wikidata.org/wiki/Q3583526"
+  },
+  {
+    "name": "Église Saint-Pierre-Apôtre de Montréal",
+    "address": {
+      "street": "1216 Rue Panet",
+      "postalCode": "H2L 3B5",
+      "city": "Montréal"
+    },
+    "latitude": 45.519103459,
+    "longitude": -73.553209346,
+    "massSchedules": [
+      {
+        "dayOfWeek": 0,
+        "time": "10:00",
+        "rite": "french_paul_vi",
+        "language": "French",
+        "notes": "Horaire à confirmer"
+      }
+    ],
+    "rites": [
+      "french_paul_vi"
+    ],
+    "languages": [
+      "French"
+    ],
+    "description": "Église catholique située à Ville-Marie",
+    "sourceUrl": "https://www.wikidata.org/wiki/Q3583529"
+  },
+  {
+    "name": "Église Saint-Sixte",
+    "address": {
+      "street": "810 Boulevard Marcel-Laurin",
+      "postalCode": "H4M 2M7",
+      "city": "Montréal"
+    },
+    "latitude": 45.5072,
+    "longitude": -73.6846,
+    "massSchedules": [
+      {
+        "dayOfWeek": 0,
+        "time": "10:00",
+        "rite": "french_paul_vi",
+        "language": "French",
+        "notes": "Horaire à confirmer"
+      }
+    ],
+    "rites": [
+      "french_paul_vi"
+    ],
+    "languages": [
+      "French"
+    ],
+    "description": "Église catholique située à Saint-Laurent",
+    "sourceUrl": "https://www.wikidata.org/wiki/Q3584486"
+  },
+  {
+    "name": "Église Notre-Dame-de-la-Défense",
+    "address": {
+      "street": "6810 Avenue Henri-Julien",
+      "postalCode": "H2S 1L4",
+      "city": "Montréal"
+    },
+    "latitude": 45.534929,
+    "longitude": -73.611413,
+    "massSchedules": [
+      {
+        "dayOfWeek": 0,
+        "time": "10:00",
+        "rite": "french_paul_vi",
+        "language": "French",
+        "notes": "Horaire à confirmer"
+      }
+    ],
+    "rites": [
+      "french_paul_vi"
+    ],
+    "languages": [
+      "French"
+    ],
+    "description": "Église catholique située à Rosemont–La Petite-Patrie",
+    "sourceUrl": "https://www.wikidata.org/wiki/Q3585563"
+  },
+  {
+    "name": "Église de la Visitation du Sault-au-Récollet",
+    "address": {
+      "street": "1829 Boulevard Gouin Est",
+      "postalCode": "H2C 3H6",
+      "city": "Montréal"
+    },
+    "latitude": 45.570527777,
+    "longitude": -73.661527777,
+    "massSchedules": [
+      {
+        "dayOfWeek": 0,
+        "time": "10:00",
+        "rite": "french_paul_vi",
+        "language": "French",
+        "notes": "Horaire à confirmer"
+      }
+    ],
+    "rites": [
+      "french_paul_vi"
+    ],
+    "languages": [
+      "French"
+    ],
+    "description": "Église catholique située à Ahuntsic-Cartierville",
+    "sourceUrl": "https://www.wikidata.org/wiki/Q3585888"
+  },
+  {
+    "name": "Église des Saints-Anges-Gardiens",
+    "address": {
+      "street": "1300 Boulevard Saint-Joseph",
+      "postalCode": "H8S 4B7",
+      "city": "Montréal"
+    },
+    "latitude": 45.432,
+    "longitude": -73.6764,
+    "massSchedules": [
+      {
+        "dayOfWeek": 0,
+        "time": "10:00",
+        "rite": "french_paul_vi",
+        "language": "French",
+        "notes": "Horaire à confirmer"
+      }
+    ],
+    "rites": [
+      "french_paul_vi"
+    ],
+    "languages": [
+      "French"
+    ],
+    "description": "Église catholique située à Montréal",
+    "sourceUrl": "https://www.wikidata.org/wiki/Q3585925"
+  },
+  {
+    "name": "Église du Très-Saint-Nom-de-Jésus",
+    "address": {
+      "street": "1655 Avenue Desjardins",
+      "postalCode": "H1V 1T1",
+      "city": "Montréal"
+    },
+    "latitude": 45.55031,
+    "longitude": -73.53731,
+    "massSchedules": [
+      {
+        "dayOfWeek": 0,
+        "time": "10:00",
+        "rite": "french_paul_vi",
+        "language": "French",
+        "notes": "Horaire à confirmer"
+      }
+    ],
+    "rites": [
+      "french_paul_vi"
+    ],
+    "languages": [
+      "French"
+    ],
+    "description": "Église catholique située à Montréal",
+    "sourceUrl": "https://www.wikidata.org/wiki/Q3585995"
+  },
+  {
+    "name": "Église Saint-Michel-Archange",
+    "address": {
+      "street": "Rue Saint-Urbain",
+      "postalCode": "H2T 2K8",
+      "city": "Montréal"
+    },
+    "latitude": 45.5246,
+    "longitude": -73.6005,
+    "massSchedules": [
+      {
+        "dayOfWeek": 0,
+        "time": "10:00",
+        "rite": "french_paul_vi",
+        "language": "French",
+        "notes": "Horaire à confirmer"
+      }
+    ],
+    "rites": [
+      "french_paul_vi"
+    ],
+    "languages": [
+      "French"
+    ],
+    "description": "Église catholique située à Montréal",
+    "sourceUrl": "https://www.wikidata.org/wiki/Q5117310"
+  },
+  {
+    "name": "Église Saint-Sulpice de Saint-Sulpice",
+    "address": {
+      "street": "Rue Notre-Dame",
+      "postalCode": "J5W 3W2",
+      "city": "Saint-Sulpice"
+    },
+    "latitude": 45.826747777,
+    "longitude": -73.355933333,
+    "massSchedules": [
+      {
+        "dayOfWeek": 0,
+        "time": "10:00",
+        "rite": "french_paul_vi",
+        "language": "French",
+        "notes": "Horaire à confirmer"
+      }
+    ],
+    "rites": [
+      "french_paul_vi"
+    ],
+    "languages": [
+      "French"
+    ],
+    "description": "Église catholique située à Saint-Sulpice",
+    "sourceUrl": "https://www.wikidata.org/wiki/Q15731736"
+  },
+  {
+    "name": "Église Notre-Dame-des-Champs",
+    "address": {
+      "street": "184 Boulevard Iberville",
+      "postalCode": "J6A 3P5",
+      "city": "Repentigny"
+    },
+    "latitude": 45.721055555,
+    "longitude": -73.469833333,
+    "massSchedules": [
+      {
+        "dayOfWeek": 0,
+        "time": "10:00",
+        "rite": "french_paul_vi",
+        "language": "French",
+        "notes": "Horaire à confirmer"
+      }
+    ],
+    "rites": [
+      "french_paul_vi"
+    ],
+    "languages": [
+      "French"
+    ],
+    "description": "Église catholique située à Repentigny",
+    "sourceUrl": "https://www.wikidata.org/wiki/Q18753280"
+  },
+  {
+    "name": "Église de la Purification-de-la-Bienheureuse-Vierge-Marie",
+    "address": {
+      "street": "Rue Notre-Dame",
+      "postalCode": "J6A 2T2",
+      "city": "Repentigny"
+    },
+    "latitude": 45.73919,
+    "longitude": -73.44702,
+    "massSchedules": [
+      {
+        "dayOfWeek": 0,
+        "time": "10:00",
+        "rite": "french_paul_vi",
+        "language": "French",
+        "notes": "Horaire à confirmer"
+      }
+    ],
+    "rites": [
+      "french_paul_vi"
+    ],
+    "languages": [
+      "French"
+    ],
+    "description": "Église catholique située à Repentigny",
+    "sourceUrl": "https://www.wikidata.org/wiki/Q25916603"
+  },
+  {
+    "name": "Église de L'Assomption-de-la-Sainte-Vierge",
+    "address": {
+      "street": "285 Rue Saint-Pierre",
+      "postalCode": "J5W 2B1",
+      "city": "L'Assomption"
+    },
+    "latitude": 45.82522,
+    "longitude": -73.42378,
+    "massSchedules": [
+      {
+        "dayOfWeek": 0,
+        "time": "10:00",
+        "rite": "french_paul_vi",
+        "language": "French",
+        "notes": "Horaire à confirmer"
+      }
+    ],
+    "rites": [
+      "french_paul_vi"
+    ],
+    "languages": [
+      "French"
+    ],
+    "description": "Église catholique située à L'Assomption",
+    "sourceUrl": "https://www.wikidata.org/wiki/Q27907340"
+  },
+  {
+    "name": "Église Saint-Laurent de Montréal",
+    "address": {
+      "street": "Avenue Sainte-Croix",
+      "postalCode": "H4L 2H2",
+      "city": "Montréal"
+    },
+    "latitude": 45.51394,
+    "longitude": -73.67386,
+    "massSchedules": [
+      {
+        "dayOfWeek": 0,
+        "time": "10:00",
+        "rite": "french_paul_vi",
+        "language": "French",
+        "notes": "Horaire à confirmer"
+      }
+    ],
+    "rites": [
+      "french_paul_vi"
+    ],
+    "languages": [
+      "French"
+    ],
+    "description": "Église catholique située à Saint-Laurent",
+    "sourceUrl": "https://www.wikidata.org/wiki/Q28649070"
+  },
+  {
+    "name": "Église Saint-Raphaël-Archange de L’Île-Bizard",
+    "address": {
+      "street": "Rue Saint-Joseph",
+      "postalCode": "H9C 1E8",
+      "city": "Montréal"
+    },
+    "latitude": 45.48703,
+    "longitude": -73.87889,
+    "massSchedules": [
+      {
+        "dayOfWeek": 0,
+        "time": "10:00",
+        "rite": "french_paul_vi",
+        "language": "French",
+        "notes": "Horaire à confirmer"
+      }
+    ],
+    "rites": [
+      "french_paul_vi"
+    ],
+    "languages": [
+      "French"
+    ],
+    "description": "Église catholique située à L'Île-Bizard–Sainte-Geneviève",
+    "sourceUrl": "https://www.wikidata.org/wiki/Q28649072"
+  },
+  {
+    "name": "Église Saint-Maurice-de-Duvernay",
+    "address": {
+      "street": "Rue D'Ivry",
+      "postalCode": "H7G 2E7",
+      "city": "Laval (région administrative)"
+    },
+    "latitude": 45.578277777,
+    "longitude": -73.674444444,
+    "massSchedules": [
+      {
+        "dayOfWeek": 0,
+        "time": "10:00",
+        "rite": "french_paul_vi",
+        "language": "French",
+        "notes": "Horaire à confirmer"
+      }
+    ],
+    "rites": [
+      "french_paul_vi"
+    ],
+    "languages": [
+      "French"
+    ],
+    "description": "Église catholique située à Laval",
+    "sourceUrl": "https://www.wikidata.org/wiki/Q30739272"
+  },
+  {
+    "name": "Église Notre-Dame-des-Victoires",
+    "address": {
+      "street": "2700 Rue Lacordaire",
+      "postalCode": "H1N 2S6",
+      "city": "Montréal"
+    },
+    "latitude": 45.572073,
+    "longitude": -73.540877,
+    "massSchedules": [
+      {
+        "dayOfWeek": 0,
+        "time": "10:00",
+        "rite": "french_paul_vi",
+        "language": "French",
+        "notes": "Horaire à confirmer"
+      }
+    ],
+    "rites": [
+      "french_paul_vi"
+    ],
+    "languages": [
+      "French"
+    ],
+    "description": "Église catholique située à Mercier–Hochelaga-Maisonneuve",
+    "sourceUrl": "https://www.wikidata.org/wiki/Q64363541"
+  },
+  {
+    "name": "Église sans nom",
+    "address": {
+      "street": "Rue Guizot Ouest",
+      "postalCode": "H2P 2L8",
+      "city": "Montréal"
+    },
+    "latitude": 45.538699,
+    "longitude": -73.634673,
+    "massSchedules": [
+      {
+        "dayOfWeek": 0,
+        "time": "10:00",
+        "rite": "french_paul_vi",
+        "language": "French",
+        "notes": "Horaire à confirmer"
+      }
+    ],
+    "rites": [
+      "french_paul_vi"
+    ],
+    "languages": [
+      "French"
+    ],
+    "description": "Église catholique située à Montréal",
+    "sourceUrl": "https://www.wikidata.org/wiki/Q79307448"
+  },
+  {
+    "name": "Église Saint-Gérard-Majella",
+    "address": {
+      "street": "2758 Boulevard de l'Ange-Gardien Nord",
+      "postalCode": "J5W 4R8",
+      "city": "L'Assomption"
+    },
+    "latitude": 45.897305555,
+    "longitude": -73.4315,
+    "massSchedules": [
+      {
+        "dayOfWeek": 0,
+        "time": "10:00",
+        "rite": "french_paul_vi",
+        "language": "French",
+        "notes": "Horaire à confirmer"
+      }
+    ],
+    "rites": [
+      "french_paul_vi"
+    ],
+    "languages": [
+      "French"
+    ],
+    "description": "Église catholique située à L'Assomption",
+    "sourceUrl": "https://www.wikidata.org/wiki/Q111604441"
+  },
+  {
+    "name": "Église Saint-Irénée de Montréal",
+    "address": {
+      "street": "Rue Delisle",
+      "postalCode": "H4C 1N9",
+      "city": "Montréal"
+    },
+    "latitude": 45.482473,
+    "longitude": -73.578725,
+    "massSchedules": [
+      {
+        "dayOfWeek": 0,
+        "time": "10:00",
+        "rite": "french_paul_vi",
+        "language": "French",
+        "notes": "Horaire à confirmer"
+      }
+    ],
+    "rites": [
+      "french_paul_vi"
+    ],
+    "languages": [
+      "French"
+    ],
+    "description": "Église catholique située à Montréal",
+    "sourceUrl": "https://www.wikidata.org/wiki/Q112751838"
+  },
+  {
+    "name": "Église Saint-Zotique de Montréal",
+    "address": {
+      "street": "4565 Rue Notre-Dame Ouest",
+      "postalCode": "H4C 1S5",
+      "city": "Montréal"
+    },
+    "latitude": 45.474078,
+    "longitude": -73.587875,
+    "massSchedules": [
+      {
+        "dayOfWeek": 0,
+        "time": "10:00",
+        "rite": "french_paul_vi",
+        "language": "French",
+        "notes": "Horaire à confirmer"
+      }
+    ],
+    "rites": [
+      "french_paul_vi"
+    ],
+    "languages": [
+      "French"
+    ],
+    "description": "Église catholique située à Montréal",
+    "sourceUrl": "https://www.wikidata.org/wiki/Q112751914"
+  },
+  {
+    "name": "Église   Ascension of Our Lord",
+    "address": {
+      "street": "4300 Rue Sherbrooke Ouest",
+      "postalCode": "H3Z 2E7",
+      "city": "Westmount"
+    },
+    "latitude": 45.486301,
+    "longitude": -73.594129,
+    "massSchedules": [
+      {
+        "dayOfWeek": 0,
+        "time": "10:00",
+        "rite": "french_paul_vi",
+        "language": "French",
+        "notes": "Horaire à confirmer"
+      }
+    ],
+    "rites": [
+      "french_paul_vi"
+    ],
+    "languages": [
+      "French"
+    ],
+    "description": "Église catholique située à Westmount",
+    "sourceUrl": "https://www.wikidata.org/wiki/Q114151584"
+  },
+  {
+    "name": "Église Saint Edmund of Canterbury",
+    "address": {
+      "street": "105 Boulevard Beaconsfield",
+      "postalCode": "H9W 5Z6",
+      "city": "Beaconsfield"
+    },
+    "latitude": 45.431302,
+    "longitude": -73.846898,
+    "massSchedules": [
+      {
+        "dayOfWeek": 0,
+        "time": "10:00",
+        "rite": "french_paul_vi",
+        "language": "French",
+        "notes": "Horaire à confirmer"
+      }
+    ],
+    "rites": [
+      "french_paul_vi"
+    ],
+    "languages": [
+      "French"
+    ],
+    "description": "Église catholique située à Beaconsfield",
+    "sourceUrl": "https://www.wikidata.org/wiki/Q114874656"
+  },
+  {
+    "name": "Église Saint-Paul",
+    "address": {
+      "street": "1690 Avenue de l'Église",
+      "postalCode": "H4E 1G5",
+      "city": "Montréal"
+    },
+    "latitude": 45.463226,
+    "longitude": -73.586444,
+    "massSchedules": [
+      {
+        "dayOfWeek": 0,
+        "time": "10:00",
+        "rite": "french_paul_vi",
+        "language": "French",
+        "notes": "Horaire à confirmer"
+      }
+    ],
+    "rites": [
+      "french_paul_vi"
+    ],
+    "languages": [
+      "French"
+    ],
+    "description": "Église catholique située à Le Sud-Ouest",
+    "sourceUrl": "https://www.wikidata.org/wiki/Q127686844"
+  },
+  {
+    "name": "Église Saint John Brebeuf",
+    "address": {
+      "street": "7775 Rue George",
+      "postalCode": "H8P 1B3",
+      "city": "Montréal"
+    },
+    "latitude": 45.4285077,
+    "longitude": -73.6066151,
+    "massSchedules": [
+      {
+        "dayOfWeek": 0,
+        "time": "10:00",
+        "rite": "french_paul_vi",
+        "language": "French",
+        "notes": "Horaire à confirmer"
+      }
+    ],
+    "rites": [
+      "french_paul_vi"
+    ],
+    "languages": [
+      "French"
+    ],
+    "description": "Église catholique située à LaSalle",
+    "sourceUrl": "https://www.wikidata.org/wiki/Q132172378"
+  },
+  {
+    "name": "Église de Saint-Lin",
+    "address": {
+      "street": "12e Avenue",
+      "postalCode": "J5M 2W1",
+      "city": "Saint-Lin–Laurentides"
+    },
+    "latitude": 45.852861111,
+    "longitude": -73.756166666,
+    "massSchedules": [
+      {
+        "dayOfWeek": 0,
+        "time": "10:00",
+        "rite": "french_paul_vi",
+        "language": "French",
+        "notes": "Horaire à confirmer"
+      }
+    ],
+    "rites": [
+      "french_paul_vi"
+    ],
+    "languages": [
+      "French"
+    ],
+    "description": "Église catholique située à Lanaudière",
+    "sourceUrl": "https://www.wikidata.org/wiki/Q135983285"
+  },
+  {
+    "name": "Basilique Sainte-Anne-de-Beaupré",
+    "address": {
+      "street": "10018 Avenue Royale",
+      "postalCode": "G0A 3C0",
+      "city": "Sainte-Anne-de-Beaupré"
+    },
+    "latitude": 47.023851,
+    "longitude": -70.928975,
+    "massSchedules": [
+      {
+        "dayOfWeek": 0,
+        "time": "10:00",
+        "rite": "french_paul_vi",
+        "language": "French",
+        "notes": "Horaire à confirmer"
+      }
+    ],
+    "rites": [
+      "french_paul_vi"
+    ],
+    "languages": [
+      "French"
+    ],
+    "description": "Église catholique située à Sainte-Anne-de-Beaupré",
+    "sourceUrl": "https://www.wikidata.org/wiki/Q810148"
+  },
+  {
+    "name": "Basilique-cathédrale Notre-Dame de Québec",
+    "address": {
+      "street": "49 Rue Sainte-Famille",
+      "postalCode": "G1R 5X8",
+      "city": "Québec"
+    },
+    "latitude": 46.813851,
+    "longitude": -71.2066,
+    "massSchedules": [
+      {
+        "dayOfWeek": 0,
+        "time": "10:00",
+        "rite": "french_paul_vi",
+        "language": "French",
+        "notes": "Horaire à confirmer"
+      }
+    ],
+    "rites": [
+      "french_paul_vi"
+    ],
+    "languages": [
+      "French"
+    ],
+    "description": "Église catholique située à La Cité-Limoilou",
+    "sourceUrl": "https://www.wikidata.org/wiki/Q2002465"
+  },
+  {
+    "name": "Chapelle des Jésuites",
+    "address": {
+      "street": "20 Rue Dauphine",
+      "postalCode": "G1R 4E1",
+      "city": "Québec"
+    },
+    "latitude": 46.812138888,
+    "longitude": -71.212222222,
+    "massSchedules": [
+      {
+        "dayOfWeek": 0,
+        "time": "10:00",
+        "rite": "french_paul_vi",
+        "language": "French",
+        "notes": "Horaire à confirmer"
+      }
+    ],
+    "rites": [
+      "french_paul_vi"
+    ],
+    "languages": [
+      "French"
+    ],
+    "description": "Église catholique située à La Cité-Limoilou",
+    "sourceUrl": "https://www.wikidata.org/wiki/Q2957384"
+  },
+  {
+    "name": "Église Notre-Dame-des-Victoires de Québec",
+    "address": {
+      "street": "2 Rue Notre-Dame",
+      "postalCode": "G1K 8R1",
+      "city": "Québec"
+    },
+    "latitude": 46.8128,
+    "longitude": -71.2027,
+    "massSchedules": [
+      {
+        "dayOfWeek": 0,
+        "time": "10:00",
+        "rite": "french_paul_vi",
+        "language": "French",
+        "notes": "Horaire à confirmer"
+      }
+    ],
+    "rites": [
+      "french_paul_vi"
+    ],
+    "languages": [
+      "French"
+    ],
+    "description": "Église catholique située à La Cité-Limoilou",
+    "sourceUrl": "https://www.wikidata.org/wiki/Q3538054"
+  },
+  {
+    "name": "Église Notre-Dame-de-Lorette de Wendake",
+    "address": {
+      "street": "73 Boulevard Bastien",
+      "postalCode": "G0A 4V0",
+      "city": "Wendake"
+    },
+    "latitude": 46.856111111,
+    "longitude": -71.354722222,
+    "massSchedules": [
+      {
+        "dayOfWeek": 0,
+        "time": "10:00",
+        "rite": "french_paul_vi",
+        "language": "French",
+        "notes": "Horaire à confirmer"
+      }
+    ],
+    "rites": [
+      "french_paul_vi"
+    ],
+    "languages": [
+      "French"
+    ],
+    "description": "Église catholique située à Wendake",
+    "sourceUrl": "https://www.wikidata.org/wiki/Q3580214"
+  },
+  {
+    "name": "Église Saint-Jean-Baptiste de Québec",
+    "address": {
+      "street": "470 Rue Saint-Jean",
+      "postalCode": "G1R 1P3",
+      "city": "Québec"
+    },
+    "latitude": 46.809444444,
+    "longitude": -71.222222222,
+    "massSchedules": [
+      {
+        "dayOfWeek": 0,
+        "time": "10:00",
+        "rite": "french_paul_vi",
+        "language": "French",
+        "notes": "Horaire à confirmer"
+      }
+    ],
+    "rites": [
+      "french_paul_vi"
+    ],
+    "languages": [
+      "French"
+    ],
+    "description": "Église catholique située à La Cité-Limoilou",
+    "sourceUrl": "https://www.wikidata.org/wiki/Q3582005"
+  },
+  {
+    "name": "Église Saint-Joseph-de-la-Pointe-Lévy",
+    "address": {
+      "street": "Rue Saint-Joseph",
+      "postalCode": "G6V 7A5",
+      "city": "Lévis"
+    },
+    "latitude": 46.826111111,
+    "longitude": -71.165,
+    "massSchedules": [
+      {
+        "dayOfWeek": 0,
+        "time": "10:00",
+        "rite": "french_paul_vi",
+        "language": "French",
+        "notes": "Horaire à confirmer"
+      }
+    ],
+    "rites": [
+      "french_paul_vi"
+    ],
+    "languages": [
+      "French"
+    ],
+    "description": "Église catholique située à Desjardins",
+    "sourceUrl": "https://www.wikidata.org/wiki/Q3582128"
+  },
+  {
+    "name": "Église Saint-Thomas-d'Aquin",
+    "address": {
+      "street": "2125 Rue Louis-Jolliet",
+      "postalCode": "G1V 2B7",
+      "city": "Québec"
+    },
+    "latitude": 46.7881,
+    "longitude": -71.2681,
+    "massSchedules": [
+      {
+        "dayOfWeek": 0,
+        "time": "10:00",
+        "rite": "french_paul_vi",
+        "language": "French",
+        "notes": "Horaire à confirmer"
+      }
+    ],
+    "rites": [
+      "french_paul_vi"
+    ],
+    "languages": [
+      "French"
+    ],
+    "description": "Église catholique située à Sainte-Foy–Sillery–Cap-Rouge",
+    "sourceUrl": "https://www.wikidata.org/wiki/Q3584570"
+  },
+  {
+    "name": "Église Saint-Patrick de Québec",
+    "address": {
+      "street": "1125 Avenue De Salaberry",
+      "postalCode": "G1R 2G6",
+      "city": "Québec"
+    },
+    "latitude": 46.8042,
+    "longitude": -71.2241,
+    "massSchedules": [
+      {
+        "dayOfWeek": 0,
+        "time": "10:00",
+        "rite": "french_paul_vi",
+        "language": "French",
+        "notes": "Horaire à confirmer"
+      }
+    ],
+    "rites": [
+      "french_paul_vi"
+    ],
+    "languages": [
+      "French"
+    ],
+    "description": "Église catholique située à La Cité-Limoilou",
+    "sourceUrl": "https://www.wikidata.org/wiki/Q7590931"
+  },
+  {
+    "name": "Église de la Sainte-Famille de l'île d'Orléans",
+    "address": {
+      "street": "Chemin Royal",
+      "postalCode": "G0A 3C0",
+      "city": "Sainte-Famille-de-l'Île-d'Orléans"
+    },
+    "latitude": 46.973654166,
+    "longitude": -70.962360277,
+    "massSchedules": [
+      {
+        "dayOfWeek": 0,
+        "time": "10:00",
+        "rite": "french_paul_vi",
+        "language": "French",
+        "notes": "Horaire à confirmer"
+      }
+    ],
+    "rites": [
+      "french_paul_vi"
+    ],
+    "languages": [
+      "French"
+    ],
+    "description": "Église catholique située à Sainte-Famille-de-l'Île-d'Orléans",
+    "sourceUrl": "https://www.wikidata.org/wiki/Q15208348"
+  },
+  {
+    "name": "Église de Saint-Jean-de-l'Île-d'Orléans",
+    "address": {
+      "street": "2000 Chemin Royal",
+      "postalCode": "G0A 3W0",
+      "city": "Saint-Jean-de-l'Île-d'Orléans"
+    },
+    "latitude": 46.920430555,
+    "longitude": -70.88995,
+    "massSchedules": [
+      {
+        "dayOfWeek": 0,
+        "time": "10:00",
+        "rite": "french_paul_vi",
+        "language": "French",
+        "notes": "Horaire à confirmer"
+      }
+    ],
+    "rites": [
+      "french_paul_vi"
+    ],
+    "languages": [
+      "French"
+    ],
+    "description": "Église catholique située à Saint-Jean-de-l'Île-d'Orléans",
+    "sourceUrl": "https://www.wikidata.org/wiki/Q15221393"
+  },
+  {
+    "name": "Église de Saint-Pierre-de-l'Île-d'Orléans",
+    "address": {
+      "street": "1248 Chemin Royal",
+      "postalCode": "G0A 4E0",
+      "city": "Saint-Pierre-de-l'Île-d'Orléans"
+    },
+    "latitude": 46.888736111,
+    "longitude": -71.0735,
+    "massSchedules": [
+      {
+        "dayOfWeek": 0,
+        "time": "10:00",
+        "rite": "french_paul_vi",
+        "language": "French",
+        "notes": "Horaire à confirmer"
+      }
+    ],
+    "rites": [
+      "french_paul_vi"
+    ],
+    "languages": [
+      "French"
+    ],
+    "description": "Église catholique située à Saint-Pierre-de-l'Île-d'Orléans",
+    "sourceUrl": "https://www.wikidata.org/wiki/Q15251031"
+  },
+  {
+    "name": "Église Saint-Roch",
+    "address": {
+      "street": "160 Rue Saint-Joseph Est",
+      "postalCode": "G1K 3A7",
+      "city": "Québec"
+    },
+    "latitude": 46.81507,
+    "longitude": -71.222786,
+    "massSchedules": [
+      {
+        "dayOfWeek": 0,
+        "time": "10:00",
+        "rite": "french_paul_vi",
+        "language": "French",
+        "notes": "Horaire à confirmer"
+      }
+    ],
+    "rites": [
+      "french_paul_vi"
+    ],
+    "languages": [
+      "French"
+    ],
+    "description": "Église catholique située à La Cité-Limoilou",
+    "sourceUrl": "https://www.wikidata.org/wiki/Q15548091"
+  },
+  {
+    "name": "Église du Saint-Nom-de-Marie de Sainte-Marie",
+    "address": {
+      "street": "Rue Saint-Antoine",
+      "postalCode": "G6E 4B8",
+      "city": "Sainte-Marie"
+    },
+    "latitude": 46.437650833,
+    "longitude": -71.022050833,
+    "massSchedules": [
+      {
+        "dayOfWeek": 0,
+        "time": "10:00",
+        "rite": "french_paul_vi",
+        "language": "French",
+        "notes": "Horaire à confirmer"
+      }
+    ],
+    "rites": [
+      "french_paul_vi"
+    ],
+    "languages": [
+      "French"
+    ],
+    "description": "Église catholique située à Sainte-Marie",
+    "sourceUrl": "https://www.wikidata.org/wiki/Q16318855"
+  },
+  {
+    "name": "Église Saint-Dominique de Québec",
+    "address": {
+      "street": "175 Grande Allée Ouest",
+      "postalCode": "G1R 2H1",
+      "city": "Québec"
+    },
+    "latitude": 46.801,
+    "longitude": -71.2245,
+    "massSchedules": [
+      {
+        "dayOfWeek": 0,
+        "time": "10:00",
+        "rite": "french_paul_vi",
+        "language": "French",
+        "notes": "Horaire à confirmer"
+      }
+    ],
+    "rites": [
+      "french_paul_vi"
+    ],
+    "languages": [
+      "French"
+    ],
+    "description": "Église catholique située à La Cité-Limoilou",
+    "sourceUrl": "https://www.wikidata.org/wiki/Q18535200"
+  },
+  {
+    "name": "Église Saint-Michel de Sillery",
+    "address": {
+      "street": "1735 Côte de Sillery",
+      "postalCode": "G1T 2A9",
+      "city": "Québec"
+    },
+    "latitude": 46.7743341,
+    "longitude": -71.244143985,
+    "massSchedules": [
+      {
+        "dayOfWeek": 0,
+        "time": "10:00",
+        "rite": "french_paul_vi",
+        "language": "French",
+        "notes": "Horaire à confirmer"
+      }
+    ],
+    "rites": [
+      "french_paul_vi"
+    ],
+    "languages": [
+      "French"
+    ],
+    "description": "Église catholique située à Sainte-Foy–Sillery–Cap-Rouge",
+    "sourceUrl": "https://www.wikidata.org/wiki/Q20202880"
+  },
+  {
+    "name": "Église Saint-Antoine-de-Padoue de Saint-Antoine-de-Tilly",
+    "address": {
+      "street": "Chemin de Tilly",
+      "postalCode": "G0A 2R0",
+      "city": "Saint-Antoine-de-Tilly"
+    },
+    "latitude": 46.66439,
+    "longitude": -71.57375,
+    "massSchedules": [
+      {
+        "dayOfWeek": 0,
+        "time": "10:00",
+        "rite": "french_paul_vi",
+        "language": "French",
+        "notes": "Horaire à confirmer"
+      }
+    ],
+    "rites": [
+      "french_paul_vi"
+    ],
+    "languages": [
+      "French"
+    ],
+    "description": "Église catholique située à Saint-Antoine-de-Tilly",
+    "sourceUrl": "https://www.wikidata.org/wiki/Q24049304"
+  },
+  {
+    "name": "Église Saint-Bernard de Saint-Bernard",
+    "address": {
+      "street": "Rue Saint-Georges",
+      "postalCode": "G0S 2G0",
+      "city": "Saint-Bernard"
+    },
+    "latitude": 46.4975,
+    "longitude": -71.13741,
+    "massSchedules": [
+      {
+        "dayOfWeek": 0,
+        "time": "10:00",
+        "rite": "french_paul_vi",
+        "language": "French",
+        "notes": "Horaire à confirmer"
+      }
+    ],
+    "rites": [
+      "french_paul_vi"
+    ],
+    "languages": [
+      "French"
+    ],
+    "description": "Église catholique située à Saint-Bernard",
+    "sourceUrl": "https://www.wikidata.org/wiki/Q24049305"
+  },
+  {
+    "name": "Église Saint-Elzéar de Saint-Elzéar",
+    "address": {
+      "street": "Avenue Principale",
+      "postalCode": "G0S 2J2",
+      "city": "Saint-Elzéar"
+    },
+    "latitude": 46.40621,
+    "longitude": -71.06072,
+    "massSchedules": [
+      {
+        "dayOfWeek": 0,
+        "time": "10:00",
+        "rite": "french_paul_vi",
+        "language": "French",
+        "notes": "Horaire à confirmer"
+      }
+    ],
+    "rites": [
+      "french_paul_vi"
+    ],
+    "languages": [
+      "French"
+    ],
+    "description": "Église catholique située à Saint-Elzéar",
+    "sourceUrl": "https://www.wikidata.org/wiki/Q24049306"
+  },
+  {
+    "name": "Église Saint-Isidore",
+    "address": {
+      "street": "Rue Sainte-Geneviève",
+      "postalCode": "G0S 2S0",
+      "city": "Saint-Isidore"
+    },
+    "latitude": 46.58371,
+    "longitude": -71.09017,
+    "massSchedules": [
+      {
+        "dayOfWeek": 0,
+        "time": "10:00",
+        "rite": "french_paul_vi",
+        "language": "French",
+        "notes": "Horaire à confirmer"
+      }
+    ],
+    "rites": [
+      "french_paul_vi"
+    ],
+    "languages": [
+      "French"
+    ],
+    "description": "Église catholique située à Saint-Isidore",
+    "sourceUrl": "https://www.wikidata.org/wiki/Q24049308"
+  },
+  {
+    "name": "Église Saint-Romuald de Lévis",
+    "address": {
+      "street": "Rue de Saint-Romuald",
+      "postalCode": "G6W 5P7",
+      "city": "Lévis"
+    },
+    "latitude": 46.75603,
+    "longitude": -71.23731,
+    "massSchedules": [
+      {
+        "dayOfWeek": 0,
+        "time": "10:00",
+        "rite": "french_paul_vi",
+        "language": "French",
+        "notes": "Horaire à confirmer"
+      }
+    ],
+    "rites": [
+      "french_paul_vi"
+    ],
+    "languages": [
+      "French"
+    ],
+    "description": "Église catholique située à Les Chutes-de-la-Chaudière-Est",
+    "sourceUrl": "https://www.wikidata.org/wiki/Q24049312"
+  },
+  {
+    "name": "Église Notre-Dame-de-la-Victoire de Lévis",
+    "address": {
+      "street": "Rue Gauvreau",
+      "postalCode": "G6V 3T7",
+      "city": "Lévis"
+    },
+    "latitude": 46.81018,
+    "longitude": -71.1816,
+    "massSchedules": [
+      {
+        "dayOfWeek": 0,
+        "time": "10:00",
+        "rite": "french_paul_vi",
+        "language": "French",
+        "notes": "Horaire à confirmer"
+      }
+    ],
+    "rites": [
+      "french_paul_vi"
+    ],
+    "languages": [
+      "French"
+    ],
+    "description": "Église catholique située à Desjardins",
+    "sourceUrl": "https://www.wikidata.org/wiki/Q24049313"
+  },
+  {
+    "name": "Église Saint-Charles-Borromée de Charlesbourg",
+    "address": {
+      "street": "7990 1e Avenue",
+      "postalCode": "G1H 3G3",
+      "city": "Québec"
+    },
+    "latitude": 46.86103,
+    "longitude": -71.26986,
+    "massSchedules": [
+      {
+        "dayOfWeek": 0,
+        "time": "10:00",
+        "rite": "french_paul_vi",
+        "language": "French",
+        "notes": "Horaire à confirmer"
+      }
+    ],
+    "rites": [
+      "french_paul_vi"
+    ],
+    "languages": [
+      "French"
+    ],
+    "description": "Église catholique située à Charlesbourg",
+    "sourceUrl": "https://www.wikidata.org/wiki/Q25706886"
+  },
+  {
+    "name": "Église Saint-Charles-Borromée de Grondines",
+    "address": {
+      "street": "501 Chemin Sir-Lomer-Gouin",
+      "postalCode": "G0A 1W0",
+      "city": "Deschambault-Grondines"
+    },
+    "latitude": 46.59263,
+    "longitude": -72.04178,
+    "massSchedules": [
+      {
+        "dayOfWeek": 0,
+        "time": "10:00",
+        "rite": "french_paul_vi",
+        "language": "French",
+        "notes": "Horaire à confirmer"
+      }
+    ],
+    "rites": [
+      "french_paul_vi"
+    ],
+    "languages": [
+      "French"
+    ],
+    "description": "Église catholique située à Deschambault-Grondines",
+    "sourceUrl": "https://www.wikidata.org/wiki/Q25706887"
+  },
+  {
+    "name": "Église Saint-Joseph de Deschambault",
+    "address": {
+      "street": "115 Rue de l'Église",
+      "postalCode": "G0A 1S0",
+      "city": "Deschambault-Grondines"
+    },
+    "latitude": 46.648,
+    "longitude": -71.92786,
+    "massSchedules": [
+      {
+        "dayOfWeek": 0,
+        "time": "10:00",
+        "rite": "french_paul_vi",
+        "language": "French",
+        "notes": "Horaire à confirmer"
+      }
+    ],
+    "rites": [
+      "french_paul_vi"
+    ],
+    "languages": [
+      "French"
+    ],
+    "description": "Église catholique située à Deschambault-Grondines",
+    "sourceUrl": "https://www.wikidata.org/wiki/Q25706890"
+  },
+  {
+    "name": "Église Sainte-Agnès de Sainte-Agnès",
+    "address": {
+      "street": "Rue du Patrimoine",
+      "postalCode": "G4A 1G1",
+      "city": "La Malbaie"
+    },
+    "latitude": 47.66286,
+    "longitude": -70.26909,
+    "massSchedules": [
+      {
+        "dayOfWeek": 0,
+        "time": "10:00",
+        "rite": "french_paul_vi",
+        "language": "French",
+        "notes": "Horaire à confirmer"
+      }
+    ],
+    "rites": [
+      "french_paul_vi"
+    ],
+    "languages": [
+      "French"
+    ],
+    "description": "Église catholique située à La Malbaie",
+    "sourceUrl": "https://www.wikidata.org/wiki/Q25706891"
+  },
+  {
+    "name": "Église de la Sainte-Famille de Cap-Santé",
+    "address": {
+      "street": "30 Place de l'Église",
+      "postalCode": "G0A 1L0",
+      "city": "Cap-Santé"
+    },
+    "latitude": 46.67046,
+    "longitude": -71.78706,
+    "massSchedules": [
+      {
+        "dayOfWeek": 0,
+        "time": "10:00",
+        "rite": "french_paul_vi",
+        "language": "French",
+        "notes": "Horaire à confirmer"
+      }
+    ],
+    "rites": [
+      "french_paul_vi"
+    ],
+    "languages": [
+      "French"
+    ],
+    "description": "Église catholique située à Cap-Santé",
+    "sourceUrl": "https://www.wikidata.org/wiki/Q25706892"
+  },
+  {
+    "name": "Église des Augustines-de-l'Hôtel-Dieu-de-Québec",
+    "address": {
+      "street": "Rue Charlevoix",
+      "postalCode": "G1R 0C3",
+      "city": "Québec"
+    },
+    "latitude": 46.81508,
+    "longitude": -71.21033,
+    "massSchedules": [
+      {
+        "dayOfWeek": 0,
+        "time": "10:00",
+        "rite": "french_paul_vi",
+        "language": "French",
+        "notes": "Horaire à confirmer"
+      }
+    ],
+    "rites": [
+      "french_paul_vi"
+    ],
+    "languages": [
+      "French"
+    ],
+    "description": "Église catholique située à La Cité-Limoilou",
+    "sourceUrl": "https://www.wikidata.org/wiki/Q25706893"
+  },
+  {
+    "name": "Église Saint-Louis-de-France",
+    "address": {
+      "street": "1572 Route de l'Église",
+      "postalCode": "G1W 3P5",
+      "city": "Québec"
+    },
+    "latitude": 46.759809,
+    "longitude": -71.279686,
+    "massSchedules": [
+      {
+        "dayOfWeek": 0,
+        "time": "10:00",
+        "rite": "french_paul_vi",
+        "language": "French",
+        "notes": "Horaire à confirmer"
+      }
+    ],
+    "rites": [
+      "french_paul_vi"
+    ],
+    "languages": [
+      "French"
+    ],
+    "description": "Église catholique située à Sainte-Foy–Sillery–Cap-Rouge",
+    "sourceUrl": "https://www.wikidata.org/wiki/Q26256789"
+  },
+  {
+    "name": "Église du Très-Saint-Sacrement de Québec",
+    "address": {
+      "street": "1330 Chemin Sainte-Foy",
+      "postalCode": "G1S 2N5",
+      "city": "Québec"
+    },
+    "latitude": 46.7952,
+    "longitude": -71.254,
+    "massSchedules": [
+      {
+        "dayOfWeek": 0,
+        "time": "10:00",
+        "rite": "french_paul_vi",
+        "language": "French",
+        "notes": "Horaire à confirmer"
+      }
+    ],
+    "rites": [
+      "french_paul_vi"
+    ],
+    "languages": [
+      "French"
+    ],
+    "description": "Église catholique située à La Cité-Limoilou",
+    "sourceUrl": "https://www.wikidata.org/wiki/Q26257799"
+  },
+  {
+    "name": "Église Saint-Sauveur de Québec",
+    "address": {
+      "street": "Rue Boisseau",
+      "postalCode": "G1N 1V6",
+      "city": "Québec"
+    },
+    "latitude": 46.8111,
+    "longitude": -71.2355,
+    "massSchedules": [
+      {
+        "dayOfWeek": 0,
+        "time": "10:00",
+        "rite": "french_paul_vi",
+        "language": "French",
+        "notes": "Horaire à confirmer"
+      }
+    ],
+    "rites": [
+      "french_paul_vi"
+    ],
+    "languages": [
+      "French"
+    ],
+    "description": "Église catholique située à La Cité-Limoilou",
+    "sourceUrl": "https://www.wikidata.org/wiki/Q26257802"
+  },
+  {
+    "name": "Église Saint-Gabriel de La Durantaye",
+    "address": {
+      "street": "2 Rue Furois",
+      "postalCode": "",
+      "city": "La Durantaye"
+    },
+    "latitude": 46.83456,
+    "longitude": -70.85717,
+    "massSchedules": [
+      {
+        "dayOfWeek": 0,
+        "time": "10:00",
+        "rite": "french_paul_vi",
+        "language": "French",
+        "notes": "Horaire à confirmer"
+      }
+    ],
+    "rites": [
+      "french_paul_vi"
+    ],
+    "languages": [
+      "French"
+    ],
+    "description": "Église catholique située à La Durantaye",
+    "sourceUrl": "https://www.wikidata.org/wiki/Q28062676"
+  },
+  {
+    "name": "Église Saint-Martin de Saint-Martin",
+    "address": {
+      "street": "10 7e Rue Est",
+      "postalCode": "G0M 1B0",
+      "city": "Saint-Martin"
+    },
+    "latitude": 45.95964,
+    "longitude": -70.65564,
+    "massSchedules": [
+      {
+        "dayOfWeek": 0,
+        "time": "10:00",
+        "rite": "french_paul_vi",
+        "language": "French",
+        "notes": "Horaire à confirmer"
+      }
+    ],
+    "rites": [
+      "french_paul_vi"
+    ],
+    "languages": [
+      "French"
+    ],
+    "description": "Église catholique située à Saint-Martin",
+    "sourceUrl": "https://www.wikidata.org/wiki/Q28062678"
+  },
+  {
+    "name": "Église Saint-Narcisse de Saint-Narcisse-de-Beaurivage",
+    "address": {
+      "street": "380 Rue Principale",
+      "postalCode": "G0S 1W0",
+      "city": "Saint-Narcisse-de-Beaurivage"
+    },
+    "latitude": 46.48233,
+    "longitude": -71.23281,
+    "massSchedules": [
+      {
+        "dayOfWeek": 0,
+        "time": "10:00",
+        "rite": "french_paul_vi",
+        "language": "French",
+        "notes": "Horaire à confirmer"
+      }
+    ],
+    "rites": [
+      "french_paul_vi"
+    ],
+    "languages": [
+      "French"
+    ],
+    "description": "Église catholique située à Saint-Narcisse-de-Beaurivage",
+    "sourceUrl": "https://www.wikidata.org/wiki/Q28062679"
+  },
+  {
+    "name": "Église Saint-Victor de Saint-Victor",
+    "address": {
+      "street": "298 Rue Principale",
+      "postalCode": "G0M 2B0",
+      "city": "Saint-Victor"
+    },
+    "latitude": 46.14757,
+    "longitude": -70.90565,
+    "massSchedules": [
+      {
+        "dayOfWeek": 0,
+        "time": "10:00",
+        "rite": "french_paul_vi",
+        "language": "French",
+        "notes": "Horaire à confirmer"
+      }
+    ],
+    "rites": [
+      "french_paul_vi"
+    ],
+    "languages": [
+      "French"
+    ],
+    "description": "Église catholique située à Saint-Victor",
+    "sourceUrl": "https://www.wikidata.org/wiki/Q28062685"
+  },
+  {
+    "name": "Église Sainte-Croix de Sainte-Croix",
+    "address": {
+      "street": "Rue de la Mennais",
+      "postalCode": "G0S 2H0",
+      "city": "Sainte-Croix"
+    },
+    "latitude": 46.62222,
+    "longitude": -71.73972,
+    "massSchedules": [
+      {
+        "dayOfWeek": 0,
+        "time": "10:00",
+        "rite": "french_paul_vi",
+        "language": "French",
+        "notes": "Horaire à confirmer"
+      }
+    ],
+    "rites": [
+      "french_paul_vi"
+    ],
+    "languages": [
+      "French"
+    ],
+    "description": "Église catholique située à Sainte-Croix",
+    "sourceUrl": "https://www.wikidata.org/wiki/Q28062687"
+  },
+  {
+    "name": "Église Saint-Éphrem de Saint-Éphrem-de-Beauce",
+    "address": {
+      "street": "Route 108 Ouest",
+      "postalCode": "G0M 1R0",
+      "city": "Saint-Éphrem-de-Beauce"
+    },
+    "latitude": 46.05922,
+    "longitude": -70.95414,
+    "massSchedules": [
+      {
+        "dayOfWeek": 0,
+        "time": "10:00",
+        "rite": "french_paul_vi",
+        "language": "French",
+        "notes": "Horaire à confirmer"
+      }
+    ],
+    "rites": [
+      "french_paul_vi"
+    ],
+    "languages": [
+      "French"
+    ],
+    "description": "Église catholique située à Saint-Éphrem-de-Beauce",
+    "sourceUrl": "https://www.wikidata.org/wiki/Q28062689"
+  },
+  {
+    "name": "Église Saint-Hilaire de Saint-Hilaire-de-Dorset",
+    "address": {
+      "street": "870 Rue Principale",
+      "postalCode": "",
+      "city": "Saint-Hilaire-de-Dorset"
+    },
+    "latitude": 45.86469,
+    "longitude": -70.85733,
+    "massSchedules": [
+      {
+        "dayOfWeek": 0,
+        "time": "10:00",
+        "rite": "french_paul_vi",
+        "language": "French",
+        "notes": "Horaire à confirmer"
+      }
+    ],
+    "rites": [
+      "french_paul_vi"
+    ],
+    "languages": [
+      "French"
+    ],
+    "description": "Église catholique située à Saint-Hilaire-de-Dorset",
+    "sourceUrl": "https://www.wikidata.org/wiki/Q28062691"
+  },
+  {
+    "name": "Église Saint-Samuel de Lac-Drolet",
+    "address": {
+      "street": "671 Chemin Principal",
+      "postalCode": "G0Y 1C0",
+      "city": "Lac-Drolet"
+    },
+    "latitude": 45.71803,
+    "longitude": -70.84844,
+    "massSchedules": [
+      {
+        "dayOfWeek": 0,
+        "time": "10:00",
+        "rite": "french_paul_vi",
+        "language": "French",
+        "notes": "Horaire à confirmer"
+      }
+    ],
+    "rites": [
+      "french_paul_vi"
+    ],
+    "languages": [
+      "French"
+    ],
+    "description": "Église catholique située à Lac-Drolet",
+    "sourceUrl": "https://www.wikidata.org/wiki/Q28803927"
+  },
+  {
+    "name": "Église Saint-Étienne de Beaumont",
+    "address": {
+      "street": "60 Chemin du Domaine",
+      "postalCode": "G0R 1C0",
+      "city": "Beaumont"
+    },
+    "latitude": 46.83033,
+    "longitude": -71.01133,
+    "massSchedules": [
+      {
+        "dayOfWeek": 0,
+        "time": "10:00",
+        "rite": "french_paul_vi",
+        "language": "French",
+        "notes": "Horaire à confirmer"
+      }
+    ],
+    "rites": [
+      "french_paul_vi"
+    ],
+    "languages": [
+      "French"
+    ],
+    "description": "Église catholique située à Beaumont",
+    "sourceUrl": "https://www.wikidata.org/wiki/Q29934858"
+  },
+  {
+    "name": "Église Saint-Alphonse de Thetford Mines",
+    "address": {
+      "street": "47 Rue Dumais Sud",
+      "postalCode": "G6G 3W4",
+      "city": "Thetford Mines"
+    },
+    "latitude": 46.08989,
+    "longitude": -71.30011,
+    "massSchedules": [
+      {
+        "dayOfWeek": 0,
+        "time": "10:00",
+        "rite": "french_paul_vi",
+        "language": "French",
+        "notes": "Horaire à confirmer"
+      }
+    ],
+    "rites": [
+      "french_paul_vi"
+    ],
+    "languages": [
+      "French"
+    ],
+    "description": "Église catholique située à Thetford Mines",
+    "sourceUrl": "https://www.wikidata.org/wiki/Q33026888"
+  },
+  {
+    "name": "Église Saint-Cajetan",
+    "address": {
+      "street": "80 Rue Principale",
+      "postalCode": "G0R 1A0",
+      "city": "Armagh"
+    },
+    "latitude": 46.744191666,
+    "longitude": -70.588927777,
+    "massSchedules": [
+      {
+        "dayOfWeek": 0,
+        "time": "10:00",
+        "rite": "french_paul_vi",
+        "language": "French",
+        "notes": "Horaire à confirmer"
+      }
+    ],
+    "rites": [
+      "french_paul_vi"
+    ],
+    "languages": [
+      "French"
+    ],
+    "description": "Église catholique située à Armagh",
+    "sourceUrl": "https://www.wikidata.org/wiki/Q53680106"
+  },
+  {
+    "name": "Église Saint-Pierre-aux-Liens",
+    "address": {
+      "street": "4211 Rue des Roses",
+      "postalCode": "G1G 1R9",
+      "city": "Québec"
+    },
+    "latitude": 46.8813151,
+    "longitude": -71.286621,
+    "massSchedules": [
+      {
+        "dayOfWeek": 0,
+        "time": "10:00",
+        "rite": "french_paul_vi",
+        "language": "French",
+        "notes": "Horaire à confirmer"
+      }
+    ],
+    "rites": [
+      "french_paul_vi"
+    ],
+    "languages": [
+      "French"
+    ],
+    "description": "Église catholique située à Orsainville",
+    "sourceUrl": "https://www.wikidata.org/wiki/Q56025809"
+  },
+  {
+    "name": "Église de la Nativité-de-Notre-Dame de Beauport",
+    "address": {
+      "street": "29 Avenue du Couvent",
+      "postalCode": "G1E 6R9",
+      "city": "Québec"
+    },
+    "latitude": 46.858888888,
+    "longitude": -71.189444444,
+    "massSchedules": [
+      {
+        "dayOfWeek": 0,
+        "time": "10:00",
+        "rite": "french_paul_vi",
+        "language": "French",
+        "notes": "Horaire à confirmer"
+      }
+    ],
+    "rites": [
+      "french_paul_vi"
+    ],
+    "languages": [
+      "French"
+    ],
+    "description": "Église catholique située à Beauport",
+    "sourceUrl": "https://www.wikidata.org/wiki/Q60173967"
+  },
+  {
+    "name": "Église de Notre-Dame-de-Jacques-Cartier",
+    "address": {
+      "street": "Rue Saint-Joseph Est",
+      "postalCode": "G1K 2Y6",
+      "city": "Québec"
+    },
+    "latitude": 46.8130197,
+    "longitude": -71.2290107,
+    "massSchedules": [
+      {
+        "dayOfWeek": 0,
+        "time": "10:00",
+        "rite": "french_paul_vi",
+        "language": "French",
+        "notes": "Horaire à confirmer"
+      }
+    ],
+    "rites": [
+      "french_paul_vi"
+    ],
+    "languages": [
+      "French"
+    ],
+    "description": "Église catholique située à La Cité-Limoilou",
+    "sourceUrl": "https://www.wikidata.org/wiki/Q62529831"
+  },
+  {
+    "name": "Église de Saint-Ubalde",
+    "address": {
+      "street": "425 Rue Saint-Paul",
+      "postalCode": "G0A 4L0",
+      "city": "Saint-Ubalde"
+    },
+    "latitude": 46.756122,
+    "longitude": -72.269529,
+    "massSchedules": [
+      {
+        "dayOfWeek": 0,
+        "time": "10:00",
+        "rite": "french_paul_vi",
+        "language": "French",
+        "notes": "Horaire à confirmer"
+      }
+    ],
+    "rites": [
+      "french_paul_vi"
+    ],
+    "languages": [
+      "French"
+    ],
+    "description": "Église catholique située à Saint-Ubalde",
+    "sourceUrl": "https://www.wikidata.org/wiki/Q63858503"
+  },
+  {
+    "name": "Église de Saint-Laurent",
+    "address": {
+      "street": "1527 Chemin Royal",
+      "postalCode": "G0A 3Z0",
+      "city": "Saint-Laurent-de-l'Île-d'Orléans"
+    },
+    "latitude": 46.860277777,
+    "longitude": -71.005638888,
+    "massSchedules": [
+      {
+        "dayOfWeek": 0,
+        "time": "10:00",
+        "rite": "french_paul_vi",
+        "language": "French",
+        "notes": "Horaire à confirmer"
+      }
+    ],
+    "rites": [
+      "french_paul_vi"
+    ],
+    "languages": [
+      "French"
+    ],
+    "description": "Église catholique située à Saint-Laurent-de-l'Île-d'Orléans",
+    "sourceUrl": "https://www.wikidata.org/wiki/Q66763856"
+  },
+  {
+    "name": "Église Saint-Raymond-Nonnat de Saint-Raymond",
+    "address": {
+      "street": "331 Rue Saint-Joseph",
+      "postalCode": "G3L 1J8",
+      "city": "Saint-Raymond"
+    },
+    "latitude": 46.8905088,
+    "longitude": -71.8335755,
+    "massSchedules": [
+      {
+        "dayOfWeek": 0,
+        "time": "10:00",
+        "rite": "french_paul_vi",
+        "language": "French",
+        "notes": "Horaire à confirmer"
+      }
+    ],
+    "rites": [
+      "french_paul_vi"
+    ],
+    "languages": [
+      "French"
+    ],
+    "description": "Église catholique située à Saint-Raymond",
+    "sourceUrl": "https://www.wikidata.org/wiki/Q83788028"
+  },
+  {
+    "name": "Église Saint-Anselme",
+    "address": {
+      "street": "Rue Principale",
+      "postalCode": "G0R 2N0",
+      "city": "Saint-Anselme"
+    },
+    "latitude": 46.629139,
+    "longitude": -70.971734,
+    "massSchedules": [
+      {
+        "dayOfWeek": 0,
+        "time": "10:00",
+        "rite": "french_paul_vi",
+        "language": "French",
+        "notes": "Horaire à confirmer"
+      }
+    ],
+    "rites": [
+      "french_paul_vi"
+    ],
+    "languages": [
+      "French"
+    ],
+    "description": "Église catholique située à Saint-Anselme",
+    "sourceUrl": "https://www.wikidata.org/wiki/Q105635844"
+  },
+  {
+    "name": "Église Saint-Ignace-de-Loyola",
+    "address": {
+      "street": "3325 Rue Loyola",
+      "postalCode": "G1E 2S1",
+      "city": "Québec"
+    },
+    "latitude": 46.853083333,
+    "longitude": -71.209833333,
+    "massSchedules": [
+      {
+        "dayOfWeek": 0,
+        "time": "10:00",
+        "rite": "french_paul_vi",
+        "language": "French",
+        "notes": "Horaire à confirmer"
+      }
+    ],
+    "rites": [
+      "french_paul_vi"
+    ],
+    "languages": [
+      "French"
+    ],
+    "description": "Église catholique située à Beauport",
+    "sourceUrl": "https://www.wikidata.org/wiki/Q105949189"
+  },
+  {
+    "name": "Église de Saint-Athanase",
+    "address": {
+      "street": "Rue Dublin",
+      "postalCode": "G0S 1K0",
+      "city": "Inverness"
+    },
+    "latitude": 46.257981,
+    "longitude": -71.519021,
+    "massSchedules": [
+      {
+        "dayOfWeek": 0,
+        "time": "10:00",
+        "rite": "french_paul_vi",
+        "language": "French",
+        "notes": "Horaire à confirmer"
+      }
+    ],
+    "rites": [
+      "french_paul_vi"
+    ],
+    "languages": [
+      "French"
+    ],
+    "description": "Église catholique située à Inverness",
+    "sourceUrl": "https://www.wikidata.org/wiki/Q106730473"
+  },
+  {
+    "name": "Église Saint-Maxime",
+    "address": {
+      "street": "14e Rue",
+      "postalCode": "G0S 3G0",
+      "city": "Scott"
+    },
+    "latitude": 46.507548,
+    "longitude": -71.076181,
+    "massSchedules": [
+      {
+        "dayOfWeek": 0,
+        "time": "10:00",
+        "rite": "french_paul_vi",
+        "language": "French",
+        "notes": "Horaire à confirmer"
+      }
+    ],
+    "rites": [
+      "french_paul_vi"
+    ],
+    "languages": [
+      "French"
+    ],
+    "description": "Église catholique située à Scott",
+    "sourceUrl": "https://www.wikidata.org/wiki/Q108938695"
+  },
+  {
+    "name": "Église Saint-Sébastien de Saint-Sébastien",
+    "address": {
+      "street": "Rue de la Fabrique",
+      "postalCode": "",
+      "city": "Saint-Sébastien"
+    },
+    "latitude": 45.78223644,
+    "longitude": -70.96909596,
+    "massSchedules": [
+      {
+        "dayOfWeek": 0,
+        "time": "10:00",
+        "rite": "french_paul_vi",
+        "language": "French",
+        "notes": "Horaire à confirmer"
+      }
+    ],
+    "rites": [
+      "french_paul_vi"
+    ],
+    "languages": [
+      "French"
+    ],
+    "description": "Église catholique située à Saint-Sébastien",
+    "sourceUrl": "https://www.wikidata.org/wiki/Q109317182"
+  },
+  {
+    "name": "Église Saint-Charles-de-Limoilou",
+    "address": {
+      "street": "8e Avenue",
+      "postalCode": "G1J 2Z9",
+      "city": "Québec"
+    },
+    "latitude": 46.82535,
+    "longitude": -71.22227,
+    "massSchedules": [
+      {
+        "dayOfWeek": 0,
+        "time": "10:00",
+        "rite": "french_paul_vi",
+        "language": "French",
+        "notes": "Horaire à confirmer"
+      }
+    ],
+    "rites": [
+      "french_paul_vi"
+    ],
+    "languages": [
+      "French"
+    ],
+    "description": "Église catholique située à La Cité-Limoilou",
+    "sourceUrl": "https://www.wikidata.org/wiki/Q110092495"
+  },
+  {
+    "name": "Église Saint-Zéphirin-de-Stadacona de Québec",
+    "address": {
+      "street": "1400 Avenue François-1er",
+      "postalCode": "G1L 2J2",
+      "city": "Québec"
+    },
+    "latitude": 46.8247,
+    "longitude": -71.24255,
+    "massSchedules": [
+      {
+        "dayOfWeek": 0,
+        "time": "10:00",
+        "rite": "french_paul_vi",
+        "language": "French",
+        "notes": "Horaire à confirmer"
+      }
+    ],
+    "rites": [
+      "french_paul_vi"
+    ],
+    "languages": [
+      "French"
+    ],
+    "description": "Église catholique située à La Cité-Limoilou",
+    "sourceUrl": "https://www.wikidata.org/wiki/Q112751287"
+  },
+  {
+    "name": "Église Saint-François-d'Assise de Beauceville",
+    "address": {
+      "street": "101 Place de l'Église",
+      "postalCode": "G5X 1S3",
+      "city": "Beauceville"
+    },
+    "latitude": 46.2111111,
+    "longitude": -70.7788889,
+    "massSchedules": [
+      {
+        "dayOfWeek": 0,
+        "time": "10:00",
+        "rite": "french_paul_vi",
+        "language": "French",
+        "notes": "Horaire à confirmer"
+      }
+    ],
+    "rites": [
+      "french_paul_vi"
+    ],
+    "languages": [
+      "French"
+    ],
+    "description": "Église catholique située à Beauceville",
+    "sourceUrl": "https://www.wikidata.org/wiki/Q112912161"
+  },
+  {
+    "name": "Église Saint-Bernardin-de-Sienne de Rivière-à-Pierre",
+    "address": {
+      "street": "605 Rue de l'Église Est",
+      "postalCode": "G0A 3A0",
+      "city": "Rivière-à-Pierre"
+    },
+    "latitude": 46.997621,
+    "longitude": -72.1788954,
+    "massSchedules": [
+      {
+        "dayOfWeek": 0,
+        "time": "10:00",
+        "rite": "french_paul_vi",
+        "language": "French",
+        "notes": "Horaire à confirmer"
+      }
+    ],
+    "rites": [
+      "french_paul_vi"
+    ],
+    "languages": [
+      "French"
+    ],
+    "description": "Église catholique située à Rivière-à-Pierre",
+    "sourceUrl": "https://www.wikidata.org/wiki/Q113033768"
+  },
+  {
+    "name": "Église La Visitation de Notre-Dame de Château-Richer",
+    "address": {
+      "street": "Rue de l'Église",
+      "postalCode": "G0A 1N0",
+      "city": "Château-Richer"
+    },
+    "latitude": 46.970129,
+    "longitude": -71.0183,
+    "massSchedules": [
+      {
+        "dayOfWeek": 0,
+        "time": "10:00",
+        "rite": "french_paul_vi",
+        "language": "French",
+        "notes": "Horaire à confirmer"
+      }
+    ],
+    "rites": [
+      "french_paul_vi"
+    ],
+    "languages": [
+      "French"
+    ],
+    "description": "Église catholique située à Château-Richer",
+    "sourceUrl": "https://www.wikidata.org/wiki/Q113137802"
+  },
+  {
+    "name": "Église de Saint-Michel",
+    "address": {
+      "street": "Rue Saint-Georges",
+      "postalCode": "",
+      "city": "Saint-Michel-de-Bellechasse"
+    },
+    "latitude": 46.876165,
+    "longitude": -70.907567,
+    "massSchedules": [
+      {
+        "dayOfWeek": 0,
+        "time": "10:00",
+        "rite": "french_paul_vi",
+        "language": "French",
+        "notes": "Horaire à confirmer"
+      }
+    ],
+    "rites": [
+      "french_paul_vi"
+    ],
+    "languages": [
+      "French"
+    ],
+    "description": "Église catholique située à Saint-Michel-de-Bellechasse",
+    "sourceUrl": "https://www.wikidata.org/wiki/Q113157062"
+  },
+  {
+    "name": "Église de Saint-Séverin",
+    "address": {
+      "street": "199 Rue de l'Église",
+      "postalCode": "G0N 1V0",
+      "city": "Saint-Séverin"
+    },
+    "latitude": 46.32527,
+    "longitude": -71.054054,
+    "massSchedules": [
+      {
+        "dayOfWeek": 0,
+        "time": "10:00",
+        "rite": "french_paul_vi",
+        "language": "French",
+        "notes": "Horaire à confirmer"
+      }
+    ],
+    "rites": [
+      "french_paul_vi"
+    ],
+    "languages": [
+      "French"
+    ],
+    "description": "Église catholique située à Saint-Séverin",
+    "sourceUrl": "https://www.wikidata.org/wiki/Q115789953"
+  },
+  {
+    "name": "Église Sainte-Sabine",
+    "address": {
+      "street": "Rue de la Fabrique",
+      "postalCode": "",
+      "city": "Sainte-Sabine"
+    },
+    "latitude": 46.492483,
+    "longitude": -70.352285,
+    "massSchedules": [
+      {
+        "dayOfWeek": 0,
+        "time": "10:00",
+        "rite": "french_paul_vi",
+        "language": "French",
+        "notes": "Horaire à confirmer"
+      }
+    ],
+    "rites": [
+      "french_paul_vi"
+    ],
+    "languages": [
+      "French"
+    ],
+    "description": "Église catholique située à Sainte-Sabine",
+    "sourceUrl": "https://www.wikidata.org/wiki/Q117270254"
+  },
+  {
+    "name": "Église Saint-Sylvestre",
+    "address": {
+      "street": "Rue Principale",
+      "postalCode": "G0S 3C0",
+      "city": "Saint-Sylvestre"
+    },
+    "latitude": 46.362296,
+    "longitude": -71.229403,
+    "massSchedules": [
+      {
+        "dayOfWeek": 0,
+        "time": "10:00",
+        "rite": "french_paul_vi",
+        "language": "French",
+        "notes": "Horaire à confirmer"
+      }
+    ],
+    "rites": [
+      "french_paul_vi"
+    ],
+    "languages": [
+      "French"
+    ],
+    "description": "Église catholique située à Saint-Sylvestre",
+    "sourceUrl": "https://www.wikidata.org/wiki/Q118562869"
+  },
+  {
+    "name": "Église Saint-Calixte",
+    "address": {
+      "street": "Avenue des Érables",
+      "postalCode": "G6L 2K6",
+      "city": "Plessisville"
+    },
+    "latitude": 46.21613,
+    "longitude": -71.775479,
+    "massSchedules": [
+      {
+        "dayOfWeek": 0,
+        "time": "10:00",
+        "rite": "french_paul_vi",
+        "language": "French",
+        "notes": "Horaire à confirmer"
+      }
+    ],
+    "rites": [
+      "french_paul_vi"
+    ],
+    "languages": [
+      "French"
+    ],
+    "description": "Église catholique située à Plessisville",
+    "sourceUrl": "https://www.wikidata.org/wiki/Q119505625"
+  },
+  {
+    "name": "Église de Saint-Louis-de-Gonzague",
+    "address": {
+      "street": "111 Rue de l'Église",
+      "postalCode": "",
+      "city": "Saint-Louis-de-Gonzague"
+    },
+    "latitude": 46.267868,
+    "longitude": -70.327626,
+    "massSchedules": [
+      {
+        "dayOfWeek": 0,
+        "time": "10:00",
+        "rite": "french_paul_vi",
+        "language": "French",
+        "notes": "Horaire à confirmer"
+      }
+    ],
+    "rites": [
+      "french_paul_vi"
+    ],
+    "languages": [
+      "French"
+    ],
+    "description": "Église catholique située à Saint-Louis-de-Gonzague",
+    "sourceUrl": "https://www.wikidata.org/wiki/Q120079814"
+  },
+  {
+    "name": "Église de Saint-Lambert",
+    "address": {
+      "street": "Rue des Érables",
+      "postalCode": "G0S 2W0",
+      "city": "Saint-Lambert-de-Lauzon"
+    },
+    "latitude": 46.586916,
+    "longitude": -71.211915,
+    "massSchedules": [
+      {
+        "dayOfWeek": 0,
+        "time": "10:00",
+        "rite": "french_paul_vi",
+        "language": "French",
+        "notes": "Horaire à confirmer"
+      }
+    ],
+    "rites": [
+      "french_paul_vi"
+    ],
+    "languages": [
+      "French"
+    ],
+    "description": "Église catholique située à Saint-Lambert-de-Lauzon",
+    "sourceUrl": "https://www.wikidata.org/wiki/Q120378857"
+  },
+  {
+    "name": "Église Sainte-Angèle de Saint-Malo",
+    "address": {
+      "street": "275 Rue Marie-de-l'Incarnation",
+      "postalCode": "G1N 3G5",
+      "city": "Québec"
+    },
+    "latitude": 46.808176601,
+    "longitude": -71.244441115,
+    "massSchedules": [
+      {
+        "dayOfWeek": 0,
+        "time": "10:00",
+        "rite": "french_paul_vi",
+        "language": "French",
+        "notes": "Horaire à confirmer"
+      }
+    ],
+    "rites": [
+      "french_paul_vi"
+    ],
+    "languages": [
+      "French"
+    ],
+    "description": "Église catholique située à La Cité-Limoilou",
+    "sourceUrl": "https://www.wikidata.org/wiki/Q123374330"
+  },
+  {
+    "name": "Église de Saint-Pierre-Baptiste",
+    "address": {
+      "street": "Route de l'Église",
+      "postalCode": "",
+      "city": "Saint-Pierre-Baptiste"
+    },
+    "latitude": 46.206675,
+    "longitude": -71.61486,
+    "massSchedules": [
+      {
+        "dayOfWeek": 0,
+        "time": "10:00",
+        "rite": "french_paul_vi",
+        "language": "French",
+        "notes": "Horaire à confirmer"
+      }
+    ],
+    "rites": [
+      "french_paul_vi"
+    ],
+    "languages": [
+      "French"
+    ],
+    "description": "Église catholique située à Saint-Pierre-Baptiste",
+    "sourceUrl": "https://www.wikidata.org/wiki/Q123458793"
+  },
+  {
+    "name": "Église des Saints-Anges-Gardiens",
+    "address": {
+      "street": "6357 Avenue Royale",
+      "postalCode": "G0A 2K0",
+      "city": "L'Ange-Gardien"
+    },
+    "latitude": 46.915964621,
+    "longitude": -71.093575358,
+    "massSchedules": [
+      {
+        "dayOfWeek": 0,
+        "time": "10:00",
+        "rite": "french_paul_vi",
+        "language": "French",
+        "notes": "Horaire à confirmer"
+      }
+    ],
+    "rites": [
+      "french_paul_vi"
+    ],
+    "languages": [
+      "French"
+    ],
+    "description": "Église catholique située à L'Ange-Gardien",
+    "sourceUrl": "https://www.wikidata.org/wiki/Q125144989"
+  },
+  {
+    "name": "Église de Saint-Camille-de-Lellis",
+    "address": {
+      "street": "Rue de la Fabrique",
+      "postalCode": "G0R 2S0",
+      "city": "Saint-Camille-de-Lellis"
+    },
+    "latitude": 46.493674,
+    "longitude": -70.212415,
+    "massSchedules": [
+      {
+        "dayOfWeek": 0,
+        "time": "10:00",
+        "rite": "french_paul_vi",
+        "language": "French",
+        "notes": "Horaire à confirmer"
+      }
+    ],
+    "rites": [
+      "french_paul_vi"
+    ],
+    "languages": [
+      "French"
+    ],
+    "description": "Église catholique située à Saint-Camille-de-Lellis",
+    "sourceUrl": "https://www.wikidata.org/wiki/Q126932664"
+  },
+  {
+    "name": "Église Sainte-Claire de Sainte-Claire",
+    "address": {
+      "street": "Rue Principale",
+      "postalCode": "G0R 2V0",
+      "city": "Sainte-Claire"
+    },
+    "latitude": 46.59776,
+    "longitude": -70.867057,
+    "massSchedules": [
+      {
+        "dayOfWeek": 0,
+        "time": "10:00",
+        "rite": "french_paul_vi",
+        "language": "French",
+        "notes": "Horaire à confirmer"
+      }
+    ],
+    "rites": [
+      "french_paul_vi"
+    ],
+    "languages": [
+      "French"
+    ],
+    "description": "Église catholique située à Sainte-Claire",
+    "sourceUrl": "https://www.wikidata.org/wiki/Q127695936"
+  },
+  {
+    "name": "Église Saint-Évariste de Saint-Évariste",
+    "address": {
+      "street": "331 Rue Principale",
+      "postalCode": "G0M 1S0",
+      "city": "Saint-Évariste-de-Forsyth"
+    },
+    "latitude": 45.939444444,
+    "longitude": -70.942166666,
+    "massSchedules": [
+      {
+        "dayOfWeek": 0,
+        "time": "10:00",
+        "rite": "french_paul_vi",
+        "language": "French",
+        "notes": "Horaire à confirmer"
+      }
+    ],
+    "rites": [
+      "french_paul_vi"
+    ],
+    "languages": [
+      "French"
+    ],
+    "description": "Église catholique située à Courcelles–Saint-Évariste",
+    "sourceUrl": "https://www.wikidata.org/wiki/Q128211111"
+  },
+  {
+    "name": "Église Saint-Fidèle",
+    "address": {
+      "street": "1249 4e Avenue",
+      "postalCode": "G1L 2G8",
+      "city": "Québec"
+    },
+    "latitude": 46.8289505,
+    "longitude": -71.2294753,
+    "massSchedules": [
+      {
+        "dayOfWeek": 0,
+        "time": "10:00",
+        "rite": "french_paul_vi",
+        "language": "French",
+        "notes": "Horaire à confirmer"
+      }
+    ],
+    "rites": [
+      "french_paul_vi"
+    ],
+    "languages": [
+      "French"
+    ],
+    "description": "Église catholique située à Québec",
+    "sourceUrl": "https://www.wikidata.org/wiki/Q129106696"
+  },
+  {
+    "name": "Église L'Enfant-Jésus",
+    "address": {
+      "street": "253 Rue Principale",
+      "postalCode": "G0S 3J0",
+      "city": "Vallée-Jonction"
+    },
+    "latitude": 46.37699,
+    "longitude": -70.92428,
+    "massSchedules": [
+      {
+        "dayOfWeek": 0,
+        "time": "10:00",
+        "rite": "french_paul_vi",
+        "language": "French",
+        "notes": "Horaire à confirmer"
+      }
+    ],
+    "rites": [
+      "french_paul_vi"
+    ],
+    "languages": [
+      "French"
+    ],
+    "description": "Église catholique située à Vallée-Jonction",
+    "sourceUrl": "https://www.wikidata.org/wiki/Q129144086"
+  },
+  {
+    "name": "Église Saint-Joseph de Saint-Joseph-de-Beauce",
+    "address": {
+      "street": "155 Rue des Céramistes",
+      "postalCode": "G0S 2V0",
+      "city": "Saint-Joseph-de-Beauce"
+    },
+    "latitude": 46.310989,
+    "longitude": -70.8813586,
+    "massSchedules": [
+      {
+        "dayOfWeek": 0,
+        "time": "10:00",
+        "rite": "french_paul_vi",
+        "language": "French",
+        "notes": "Horaire à confirmer"
+      }
+    ],
+    "rites": [
+      "french_paul_vi"
+    ],
+    "languages": [
+      "French"
+    ],
+    "description": "Église catholique située à Saint-Joseph-de-Beauce",
+    "sourceUrl": "https://www.wikidata.org/wiki/Q129150537"
+  },
+  {
+    "name": "Église Les Saints-Anges",
+    "address": {
+      "street": "504 Avenue Principale",
+      "postalCode": "G0S 3E0",
+      "city": "Saints-Anges"
+    },
+    "latitude": 46.41797,
+    "longitude": -70.87615,
+    "massSchedules": [
+      {
+        "dayOfWeek": 0,
+        "time": "10:00",
+        "rite": "french_paul_vi",
+        "language": "French",
+        "notes": "Horaire à confirmer"
+      }
+    ],
+    "rites": [
+      "french_paul_vi"
+    ],
+    "languages": [
+      "French"
+    ],
+    "description": "Église catholique située à Saints-Anges",
+    "sourceUrl": "https://www.wikidata.org/wiki/Q129152455"
+  },
+  {
+    "name": "Église Saint-Édouard de Frampton",
+    "address": {
+      "street": "Rue Principale",
+      "postalCode": "G0R 1M0",
+      "city": "Frampton"
+    },
+    "latitude": 46.46152,
+    "longitude": -70.80884,
+    "massSchedules": [
+      {
+        "dayOfWeek": 0,
+        "time": "10:00",
+        "rite": "french_paul_vi",
+        "language": "French",
+        "notes": "Horaire à confirmer"
+      }
+    ],
+    "rites": [
+      "french_paul_vi"
+    ],
+    "languages": [
+      "French"
+    ],
+    "description": "Église catholique située à Frampton",
+    "sourceUrl": "https://www.wikidata.org/wiki/Q129153963"
+  },
+  {
+    "name": "Église La Sainte-Famille de Tring-Jonction",
+    "address": {
+      "street": "245 Rue Notre-Dame",
+      "postalCode": "G0N 1X0",
+      "city": "Tring-Jonction"
+    },
+    "latitude": 46.271444444,
+    "longitude": -70.99525,
+    "massSchedules": [
+      {
+        "dayOfWeek": 0,
+        "time": "10:00",
+        "rite": "french_paul_vi",
+        "language": "French",
+        "notes": "Horaire à confirmer"
+      }
+    ],
+    "rites": [
+      "french_paul_vi"
+    ],
+    "languages": [
+      "French"
+    ],
+    "description": "Église catholique située à Tring-Jonction",
+    "sourceUrl": "https://www.wikidata.org/wiki/Q129167441"
+  },
+  {
+    "name": "Église de Saint-Frédéric",
+    "address": {
+      "street": "2197 Rue Principale",
+      "postalCode": "G0N 1P0",
+      "city": "Saint-Frédéric"
+    },
+    "latitude": 46.2966373,
+    "longitude": -70.9737333,
+    "massSchedules": [
+      {
+        "dayOfWeek": 0,
+        "time": "10:00",
+        "rite": "french_paul_vi",
+        "language": "French",
+        "notes": "Horaire à confirmer"
+      }
+    ],
+    "rites": [
+      "french_paul_vi"
+    ],
+    "languages": [
+      "French"
+    ],
+    "description": "Église catholique située à Saint-Frédéric",
+    "sourceUrl": "https://www.wikidata.org/wiki/Q129167539"
+  },
+  {
+    "name": "Église Saint-Jules",
+    "address": {
+      "street": "377 Rue Principale",
+      "postalCode": "G0N 1R0",
+      "city": "Saint-Jules"
+    },
+    "latitude": 46.222805555,
+    "longitude": -70.946972222,
+    "massSchedules": [
+      {
+        "dayOfWeek": 0,
+        "time": "10:00",
+        "rite": "french_paul_vi",
+        "language": "French",
+        "notes": "Horaire à confirmer"
+      }
+    ],
+    "rites": [
+      "french_paul_vi"
+    ],
+    "languages": [
+      "French"
+    ],
+    "description": "Église catholique située à Saint-Jules",
+    "sourceUrl": "https://www.wikidata.org/wiki/Q129167709"
+  },
+  {
+    "name": "Église Saint-Odilon de Saint-Odilon-de-Cranbourne",
+    "address": {
+      "street": "103 Rue de l'Hôtel-de-Ville",
+      "postalCode": "G0S 3A0",
+      "city": "Saint-Odilon-de-Cranbourne"
+    },
+    "latitude": 46.357277777,
+    "longitude": -70.675638888,
+    "massSchedules": [
+      {
+        "dayOfWeek": 0,
+        "time": "10:00",
+        "rite": "french_paul_vi",
+        "language": "French",
+        "notes": "Horaire à confirmer"
+      }
+    ],
+    "rites": [
+      "french_paul_vi"
+    ],
+    "languages": [
+      "French"
+    ],
+    "description": "Église catholique située à Saint-Odilon-de-Cranbourne",
+    "sourceUrl": "https://www.wikidata.org/wiki/Q129168120"
+  },
+  {
+    "name": "Sanctuaire Sainte-Thérèse-de-l’Enfant-Jésus",
+    "address": {
+      "street": "158A Rue Bertrand",
+      "postalCode": "G1B 1H7",
+      "city": "Québec"
+    },
+    "latitude": 46.9057886,
+    "longitude": -71.1893817,
+    "massSchedules": [
+      {
+        "dayOfWeek": 0,
+        "time": "10:00",
+        "rite": "french_paul_vi",
+        "language": "French",
+        "notes": "Horaire à confirmer"
+      }
+    ],
+    "rites": [
+      "french_paul_vi"
+    ],
+    "languages": [
+      "French"
+    ],
+    "description": "Église catholique située à Beauport",
+    "sourceUrl": "https://www.wikidata.org/wiki/Q129765547"
+  },
+  {
+    "name": "Église Saint-Léonard de Saint-Léonard-de-Portneuf",
+    "address": {
+      "street": "529 Rue Principale",
+      "postalCode": "G0A 4A0",
+      "city": "Saint-Léonard-de-Portneuf"
+    },
+    "latitude": 46.890027777,
+    "longitude": -71.908194444,
+    "massSchedules": [
+      {
+        "dayOfWeek": 0,
+        "time": "10:00",
+        "rite": "french_paul_vi",
+        "language": "French",
+        "notes": "Horaire à confirmer"
+      }
+    ],
+    "rites": [
+      "french_paul_vi"
+    ],
+    "languages": [
+      "French"
+    ],
+    "description": "Église catholique située à Saint-Léonard-de-Portneuf",
+    "sourceUrl": "https://www.wikidata.org/wiki/Q130077019"
+  },
+  {
+    "name": "Église de Saint-Malachie",
+    "address": {
+      "street": "1157 Avenue Principale",
+      "postalCode": "G0R 3N0",
+      "city": "Saint-Malachie"
+    },
+    "latitude": 46.531272,
+    "longitude": -70.764577,
+    "massSchedules": [
+      {
+        "dayOfWeek": 0,
+        "time": "10:00",
+        "rite": "french_paul_vi",
+        "language": "French",
+        "notes": "Horaire à confirmer"
+      }
+    ],
+    "rites": [
+      "french_paul_vi"
+    ],
+    "languages": [
+      "French"
+    ],
+    "description": "Église catholique située à Saint-Malachie",
+    "sourceUrl": "https://www.wikidata.org/wiki/Q130365717"
+  },
+  {
+    "name": "Église de Saint-Joseph-de-la-Rive",
+    "address": {
+      "street": "252 Rue de l'Église",
+      "postalCode": "G0A 3Y0",
+      "city": "Saint-Joseph-de-la-Rive"
+    },
+    "latitude": 47.458353,
+    "longitude": -70.359687,
+    "massSchedules": [
+      {
+        "dayOfWeek": 0,
+        "time": "10:00",
+        "rite": "french_paul_vi",
+        "language": "French",
+        "notes": "Horaire à confirmer"
+      }
+    ],
+    "rites": [
+      "french_paul_vi"
+    ],
+    "languages": [
+      "French"
+    ],
+    "description": "Église catholique située à Les Éboulements",
+    "sourceUrl": "https://www.wikidata.org/wiki/Q132192892"
+  },
+  {
+    "name": "Église Sainte-Christine de Sainte-Christine-d'Auvergne",
+    "address": {
+      "street": "Rue du Centre-Communautaire",
+      "postalCode": "G0A 1A0",
+      "city": "Sainte-Christine-d'Auvergne"
+    },
+    "latitude": 46.813888888,
+    "longitude": -71.971583333,
+    "massSchedules": [
+      {
+        "dayOfWeek": 0,
+        "time": "10:00",
+        "rite": "french_paul_vi",
+        "language": "French",
+        "notes": "Horaire à confirmer"
+      }
+    ],
+    "rites": [
+      "french_paul_vi"
+    ],
+    "languages": [
+      "French"
+    ],
+    "description": "Église catholique située à Sainte-Christine-d'Auvergne",
+    "sourceUrl": "https://www.wikidata.org/wiki/Q134360931"
+  },
+  {
+    "name": "Église Sainte-Jeanne de Pont-Rouge",
+    "address": {
+      "street": "Rue Dupont",
+      "postalCode": "G3H 3K4",
+      "city": "Pont-Rouge"
+    },
+    "latitude": 46.755777777,
+    "longitude": -71.696166666,
+    "massSchedules": [
+      {
+        "dayOfWeek": 0,
+        "time": "10:00",
+        "rite": "french_paul_vi",
+        "language": "French",
+        "notes": "Horaire à confirmer"
+      }
+    ],
+    "rites": [
+      "french_paul_vi"
+    ],
+    "languages": [
+      "French"
+    ],
+    "description": "Église catholique située à Pont-Rouge",
+    "sourceUrl": "https://www.wikidata.org/wiki/Q134364130"
+  },
+  {
+    "name": "Église Saint-François-Xavier de Québec",
+    "address": {
+      "street": "Boulevard Père-Lelièvre",
+      "postalCode": "G1P 2X2",
+      "city": "Québec"
+    },
+    "latitude": 46.812361111,
+    "longitude": -71.297388888,
+    "massSchedules": [
+      {
+        "dayOfWeek": 0,
+        "time": "10:00",
+        "rite": "french_paul_vi",
+        "language": "French",
+        "notes": "Horaire à confirmer"
+      }
+    ],
+    "rites": [
+      "french_paul_vi"
+    ],
+    "languages": [
+      "French"
+    ],
+    "description": "Église catholique située à Québec",
+    "sourceUrl": "https://www.wikidata.org/wiki/Q134366402"
+  },
+  {
+    "name": "Église Notre-Dame-de-l'Annonciation de L'Ancienne-Lorette",
+    "address": {
+      "street": "1625 Rue Notre-Dame",
+      "postalCode": "G2E 3B4",
+      "city": "L'Ancienne-Lorette"
+    },
+    "latitude": 46.800064757,
+    "longitude": -71.35918777,
+    "massSchedules": [
+      {
+        "dayOfWeek": 0,
+        "time": "10:00",
+        "rite": "french_paul_vi",
+        "language": "French",
+        "notes": "Horaire à confirmer"
+      }
+    ],
+    "rites": [
+      "french_paul_vi"
+    ],
+    "languages": [
+      "French"
+    ],
+    "description": "Église catholique située à L'Ancienne-Lorette",
+    "sourceUrl": "https://www.wikidata.org/wiki/Q134366505"
+  },
+  {
+    "name": "Église Sainte-Monique de Sainte-Monique-des-Saules",
+    "address": {
+      "street": "Boulevard Masson",
+      "postalCode": "G1P 1J6",
+      "city": "Québec"
+    },
+    "latitude": 46.811472222,
+    "longitude": -71.32075,
+    "massSchedules": [
+      {
+        "dayOfWeek": 0,
+        "time": "10:00",
+        "rite": "french_paul_vi",
+        "language": "French",
+        "notes": "Horaire à confirmer"
+      }
+    ],
+    "rites": [
+      "french_paul_vi"
+    ],
+    "languages": [
+      "French"
+    ],
+    "description": "Église catholique située à Québec",
+    "sourceUrl": "https://www.wikidata.org/wiki/Q134366565"
+  },
+  {
+    "name": "Église Saint-Alfred de Saint-Alfred",
+    "address": {
+      "street": "333 Rang Sainte-Marie",
+      "postalCode": "",
+      "city": "Saint-Alfred"
+    },
+    "latitude": 46.15625,
+    "longitude": -70.829694444,
+    "massSchedules": [
+      {
+        "dayOfWeek": 0,
+        "time": "10:00",
+        "rite": "french_paul_vi",
+        "language": "French",
+        "notes": "Horaire à confirmer"
+      }
+    ],
+    "rites": [
+      "french_paul_vi"
+    ],
+    "languages": [
+      "French"
+    ],
+    "description": "Église catholique située à Saint-Alfred",
+    "sourceUrl": "https://www.wikidata.org/wiki/Q134374780"
+  },
+  {
+    "name": "Église Saint-Benoît-Labre de Saint-Benoît-Labre",
+    "address": {
+      "street": "153 Rue Principale",
+      "postalCode": "",
+      "city": "Saint-Benoît-Labre"
+    },
+    "latitude": 46.06825,
+    "longitude": -70.791111111,
+    "massSchedules": [
+      {
+        "dayOfWeek": 0,
+        "time": "10:00",
+        "rite": "french_paul_vi",
+        "language": "French",
+        "notes": "Horaire à confirmer"
+      }
+    ],
+    "rites": [
+      "french_paul_vi"
+    ],
+    "languages": [
+      "French"
+    ],
+    "description": "Église catholique située à Saint-Benoît-Labre",
+    "sourceUrl": "https://www.wikidata.org/wiki/Q134380004"
+  },
+  {
+    "name": "Église Saint-Honoré de Saint-Honoré-de-Shenley",
+    "address": {
+      "street": "Rue Principale",
+      "postalCode": "G0M 1V0",
+      "city": "Saint-Honoré-de-Shenley"
+    },
+    "latitude": 45.960833333,
+    "longitude": -70.827361111,
+    "massSchedules": [
+      {
+        "dayOfWeek": 0,
+        "time": "10:00",
+        "rite": "french_paul_vi",
+        "language": "French",
+        "notes": "Horaire à confirmer"
+      }
+    ],
+    "rites": [
+      "french_paul_vi"
+    ],
+    "languages": [
+      "French"
+    ],
+    "description": "Église catholique située à Saint-Honoré-de-Shenley",
+    "sourceUrl": "https://www.wikidata.org/wiki/Q134380406"
+  },
+  {
+    "name": "Église Sainte-Martine de Courcelles",
+    "address": {
+      "street": "100 Avenue de l'Église",
+      "postalCode": "G0M 1C0",
+      "city": "Courcelles–Saint-Évariste"
+    },
+    "latitude": 45.873027777,
+    "longitude": -70.983444444,
+    "massSchedules": [
+      {
+        "dayOfWeek": 0,
+        "time": "10:00",
+        "rite": "french_paul_vi",
+        "language": "French",
+        "notes": "Horaire à confirmer"
+      }
+    ],
+    "rites": [
+      "french_paul_vi"
+    ],
+    "languages": [
+      "French"
+    ],
+    "description": "Église catholique située à Courcelles–Saint-Évariste",
+    "sourceUrl": "https://www.wikidata.org/wiki/Q134380920"
+  },
+  {
+    "name": "Église Notre-Dame-de-la-Guadeloupe de La Guadeloupe",
+    "address": {
+      "street": "456 10e Rue Ouest",
+      "postalCode": "G0M 1G0",
+      "city": "La Guadeloupe"
+    },
+    "latitude": 45.962083333,
+    "longitude": -70.938305555,
+    "massSchedules": [
+      {
+        "dayOfWeek": 0,
+        "time": "10:00",
+        "rite": "french_paul_vi",
+        "language": "French",
+        "notes": "Horaire à confirmer"
+      }
+    ],
+    "rites": [
+      "french_paul_vi"
+    ],
+    "languages": [
+      "French"
+    ],
+    "description": "Église catholique située à La Guadeloupe",
+    "sourceUrl": "https://www.wikidata.org/wiki/Q134382168"
+  },
+  {
+    "name": "Église Notre-Dame-des-Sept-Douleurs de Portneuf",
+    "address": {
+      "street": "Rue des Écoliers",
+      "postalCode": "G0A 2Y0",
+      "city": "Portneuf"
+    },
+    "latitude": 46.693388888,
+    "longitude": -71.885,
+    "massSchedules": [
+      {
+        "dayOfWeek": 0,
+        "time": "10:00",
+        "rite": "french_paul_vi",
+        "language": "French",
+        "notes": "Horaire à confirmer"
+      }
+    ],
+    "rites": [
+      "french_paul_vi"
+    ],
+    "languages": [
+      "French"
+    ],
+    "description": "Église catholique située à Portneuf",
+    "sourceUrl": "https://www.wikidata.org/wiki/Q134396756"
+  },
+  {
+    "name": "Église Saint-François-de-Sales de Neuville",
+    "address": {
+      "street": "699 Rue des Érables",
+      "postalCode": "G0A 2R0",
+      "city": "Neuville"
+    },
+    "latitude": 46.697777777,
+    "longitude": -71.583611111,
+    "massSchedules": [
+      {
+        "dayOfWeek": 0,
+        "time": "10:00",
+        "rite": "french_paul_vi",
+        "language": "French",
+        "notes": "Horaire à confirmer"
+      }
+    ],
+    "rites": [
+      "french_paul_vi"
+    ],
+    "languages": [
+      "French"
+    ],
+    "description": "Église catholique située à Neuville",
+    "sourceUrl": "https://www.wikidata.org/wiki/Q134398619"
+  },
+  {
+    "name": "Église Saint-David-de-l’Auberivière",
+    "address": {
+      "street": "3995 Rue de la Fabrique",
+      "postalCode": "G6W 1J6",
+      "city": "Lévis"
+    },
+    "latitude": 46.777485416,
+    "longitude": -71.201244592,
+    "massSchedules": [
+      {
+        "dayOfWeek": 0,
+        "time": "10:00",
+        "rite": "french_paul_vi",
+        "language": "French",
+        "notes": "Horaire à confirmer"
+      }
+    ],
+    "rites": [
+      "french_paul_vi"
+    ],
+    "languages": [
+      "French"
+    ],
+    "description": "Église catholique située à Lévis",
+    "sourceUrl": "https://www.wikidata.org/wiki/Q134449838"
+  },
+  {
+    "name": "Église Sainte-Agnès",
+    "address": {
+      "street": "Avenue Sainte-Agnès",
+      "postalCode": "G3M 2C1",
+      "city": "Donnacona"
+    },
+    "latitude": 46.674805555,
+    "longitude": -71.740083333,
+    "massSchedules": [
+      {
+        "dayOfWeek": 0,
+        "time": "10:00",
+        "rite": "french_paul_vi",
+        "language": "French",
+        "notes": "Horaire à confirmer"
+      }
+    ],
+    "rites": [
+      "french_paul_vi"
+    ],
+    "languages": [
+      "French"
+    ],
+    "description": "Église catholique située à Donnacona",
+    "sourceUrl": "https://www.wikidata.org/wiki/Q134487590"
+  },
+  {
+    "name": "Église Saint-Philémon",
+    "address": {
+      "street": "1410 Rue Principale",
+      "postalCode": "G0R 4A0",
+      "city": "Saint-Philémon"
+    },
+    "latitude": 46.679513,
+    "longitude": -70.452195,
+    "massSchedules": [
+      {
+        "dayOfWeek": 0,
+        "time": "10:00",
+        "rite": "french_paul_vi",
+        "language": "French",
+        "notes": "Horaire à confirmer"
+      }
+    ],
+    "rites": [
+      "french_paul_vi"
+    ],
+    "languages": [
+      "French"
+    ],
+    "description": "Église catholique située à Saint-Philémon",
+    "sourceUrl": "https://www.wikidata.org/wiki/Q134702306"
+  },
+  {
+    "name": "Église Saint-Pascal de Maizerets",
+    "address": {
+      "street": "1891 Chemin de la Canardière",
+      "postalCode": "G1J 2E1",
+      "city": "Québec"
+    },
+    "latitude": 46.839083333,
+    "longitude": -71.221555555,
+    "massSchedules": [
+      {
+        "dayOfWeek": 0,
+        "time": "10:00",
+        "rite": "french_paul_vi",
+        "language": "French",
+        "notes": "Horaire à confirmer"
+      }
+    ],
+    "rites": [
+      "french_paul_vi"
+    ],
+    "languages": [
+      "French"
+    ],
+    "description": "Église catholique située à Maizerets",
+    "sourceUrl": "https://www.wikidata.org/wiki/Q135350007"
+  },
+  {
+    "name": "Église Saint-André",
+    "address": {
+      "street": "Boulevard Savard",
+      "postalCode": "G2B 1S1",
+      "city": "Québec"
+    },
+    "latitude": 46.8565571,
+    "longitude": -71.3350891,
+    "massSchedules": [
+      {
+        "dayOfWeek": 0,
+        "time": "10:00",
+        "rite": "french_paul_vi",
+        "language": "French",
+        "notes": "Horaire à confirmer"
+      }
+    ],
+    "rites": [
+      "french_paul_vi"
+    ],
+    "languages": [
+      "French"
+    ],
+    "description": "Église catholique située à Québec",
+    "sourceUrl": "https://www.wikidata.org/wiki/Q136109058"
+  },
+  {
+    "name": "Église Notre-Dame-de-la-Providence",
+    "address": {
+      "street": "2770 1re Avenue",
+      "postalCode": "G0M 1K0",
+      "city": "Notre-Dame-des-Pins"
+    },
+    "latitude": 46.1837197,
+    "longitude": -70.7145928,
+    "massSchedules": [
+      {
+        "dayOfWeek": 0,
+        "time": "10:00",
+        "rite": "french_paul_vi",
+        "language": "French",
+        "notes": "Horaire à confirmer"
+      }
+    ],
+    "rites": [
+      "french_paul_vi"
+    ],
+    "languages": [
+      "French"
+    ],
+    "description": "Église catholique située à Notre-Dame-des-Pins",
+    "sourceUrl": "https://www.wikidata.org/wiki/Q136126078"
+  },
+  {
+    "name": "Église Notre-Dame-de-Foy",
+    "address": {
+      "street": "820 Rue du Chanoine-Martin",
+      "postalCode": "G1V 4N2",
+      "city": "Québec"
+    },
+    "latitude": 46.7776806,
+    "longitude": -71.3023538,
+    "massSchedules": [
+      {
+        "dayOfWeek": 0,
+        "time": "10:00",
+        "rite": "french_paul_vi",
+        "language": "French",
+        "notes": "Horaire à confirmer"
+      }
+    ],
+    "rites": [
+      "french_paul_vi"
+    ],
+    "languages": [
+      "French"
+    ],
+    "description": "Église catholique située à Québec",
+    "sourceUrl": "https://www.wikidata.org/wiki/Q136264296"
+  },
+  {
+    "name": "Église Saint-Magloire",
+    "address": {
+      "street": "131 Rue Principale",
+      "postalCode": "G0R 3M0",
+      "city": "Saint-Magloire"
+    },
+    "latitude": 46.5755093,
+    "longitude": -70.2872574,
+    "massSchedules": [
+      {
+        "dayOfWeek": 0,
+        "time": "10:00",
+        "rite": "french_paul_vi",
+        "language": "French",
+        "notes": "Horaire à confirmer"
+      }
+    ],
+    "rites": [
+      "french_paul_vi"
+    ],
+    "languages": [
+      "French"
+    ],
+    "description": "Église catholique située à Saint-Magloire",
+    "sourceUrl": "https://www.wikidata.org/wiki/Q136325619"
+  },
+  {
+    "name": "Église de L'Assomption-de-la-Sainte-Vierge",
+    "address": {
+      "street": "2377 Route du Fleuve",
+      "postalCode": "G0A 2M0",
+      "city": "Les Éboulements"
+    },
+    "latitude": 47.4801566,
+    "longitude": -70.3163991,
+    "massSchedules": [
+      {
+        "dayOfWeek": 0,
+        "time": "10:00",
+        "rite": "french_paul_vi",
+        "language": "French",
+        "notes": "Horaire à confirmer"
+      }
+    ],
+    "rites": [
+      "french_paul_vi"
+    ],
+    "languages": [
+      "French"
+    ],
+    "description": "Église catholique située à Les Éboulements",
+    "sourceUrl": "https://www.wikidata.org/wiki/Q136361833"
+  },
+  {
+    "name": "Église de Saint-Gilbert",
+    "address": {
+      "street": "Rue Principale",
+      "postalCode": "",
+      "city": "Saint-Gilbert"
+    },
+    "latitude": 46.716278,
+    "longitude": -71.993361,
+    "massSchedules": [
+      {
+        "dayOfWeek": 0,
+        "time": "10:00",
+        "rite": "french_paul_vi",
+        "language": "French",
+        "notes": "Horaire à confirmer"
+      }
+    ],
+    "rites": [
+      "french_paul_vi"
+    ],
+    "languages": [
+      "French"
+    ],
+    "description": "Église catholique située à Saint-Gilbert",
+    "sourceUrl": "https://www.wikidata.org/wiki/Q136416869"
+  },
+  {
+    "name": "Église Saint-Ambroise-de-la-Jeune-Lorette",
+    "address": {
+      "street": "277 Rue Racine",
+      "postalCode": "G2B 1E7",
+      "city": "Québec"
+    },
+    "latitude": 46.8516196,
+    "longitude": -71.3588735,
+    "massSchedules": [
+      {
+        "dayOfWeek": 0,
+        "time": "10:00",
+        "rite": "french_paul_vi",
+        "language": "French",
+        "notes": "Horaire à confirmer"
+      }
+    ],
+    "rites": [
+      "french_paul_vi"
+    ],
+    "languages": [
+      "French"
+    ],
+    "description": "Église catholique située à Québec",
+    "sourceUrl": "https://www.wikidata.org/wiki/Q136442460"
+  },
+  {
+    "name": "Église Saint-Jean-Baptiste-de-La-Salle",
+    "address": {
+      "street": "Rue Biencourt",
+      "postalCode": "G1V 1H9",
+      "city": "Québec"
+    },
+    "latitude": 46.785666666,
+    "longitude": -71.293916666,
+    "massSchedules": [
+      {
+        "dayOfWeek": 0,
+        "time": "10:00",
+        "rite": "french_paul_vi",
+        "language": "French",
+        "notes": "Horaire à confirmer"
+      }
+    ],
+    "rites": [
+      "french_paul_vi"
+    ],
+    "languages": [
+      "French"
+    ],
+    "description": "Église catholique située à Québec",
+    "sourceUrl": "https://www.wikidata.org/wiki/Q136543484"
+  },
+  {
+    "name": "Église Saint-Mathieu",
+    "address": {
+      "street": "3155 Chemin des Quatre-Bourgeois",
+      "postalCode": "G1W 4X7",
+      "city": "Québec"
+    },
+    "latitude": 46.767527777,
+    "longitude": -71.3085,
+    "massSchedules": [
+      {
+        "dayOfWeek": 0,
+        "time": "10:00",
+        "rite": "french_paul_vi",
+        "language": "French",
+        "notes": "Horaire à confirmer"
+      }
+    ],
+    "rites": [
+      "french_paul_vi"
+    ],
+    "languages": [
+      "French"
+    ],
+    "description": "Église catholique située à Québec",
+    "sourceUrl": "https://www.wikidata.org/wiki/Q136544019"
+  },
+  {
+    "name": "Église de Sainte-Catherine-de-la-Jacques-Cartier",
+    "address": {
+      "street": "Rue Charles-Painchaud",
+      "postalCode": "G3N 2L7",
+      "city": "Sainte-Catherine-de-la-Jacques-Cartier"
+    },
+    "latitude": 46.846583333,
+    "longitude": -71.62,
+    "massSchedules": [
+      {
+        "dayOfWeek": 0,
+        "time": "10:00",
+        "rite": "french_paul_vi",
+        "language": "French",
+        "notes": "Horaire à confirmer"
+      }
+    ],
+    "rites": [
+      "french_paul_vi"
+    ],
+    "languages": [
+      "French"
+    ],
+    "description": "Église catholique située à Sainte-Catherine-de-la-Jacques-Cartier",
+    "sourceUrl": "https://www.wikidata.org/wiki/Q136549226"
+  },
+  {
+    "name": "Église Saint-Marc de Saint-Marc-des-Carrières",
+    "address": {
+      "street": "Avenue Principale",
+      "postalCode": "G0A 4B0",
+      "city": "Saint-Marc-des-Carrières"
+    },
+    "latitude": 46.6830076,
+    "longitude": -72.048699,
+    "massSchedules": [
+      {
+        "dayOfWeek": 0,
+        "time": "10:00",
+        "rite": "french_paul_vi",
+        "language": "French",
+        "notes": "Horaire à confirmer"
+      }
+    ],
+    "rites": [
+      "french_paul_vi"
+    ],
+    "languages": [
+      "French"
+    ],
+    "description": "Église catholique située à Saint-Marc-des-Carrières",
+    "sourceUrl": "https://www.wikidata.org/wiki/Q136687597"
+  },
+  {
+    "name": "Église Saint-Georges",
+    "address": {
+      "street": "1840 1re Avenue",
+      "postalCode": "G5Y 1X7",
+      "city": "Saint-Georges"
+    },
+    "latitude": 46.1169443,
+    "longitude": -70.6732088,
+    "massSchedules": [
+      {
+        "dayOfWeek": 0,
+        "time": "10:00",
+        "rite": "french_paul_vi",
+        "language": "French",
+        "notes": "Horaire à confirmer"
+      }
+    ],
+    "rites": [
+      "french_paul_vi"
+    ],
+    "languages": [
+      "French"
+    ],
+    "description": "Église catholique située à Saint-Georges",
+    "sourceUrl": "https://www.wikidata.org/wiki/Q136818655"
+  },
+  {
+    "name": "Église de L'Assomption-de-la-Bienheureuse-Vierge-Marie",
+    "address": {
+      "street": "756 125e Rue",
+      "postalCode": "G5Y 1L8",
+      "city": "Saint-Georges"
+    },
+    "latitude": 46.120527777,
+    "longitude": -70.665972222,
+    "massSchedules": [
+      {
+        "dayOfWeek": 0,
+        "time": "10:00",
+        "rite": "french_paul_vi",
+        "language": "French",
+        "notes": "Horaire à confirmer"
+      }
+    ],
+    "rites": [
+      "french_paul_vi"
+    ],
+    "languages": [
+      "French"
+    ],
+    "description": "Église catholique située à Saint-Georges",
+    "sourceUrl": "https://www.wikidata.org/wiki/Q136819496"
+  },
+  {
+    "name": "Église de Saint-Augustin-de-Desmaures",
+    "address": {
+      "street": "Route 138",
+      "postalCode": "G3A 2P5",
+      "city": "Saint-Augustin-de-Desmaures"
+    },
+    "latitude": 46.7432131,
+    "longitude": -71.4584787,
+    "massSchedules": [
+      {
+        "dayOfWeek": 0,
+        "time": "10:00",
+        "rite": "french_paul_vi",
+        "language": "French",
+        "notes": "Horaire à confirmer"
+      }
+    ],
+    "rites": [
+      "french_paul_vi"
+    ],
+    "languages": [
+      "French"
+    ],
+    "description": "Église catholique située à Saint-Augustin-de-Desmaures",
+    "sourceUrl": "https://www.wikidata.org/wiki/Q137363911"
+  },
+  {
+    "name": "Chapelle des Ursulines de Québec",
+    "address": {
+      "street": "12 Rue Donnacona",
+      "postalCode": "G1R 4L6",
+      "city": "Québec"
+    },
+    "latitude": 46.8121875,
+    "longitude": -71.2078125,
+    "massSchedules": [
+      {
+        "dayOfWeek": 0,
+        "time": "10:00",
+        "rite": "french_paul_vi",
+        "language": "French",
+        "notes": "Horaire à confirmer"
+      }
+    ],
+    "rites": [
+      "french_paul_vi"
+    ],
+    "languages": [
+      "French"
+    ],
+    "description": "Église catholique située à Québec",
+    "sourceUrl": "https://www.wikidata.org/wiki/Q137393529"
+  },
+  {
+    "name": "Église Saint-Charles-Garnier de Québec",
+    "address": {
+      "street": "1214 Avenue du Chanoine-Morel",
+      "postalCode": "G1S 1K4",
+      "city": "Québec"
+    },
+    "latitude": 46.786476457,
+    "longitude": -71.250530205,
+    "massSchedules": [
+      {
+        "dayOfWeek": 0,
+        "time": "10:00",
+        "rite": "french_paul_vi",
+        "language": "French",
+        "notes": "Horaire à confirmer"
+      }
+    ],
+    "rites": [
+      "french_paul_vi"
+    ],
+    "languages": [
+      "French"
+    ],
+    "description": "Église catholique située à Sainte-Foy–Sillery–Cap-Rouge",
+    "sourceUrl": "https://www.wikidata.org/wiki/Q137705311"
+  },
+  {
+    "name": "Église Saint-Gérard-Majella",
+    "address": {
+      "street": "3322 Route de l'Aéroport",
+      "postalCode": "G3K 1T4",
+      "city": "Québec"
+    },
+    "latitude": 46.842055555,
+    "longitude": -71.432027777,
+    "massSchedules": [
+      {
+        "dayOfWeek": 0,
+        "time": "10:00",
+        "rite": "french_paul_vi",
+        "language": "French",
+        "notes": "Horaire à confirmer"
+      }
+    ],
+    "rites": [
+      "french_paul_vi"
+    ],
+    "languages": [
+      "French"
+    ],
+    "description": "Église catholique située à La Haute-Saint-Charles",
+    "sourceUrl": "https://www.wikidata.org/wiki/Q137756891"
+  },
+  {
+    "name": "Église Notre-Dame-de-Recouvrance",
+    "address": {
+      "street": "Avenue Bélanger",
+      "postalCode": "G1M 1G6",
+      "city": "Québec"
+    },
+    "latitude": 46.816722222,
+    "longitude": -71.258222222,
+    "massSchedules": [
+      {
+        "dayOfWeek": 0,
+        "time": "10:00",
+        "rite": "french_paul_vi",
+        "language": "French",
+        "notes": "Horaire à confirmer"
+      }
+    ],
+    "rites": [
+      "french_paul_vi"
+    ],
+    "languages": [
+      "French"
+    ],
+    "description": "Église catholique située à Vanier",
+    "sourceUrl": "https://www.wikidata.org/wiki/Q137768797"
+  },
+  {
+    "name": "Église Sainte-Françoise-Cabrini",
+    "address": {
+      "street": "1410 Avenue du Lac-Saint-Charles",
+      "postalCode": "G1R 4A1",
+      "city": "Québec"
+    },
+    "latitude": 46.907738888,
+    "longitude": -71.374966666,
+    "massSchedules": [
+      {
+        "dayOfWeek": 0,
+        "time": "10:00",
+        "rite": "french_paul_vi",
+        "language": "French",
+        "notes": "Horaire à confirmer"
+      }
+    ],
+    "rites": [
+      "french_paul_vi"
+    ],
+    "languages": [
+      "French"
+    ],
+    "description": "Église catholique située à La Haute-Saint-Charles",
+    "sourceUrl": "https://www.wikidata.org/wiki/Q137777268"
+  },
+  {
+    "name": "Église Notre-Dame-des-Laurentides",
+    "address": {
+      "street": "1375 Avenue de la Rivière-Jaune",
+      "postalCode": "G2N 1R8",
+      "city": "Québec"
+    },
+    "latitude": 46.9115082,
+    "longitude": -71.3408437,
+    "massSchedules": [
+      {
+        "dayOfWeek": 0,
+        "time": "10:00",
+        "rite": "french_paul_vi",
+        "language": "French",
+        "notes": "Horaire à confirmer"
+      }
+    ],
+    "rites": [
+      "french_paul_vi"
+    ],
+    "languages": [
+      "French"
+    ],
+    "description": "Église catholique située à Charlesbourg",
+    "sourceUrl": "https://www.wikidata.org/wiki/Q137777610"
+  },
+  {
+    "name": "Église Saint-Jérome-de-l'Auvergne",
+    "address": {
+      "street": "6350 3e Avenue Est",
+      "postalCode": "G1H 3K8",
+      "city": "Québec"
+    },
+    "latitude": 46.8550251,
+    "longitude": -71.2550983,
+    "massSchedules": [
+      {
+        "dayOfWeek": 0,
+        "time": "10:00",
+        "rite": "french_paul_vi",
+        "language": "French",
+        "notes": "Horaire à confirmer"
+      }
+    ],
+    "rites": [
+      "french_paul_vi"
+    ],
+    "languages": [
+      "French"
+    ],
+    "description": "Église catholique située à Des Jésuites",
+    "sourceUrl": "https://www.wikidata.org/wiki/Q137777927"
+  },
+  {
+    "name": "Église Sainte-Gertrude",
+    "address": {
+      "street": "779 Avenue de l'Éducation",
+      "postalCode": "G1E 1J2",
+      "city": "Québec"
+    },
+    "latitude": 46.8699647,
+    "longitude": -71.1874205,
+    "massSchedules": [
+      {
+        "dayOfWeek": 0,
+        "time": "10:00",
+        "rite": "french_paul_vi",
+        "language": "French",
+        "notes": "Horaire à confirmer"
+      }
+    ],
+    "rites": [
+      "french_paul_vi"
+    ],
+    "languages": [
+      "French"
+    ],
+    "description": "Église catholique située à Beauport",
+    "sourceUrl": "https://www.wikidata.org/wiki/Q137778528"
+  },
+  {
+    "name": "Église Saint-Louis-de-Courville",
+    "address": {
+      "street": "2315 Avenue Royale",
+      "postalCode": "G1C 1R1",
+      "city": "Québec"
+    },
+    "latitude": 46.8855001,
+    "longitude": -71.1586977,
+    "massSchedules": [
+      {
+        "dayOfWeek": 0,
+        "time": "10:00",
+        "rite": "french_paul_vi",
+        "language": "French",
+        "notes": "Horaire à confirmer"
+      }
+    ],
+    "rites": [
+      "french_paul_vi"
+    ],
+    "languages": [
+      "French"
+    ],
+    "description": "Église catholique située à Beauport",
+    "sourceUrl": "https://www.wikidata.org/wiki/Q137778700"
+  },
+  {
+    "name": "Église des Saints-Martyrs-Canadiens",
+    "address": {
+      "street": "735 Rue Père-Marquette",
+      "postalCode": "G1S 3C1",
+      "city": "Québec"
+    },
+    "latitude": 46.799333333,
+    "longitude": -71.237472222,
+    "massSchedules": [
+      {
+        "dayOfWeek": 0,
+        "time": "10:00",
+        "rite": "french_paul_vi",
+        "language": "French",
+        "notes": "Horaire à confirmer"
+      }
+    ],
+    "rites": [
+      "french_paul_vi"
+    ],
+    "languages": [
+      "French"
+    ],
+    "description": "Église catholique située à La Cité-Limoilou",
+    "sourceUrl": "https://www.wikidata.org/wiki/Q137779318"
+  },
+  {
+    "name": "Église Sainte-Pétronille de Sainte-Pétronille",
+    "address": {
+      "street": "21 Chemin de l'église",
+      "postalCode": "G0A 4C0",
+      "city": "Sainte-Pétronille"
+    },
+    "latitude": 46.851388888,
+    "longitude": -71.135194444,
+    "massSchedules": [
+      {
+        "dayOfWeek": 0,
+        "time": "10:00",
+        "rite": "french_paul_vi",
+        "language": "French",
+        "notes": "Horaire à confirmer"
+      }
+    ],
+    "rites": [
+      "french_paul_vi"
+    ],
+    "languages": [
+      "French"
+    ],
+    "description": "Église catholique située à Sainte-Pétronille",
+    "sourceUrl": "https://www.wikidata.org/wiki/Q137998753"
+  },
+  {
+    "name": "Église de Sainte-Agathe-de-Lotbinière",
+    "address": {
+      "street": "Rue Gosford Ouest",
+      "postalCode": "G0S 2A0",
+      "city": "Sainte-Agathe-de-Lotbinière"
+    },
+    "latitude": 46.383077,
+    "longitude": -71.409526,
+    "massSchedules": [
+      {
+        "dayOfWeek": 0,
+        "time": "10:00",
+        "rite": "french_paul_vi",
+        "language": "French",
+        "notes": "Horaire à confirmer"
+      }
+    ],
+    "rites": [
+      "french_paul_vi"
+    ],
+    "languages": [
+      "French"
+    ],
+    "description": "Église catholique située à Sainte-Agathe-de-Lotbinière",
+    "sourceUrl": "https://www.wikidata.org/wiki/Q138578151"
+  }
+]

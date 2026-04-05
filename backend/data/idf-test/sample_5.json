@@ -1,0 +1,62 @@
+[
+  {
+    "name": "FIRST COMMUNITY CHURCH OF GOD",
+    "latitude": 40.7553335,
+    "longitude": -73.997519,
+    "existing_phone": null,
+    "existing_website": "https://mccny.org/",
+    "website": "https://mccny.org/",
+    "db_id": "94b82263-8995-4a02-b7c7-060a29ab0996",
+    "last_verified": null
+  },
+  {
+    "name": "CHURCH OF THE LIVING GOD",
+    "latitude": 40.7908257,
+    "longitude": -73.9465068,
+    "existing_phone": null,
+    "existing_website": null,
+    "website": null,
+    "db_id": "eec80fb4-9432-413b-8639-3c4611ef1181",
+    "last_verified": null
+  },
+  {
+    "name": "Chapelle de l'Agneau-de-Dieu (Gare de Lyon)",
+    "city": "Paris",
+    "street": "2 place Henri-Frenay",
+    "postal_code": "75012",
+    "latitude": 48.8446423,
+    "longitude": 2.3775132,
+    "existing_phone": "01 43 07 00 47",
+    "existing_email": "chapelle.agneaudedieu@orange.fr",
+    "existing_website": "https://eglise.catholique.fr/sengager-dans-la-societe/eglise-medias/444055-applications-mobiles-de-leglise-catholique-france/?utm_source=redirection&utm_medium=url_cef&utm_campaign=messesinfo#screenshots-android",
+    "website": "https://eglise.catholique.fr/sengager-dans-la-societe/eglise-medias/444055-applications-mobiles-de-leglise-catholique-france/?utm_source=redirection&utm_medium=url_cef&utm_campaign=messesinfo#screenshots-android",
+    "db_id": "1f553184-f6d5-4df1-9e36-475ad00e21a3",
+    "last_verified": "2026-03-27T18:17:06.854Z"
+  },
+  {
+    "name": "Chapelle de Picpus (Sanctuaire Notre-Dame de Paix et Saint-Michel)",
+    "city": "Paris",
+    "street": "35 rue de Picpus (pas adresse postale)",
+    "postal_code": "75012",
+    "latitude": 48.8441984,
+    "longitude": 2.3963712,
+    "existing_website": "https://eglise.catholique.fr/sengager-dans-la-societe/eglise-medias/444055-applications-mobiles-de-leglise-catholique-france/?utm_source=redirection&utm_medium=url_cef&utm_campaign=messesinfo#screenshots-android",
+    "website": "https://eglise.catholique.fr/sengager-dans-la-societe/eglise-medias/444055-applications-mobiles-de-leglise-catholique-france/?utm_source=redirection&utm_medium=url_cef&utm_campaign=messesinfo#screenshots-android",
+    "db_id": "5021e86c-e8a6-4a64-8f58-1209dccbd99e",
+    "last_verified": "2026-03-27T18:17:41.589Z"
+  },
+  {
+    "name": "Chapelle des Petites Sœurs des Pauvres",
+    "city": "Paris",
+    "street": "9 bis boulevard de Picpus",
+    "postal_code": "75012",
+    "latitude": 48.8408091,
+    "longitude": 2.4001921,
+    "existing_phone": "09 51 50 54 83",
+    "existing_email": "p.immaculee.c@gmail.com",
+    "existing_website": "https://eglise.catholique.fr/sengager-dans-la-societe/eglise-medias/444055-applications-mobiles-de-leglise-catholique-france/?utm_source=redirection&utm_medium=url_cef&utm_campaign=messesinfo#screenshots-android",
+    "website": "https://eglise.catholique.fr/sengager-dans-la-societe/eglise-medias/444055-applications-mobiles-de-leglise-catholique-france/?utm_source=redirection&utm_medium=url_cef&utm_campaign=messesinfo#screenshots-android",
+    "db_id": "a23cb296-538f-4a08-a7de-6e78d9173179",
+    "last_verified": "2026-03-27T18:18:16.172Z"
+  }
+]

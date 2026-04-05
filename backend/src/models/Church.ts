@@ -52,6 +52,20 @@ export interface DataSource {
   metadata?: Record<string, unknown>;
 }
 
+export interface ChurchEvent {
+  title: string;
+  description?: string;
+  date: Date; // Event date
+  time?: string; // HH:MM format (optional)
+  type: string; // concert, pilgrimage, procession, conference, etc.
+  location?: string; // If different from church address
+  contact?: string;
+  registrationUrl?: string;
+  isFree?: boolean;
+  price?: number;
+  metadata?: Record<string, unknown>;
+}
+
 @Entity('churches')
 export class Church {
   @PrimaryGeneratedColumn('uuid')
@@ -98,6 +112,9 @@ export class Church {
 
   @Column({ type: 'varchar', array: true, default: [] })
   photos!: string[]; // URLs to photos
+
+  @Column({ type: 'jsonb', default: [] })
+  upcomingEvents!: ChurchEvent[]; // Concerts, pilgrimages, special events
 
   @Column({ type: 'jsonb', default: [] })
   dataSources!: DataSource[];

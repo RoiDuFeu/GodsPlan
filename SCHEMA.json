@@ -1,0 +1,66 @@
+{
+  "dataset_info": {
+    "total_records": 5080,
+    "format": "JSON array of objects",
+    "file": "GodsPlan/data/churches-nyc.json",
+    "schema_version": "1.0"
+  },
+  "field_definitions": {
+    "name": "string - Church/organization name",
+    "address": "string - Full address (street, city, state, zip)",
+    "city": "string - NYC borough or neighborhood",
+    "zip": "string - 5-digit ZIP code",
+    "lat": "float|null - Latitude (decimal degrees)",
+    "lon": "float|null - Longitude (decimal degrees)",
+    "website": "string|null - Website URL",
+    "phone": "string|null - Phone number",
+    "denomination": "string|null - Religious denomination",
+    "religion": "string|null - Religion type",
+    "source": "string - Data source: 'IRS'|'OSM'|'hybrid'|'IRS+geocoded'",
+    "match_confidence": "float|null - Match quality (0.0-1.0) for hybrid records"
+  },
+  "sample_records": {
+    "hybrid_with_full_data": {
+      "name": "ST ROSALIAS ROMAN CATHOLIC CHURCH",
+      "address": "1230 65TH ST, Brooklyn, NY 11219",
+      "city": "Brooklyn",
+      "zip": "11219",
+      "lat": 40.726702,
+      "lon": -73.9846106,
+      "website": "https://stanislauschurch.com",
+      "phone": "+1 212-475-4576",
+      "denomination": "roman_catholic",
+      "religion": "christian",
+      "source": "hybrid",
+      "match_confidence": 0.803
+    },
+    "irs_only": {
+      "name": "PENTECOSTAL CHURCH GOD IS REAL",
+      "address": "166 E 119TH ST APT 4B, New York, NY 10035",
+      "city": "New York",
+      "zip": "10035",
+      "lat": null,
+      "lon": null,
+      "website": null,
+      "phone": null,
+      "denomination": null,
+      "religion": null,
+      "source": "IRS",
+      "match_confidence": null
+    },
+    "osm_only": {
+      "name": "People's Home Church",
+      "address": "",
+      "city": "New York",
+      "zip": "",
+      "lat": 40.7277027,
+      "lon": -73.9802859,
+      "website": null,
+      "phone": null,
+      "denomination": null,
+      "religion": "christian",
+      "source": "OSM",
+      "match_confidence": null
+    }
+  }
+}

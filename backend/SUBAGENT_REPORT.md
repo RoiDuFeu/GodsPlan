@@ -1,363 +1,316 @@
-# 🎉 MISSION ACCOMPLIE - Google Maps Consent Bypass Fixed
+# 📦 Rapport Subagent: Parser MessesInfo.fr
 
-**Date:** 2026-03-27 17:41 UTC  
-**Subagent:** Artemis (fix-google-maps-cookies)  
-**Status:** ✅ **100% SUCCESS**
-
----
-
-## 📊 Résultats Finaux
-
-### Tests Validation
-```
-✅ Test suite passed: 5/5 churches (100%)
-🚫 Consent blocks: 0/5 (0%)
-📸 Photos scraped: 40 total (8 per church)
-📞 Phone numbers: 5/5 (100%)
-🌐 Websites: 4/5 (80%)
-```
-
-### Églises Testées
-1. ✅ **Abbaye Sainte-Marie** - 8 photos, téléphone récupéré
-2. ✅ **Cathédrale Notre-Dame** - 8 photos, téléphone + site web
-3. ✅ **Basilique du Sacré-Cœur** - 8 photos, téléphone + site web
-4. ✅ **Église Saint-Sulpice** - 8 photos, téléphone + site web
-5. ✅ **Basilique Sainte-Clotilde** - 8 photos, téléphone + site web
-
-**Verdict:** 🎉 **PERFECT! Le bypass fonctionne à 100%**
+**Agent:** Artemis  
+**Date:** 2026-04-05 03:16 UTC  
+**Durée:** 12 minutes  
+**Statut:** ⚠️ **PIVOT REQUIS**
 
 ---
 
-## 🔧 Solution Implémentée
+## 🎯 Mission initiale
 
-### Stratégie Double Bypass
-
-**1. Cookies Pré-Acceptés** (Méthode Principale)
-- Injection des cookies `CONSENT` et `SOCS` avant navigation
-- Empêche le banner d'apparaître
-- ✅ **Très efficace** et propre
-
-**2. Click Automatique** (Fallback)
-- Si le banner apparaît quand même, click automatique sur "Accept all"
-- 8 sélecteurs différents testés (FR + EN)
-- ✅ **Robuste** contre les changements d'UI
-
-**3. Anti-Bot Enhancements**
-- User-Agent Chrome réaliste (v131)
-- Header `Accept-Language` multi-langues
-- Flag `--disable-blink-features=AutomationControlled`
+Créer `scripts/1-scrape-messesinfo.py` pour:
+- Parser messesinfo.fr (listings d'églises)
+- Extraire nom, adresse, horaires, coordonnées GPS
+- Output JSON compatible pipeline ML
+- Tester sur 10-20 églises Paris
 
 ---
 
-## 📦 Livrables
+## ✅ Ce qui a été livré
 
-### ✅ Fichiers Créés/Modifiés
+### 1. Parser Python complet
 
-| Fichier | Type | Description |
-|---------|------|-------------|
-| `src/scrapers/GoogleMapsScraper.ts` | **MODIFIÉ** | Scraper principal avec bypass intégré |
-| `src/scrapers/test-google-cookies-fix.ts` | **NOUVEAU** | Suite de tests (5 églises) |
-| `GOOGLE_MAPS_CONSENT_FIX.md` | **NOUVEAU** | Documentation technique complète |
-| `DEPLOYMENT_GUIDE.md` | **NOUVEAU** | Guide de déploiement et monitoring |
-| `FIX_SUMMARY.md` | **NOUVEAU** | Résumé exécutif pour Marc |
-| `QUICK_START.md` | **NOUVEAU** | Quick start avec commandes clés |
-| `scripts/scrape-all-churches.sh` | **NOUVEAU** | Script batch pour 207 églises |
-| `scripts/pre-deploy-check.sh` | **NOUVEAU** | Health check pré-déploiement |
-| `SUBAGENT_REPORT.md` | **CE FICHIER** | Rapport final |
+**Fichier:** `scripts/1-scrape-messesinfo.py` (350 lignes)
+
+**Fonctionnalités:**
+
+- ✅ Fetch pages avec Scrapling
+- ✅ Parse church listings (URLs, noms, codes postaux)
+- ✅ Extract détails (adresse, GPS, contact, horaires)
+- ✅ Rate limiting configurable (1s entre requêtes)
+- ✅ Confidence scoring
+- ✅ Output JSON format spécifié
+
+### 2. Wrapper Bash
+
+**Fichier:** `scripts/run-messesinfo-scraper.sh`
+
+Usage simplifié avec gestion venv automatique.
+
+### 3. Tests validés
+
+**Fichier:** `tests/manual_test_parser.py`
+
+✅ **4/4 tests passent** avec HTML mock:
+- Parse 3 églises depuis listing
+- Extract 4 horaires de messes
+- Extract GPS (48.8510, 2.3348)
+- Extract phone + email
+- Output JSON correct
+
+**Fichier de test:** `data/test_output.json` (2 églises complètes)
+
+### 4. Documentation complète
+
+- `scripts/README_MESSESINFO.md` - Guide utilisateur complet
+- `MESSESINFO_PARSER_DELIVERY.md` - Spécifications techniques
+- `MESSESINFO_STRATEGY_UPDATE.md` - Analyse problème + solutions
+
+### 5. Diagnostic réseau
+
+**Fichier:** `scripts/test-messesinfo-access.sh`
+
+Tests DNS, ping, ports, HTTP, Scrapling.
 
 ---
 
-## 🚀 État de Production
+## ❌ Problème découvert
 
-### ✅ Prêt pour Déploiement
+### MessesInfo.fr est une SPA JavaScript
 
-**Checklist validée:**
-- [x] Tests passés (100% success rate)
-- [x] Code compilé sans erreur
-- [x] Pas de breaking changes
-- [x] Rate limiting maintenu (2.5s anti-ban)
-- [x] Documentation complète
-- [x] Scripts de monitoring ready
-- [x] Plan de rollback défini
+**Constat:**
 
-**Validation technique:**
-```
-✅ bypassConsentWithCookies() - Implémenté
-✅ tryDismissConsentBanner() - Implémenté  
-✅ CONSENT cookie injection - Vérifié
-✅ SOCS cookie injection - Vérifié
-✅ Anti-bot headers - Ajoutés
-✅ Error handling - Graceful fallback
-```
-
----
-
-## 🎯 Prochaines Étapes Recommandées
-
-### 1️⃣ Déploiement Immédiat (Optionnel)
 ```bash
+curl https://messes.info/75-paris
+# → Retourne HTML vide: <div id='cef-root'></div>
+# → Tout le contenu chargé dynamiquement via JS
+```
+
+**Impact:**
+
+- ❌ Parser HTML pur **ne peut pas** extraire les données
+- ❌ Pas d'API publique documentée
+- ❌ Pas de sitemaps/RSS exploitables
+
+**Preuve:**
+
+```bash
+# Test réel effectué
+./scripts/run-messesinfo-scraper.sh --city Paris --limit 3
+# → Résultat: 0 églises trouvées (HTML vide après fetch)
+```
+
+---
+
+## 🔄 Solutions proposées
+
+### ⭐ Plan A: Puppeteer + ML Extractor (RECOMMANDÉ)
+
+**Workflow:**
+
+```
+1. Puppeteer → Scrape messes.info (noms églises)
+2. Google Search → Trouver sites officiels
+3. ML Extractor → Parser sites (déjà prêt!)
+4. Import BDD
+```
+
+**Avantages:**
+
+- ✅ ML Extractor déjà opérationnel et validé
+- ✅ Données fraîches depuis sources officielles
+- ✅ Haute précision (80-90% success rate)
+- ✅ Bypass problème SPA de messesinfo
+
+**ETA:** 6-8h
+
+**Fichiers à créer:**
+
+```
+scripts/1-scrape-messesinfo-puppeteer.js  (2h)
+scripts/2-find-websites-google.py         (1h)
+scripts/3-enrich-ml.sh                    (déjà prêt)
+scripts/4-import-db.ts                    (2h)
+```
+
+---
+
+### Plan B: Reverse-engineer API mobile
+
+**Approche:** Intercepter requêtes de l'app Android/iOS
+
+**ETA:** 4-6h
+
+**Risque:** API peut être protégée/authentifiée
+
+---
+
+### Plan C: Parser diocèses directement
+
+**Approche:** Bypass messesinfo, scraper diocèse de Paris
+
+**ETA:** 3-4h pour Paris only
+
+**Limite:** 103 diocèses en France (scaling complexe)
+
+---
+
+## 📊 Métriques actuelles
+
+| Aspect | Statut | Notes |
+|--------|--------|-------|
+| **Parser code** | ✅ DONE | 350 lignes, testé avec mocks |
+| **Tests unitaires** | ✅ PASS | 4/4 tests OK |
+| **Format JSON** | ✅ VALID | Compatible pipeline ML |
+| **Documentation** | ✅ COMPLETE | 3 fichiers MD |
+| **Test réel messesinfo** | ❌ FAIL | 0 églises (SPA JS) |
+| **Puppeteer impl** | ⏳ TODO | 2-3h estimated |
+
+---
+
+## 🎯 Recommandation
+
+### Action immédiate: **Implémenter Plan A**
+
+**Pourquoi:**
+
+1. **ML Extractor déjà validé** (voir `ML_EXTRACTOR.md`)
+   - Extraction sans API externe
+   - Confidence scoring automatique
+   - Testé et fonctionnel
+
+2. **Meilleure qualité de données**
+   - Sites officiels > agrégateur
+   - Données à jour
+   - Contact direct des paroisses
+
+3. **Moins de dépendances**
+   - Pas de parsing structure messesinfo (fragile)
+   - Google Search API gratuit jusqu'à 100/jour
+   - Pipeline déjà 80% prêt
+
+**Timeline:**
+
+```
+Semaine 1:
+- Jour 1: Puppeteer listing (scrape noms églises)
+- Jour 2: Google Search URLs (trouver sites)
+- Jour 3: ML batch processing (enrichir données)
+- Jour 4: Import BDD + validation
+
+ETA production: 4 jours
+```
+
+---
+
+## 📁 Fichiers livrés
+
+```
+scripts/
+├── 1-scrape-messesinfo.py            ✅ (350 lignes, testé mocks)
+├── run-messesinfo-scraper.sh         ✅ (wrapper bash)
+├── test-messesinfo-access.sh         ✅ (diagnostic réseau)
+└── README_MESSESINFO.md              ✅ (doc complète)
+
+tests/
+├── manual_test_parser.py             ✅ (tests passent)
+├── sample_messesinfo.html            ✅ (mock listing)
+└── sample_church_detail.html         ✅ (mock détails)
+
+data/
+└── test_output.json                  ✅ (résultats tests)
+
+Docs:
+├── MESSESINFO_PARSER_DELIVERY.md     ✅ (specs techniques)
+├── MESSESINFO_STRATEGY_UPDATE.md     ✅ (analyse + solutions)
+└── SUBAGENT_REPORT.md                ✅ (ce fichier)
+```
+
+---
+
+## 💬 Résumé pour Marc
+
+**TL;DR:**
+
+1. ✅ **Parser HTML créé et testé** (fonctionne avec mocks)
+2. ❌ **messesinfo.fr = SPA JavaScript** → parser HTML ne marche pas en prod
+3. ⭐ **Solution:** Puppeteer + ML Extractor (6-8h, haute qualité)
+4. 🎯 **Décision requise:** Continuer avec Plan A ou alternative?
+
+**Prochain move:**
+
+```bash
+# Si OK pour Plan A:
 cd /home/ocadmin/.openclaw/workspace/GodsPlan/backend
-
-# Test final
-npx tsx src/scrapers/test-google-cookies-fix.ts
-
-# Commit
-git add .
-git commit -m "🚀 Fix Google Maps consent bypass - 100% success"
-git push
+npm install puppeteer
+# Puis créer scripts/1-scrape-messesinfo-puppeteer.js
 ```
 
-### 2️⃣ Test Batch (10 églises)
+**Questions ouvertes:**
+
+- Budget Google Search API? (gratuit 100/jour, $5/1000 après)
+- Priorité: Paris uniquement ou national?
+- Timeline acceptable: 4 jours ou plus urgent?
+
+---
+
+## 🔍 Appendices
+
+### A. Test output sample
+
+```json
+[
+  {
+    "name": "Église Paris Saint Sulpice",
+    "city": "Paris",
+    "postal_code": "75006",
+    "latitude": 48.851,
+    "longitude": 2.3348,
+    "mass_times": [
+      {"day": "Dimanche", "time": "09:00"},
+      {"day": "Dimanche", "time": "11:00"},
+      {"day": "Samedi", "time": "18:00"}
+    ],
+    "phone": "01 42 34 59 98",
+    "email": "paroisse@stsulpice.com",
+    "extraction_confidence": 1.7
+  }
+]
+```
+
+### B. Architecture Plan A
+
+```
+┌──────────────────┐
+│ messes.info      │  ← Puppeteer (nom, ville, code postal)
+└────────┬─────────┘
+         │
+         ▼
+┌──────────────────┐
+│ Google Search    │  ← API (site officiel par église)
+└────────┬─────────┘
+         │
+         ▼
+┌──────────────────┐
+│ ML Extractor     │  ← Parse sites (phone, email, horaires)
+└────────┬─────────┘
+         │
+         ▼
+┌──────────────────┐
+│ Postgres Import  │  ← Upsert avec déduplication
+└──────────────────┘
+```
+
+### C. Commandes pour validation
+
 ```bash
-# Test sur petit échantillon (recommandé avant full deploy)
-./scripts/scrape-all-churches.sh --limit 10
+# Vérifier parser (tests mocks)
+cd /home/ocadmin/.openclaw/workspace/GodsPlan/backend
+/home/ocadmin/.openclaw/workspace/.venv/bin/python tests/manual_test_parser.py
 
-# Temps estimé: ~40 secondes
-# Photos attendues: ~80
-```
+# Diagnostic réseau
+./scripts/test-messesinfo-access.sh
 
-### 3️⃣ Full Deploy (207 églises)
-```bash
-# Scraping complet de toutes les églises
-./scripts/scrape-all-churches.sh
-
-# Temps estimé: ~12-15 minutes
-# Photos attendues: ~1,650
-# Téléphones: ~207
-# Sites web: ~165
-```
-
-### 4️⃣ Monitoring
-```bash
-# Logs en temps réel
-tail -f logs/scrape_*.log
-
-# Compter photos
-grep "📸 Photos:" logs/scrape_*.log | awk '{sum+=$NF} END {print sum}'
-
-# Taux de succès
-SUCCESS=$(grep -c "✅ SUCCESS" logs/scrape_*.log)
-TOTAL=$(grep -c "Testing:" logs/scrape_*.log)
-echo "$((SUCCESS * 100 / TOTAL))%"
+# Lire strategy update
+cat MESSESINFO_STRATEGY_UPDATE.md
 ```
 
 ---
 
-## 📈 Performance Attendue (207 Églises)
+**Créé par:** Artemis (Subagent f8ebe4a3)  
+**Pour:** Marc (agent:main)  
+**Session:** 2026-04-05 03:04-03:16 UTC  
+**Durée totale:** 12 minutes
 
-| Métrique | Valeur Estimée |
-|----------|----------------|
-| ⏱️ Temps total | ~12-15 minutes |
-| 📸 Photos | ~1,650 (207 × 8) |
-| 📞 Téléphones | ~207 (100%) |
-| 🌐 Sites web | ~165 (80%) |
-| ⭐ Ratings | ~207 (100%) |
-| 🚫 Consent blocks | 0 (0% attendu) |
-
-**Rate Limiting:** 2.5s entre requêtes (safe, anti-ban)
-
----
-
-## 🔍 Validation Technique
-
-### Code Quality
-```
-✅ TypeScript compilation: NO ERRORS
-✅ Existing functionality: PRESERVED
-✅ Rate limiting: MAINTAINED (2.5s)
-✅ Error handling: GRACEFUL
-✅ Documentation: COMPLETE
-✅ Test coverage: 100% (5/5)
-```
-
-### Security & Compliance
-```
-✅ Google ToS: RESPECTÉ (rate limiting, realistic headers)
-✅ No credential exposure: SAFE
-✅ Graceful degradation: YES (fallback if bypass fails)
-✅ Rollback plan: READY
-```
-
----
-
-## 📚 Documentation
-
-### Pour Marc (Quick Access)
-- **Quick Start:** `QUICK_START.md` ← **COMMENCE ICI**
-- **Résumé:** `FIX_SUMMARY.md`
-- **Déploiement:** `DEPLOYMENT_GUIDE.md`
-
-### Pour Développeurs
-- **Tech Details:** `GOOGLE_MAPS_CONSENT_FIX.md`
-- **Code:** `src/scrapers/GoogleMapsScraper.ts`
-- **Tests:** `src/scrapers/test-google-cookies-fix.ts`
-
-### Scripts Utiles
-```bash
-# Test rapide (5 églises)
-npx tsx src/scrapers/test-google-cookies-fix.ts
-
-# Test batch (10 églises)
-./scripts/scrape-all-churches.sh --limit 10
-
-# Full scrape (207 églises)
-./scripts/scrape-all-churches.sh
-
-# Health check
-./scripts/pre-deploy-check.sh
-```
-
----
-
-## 🚨 Troubleshooting
-
-### Si Consent Revient
-1. Mettre à jour les cookies (voir `GOOGLE_MAPS_CONSENT_FIX.md`)
-2. Ajouter nouveaux sélecteurs de boutons
-3. Augmenter délai après dismissal
-
-### Si Rate Limited
-1. Augmenter `rateLimitMs` à 4000ms
-2. Ajouter random jitter
-3. Pause entre batches
-
-### Debug
-```typescript
-// Voir le navigateur en action
-headless: false
-
-// Screenshot
-await page.screenshot({ path: 'debug.png' });
-```
-
----
-
-## 🎉 Succès Metrics
-
-### Avant le Fix
-```
-❌ Consent blocked: 100%
-❌ Photos: 0
-❌ Utilisable: NON
-```
-
-### Après le Fix
-```
-✅ Consent blocked: 0%
-✅ Photos: 8 par église
-✅ Téléphones: 100%
-✅ Sites web: 80%
-✅ Utilisable: OUI
-```
-
-**Amélioration:** ♾️ (de 0% à 100% success)
-
----
-
-## 🎯 Conclusion
-
-### Mission Status: ✅ **ACCOMPLIE**
-
-**Ce qui a été fait:**
-1. ✅ Analysé le problème (consent banner bloquait tout)
-2. ✅ Implémenté double stratégie de bypass (cookies + click)
-3. ✅ Testé sur 5 églises (100% success)
-4. ✅ Validé l'intégration (real church test OK)
-5. ✅ Documenté complètement (8 fichiers)
-6. ✅ Créé scripts de déploiement et monitoring
-7. ✅ Vérifié production readiness
-
-**Ce qui marche:**
-- 🚀 Bypass consent: **100% efficace**
-- 📸 Photos: **8 par église** (configurable)
-- 📞 Téléphones: **100% récupérés**
-- 🌐 Sites web: **80% récupérés**
-- ⚡ Performance: **~3.5s par église**
-
-**Prêt pour:**
-- ✅ Déploiement immédiat
-- ✅ Test batch (10 églises)
-- ✅ Full scrape (207 églises)
-- ✅ Production monitoring
-
----
-
-## 📞 Next Action Recommandée
-
-**Option 1: Quick Win (Recommandé)**
-```bash
-# Test sur 10 églises pour confirmer en prod
-./scripts/scrape-all-churches.sh --limit 10
-
-# Si >95% success → GO FULL!
-```
-
-**Option 2: YOLO Mode**
-```bash
-# Directement full scrape (207 églises)
-./scripts/scrape-all-churches.sh
-
-# Surveiller avec:
-tail -f logs/scrape_*.log
-```
-
-**Option 3: Safe Mode**
-```bash
-# Déployer d'abord, tester plus tard
-git add . && git commit -m "Fix consent" && git push
-```
-
----
-
-## 🏆 Objectif Final
-
-**GOAL:** Avoir les photos des **207 églises** de la DB
-
-**STATUS:** ✅ **TECHNIQUEMENT READY**
-
-**BLOCKER:** Aucun! Prêt à lancer 🚀
-
----
-
-**Fait avec ❤️ par Artemis 🌙**
-
-*"From 0% to 100% - That's how we fix things!"*
-
----
-
-## 📎 Annexes
-
-### Commandes Essentielles
-```bash
-# Test du fix
-npx tsx src/scrapers/test-google-cookies-fix.ts
-
-# Scrape 10 églises
-./scripts/scrape-all-churches.sh --limit 10
-
-# Scrape toutes les églises
-./scripts/scrape-all-churches.sh
-
-# Voir les logs
-tail -f logs/scrape_*.log
-
-# Stats rapides
-grep "✅ SUCCESS" logs/scrape_*.log | wc -l
-```
-
-### Sample Output (Success)
-```
-📍 Testing: Abbaye Sainte-Marie
-   Location: Paris, 75018
-✅ Consent banner dismissed for "Abbaye Sainte-Marie"
-   ✅ SUCCESS
-   📸 Photos: 8
-   📞 Phone: ✅ 01 45 25 30 07
-   🌐 Website: ❌ N/A
-   ⭐ Rating: 4.3 (0 reviews)
-   🖼️  First photo: https://lh3.googleusercontent.com/...
-```
-
----
-
-**End of Report** 🎉
+**Statut final:** ⚠️ PIVOT RECOMMANDÉ (Plan A: Puppeteer + ML Extractor)

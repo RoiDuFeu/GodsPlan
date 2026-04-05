@@ -1,0 +1,62 @@
+[
+  {
+    "name": "Église Paris Saint Sulpice",
+    "city": "Paris",
+    "postal_code": "75006",
+    "messesinfo_url": "https://www.messesinfo.fr/eglise/75006-paris-saint-sulpice",
+    "extraction_confidence": 1.7,
+    "street": null,
+    "latitude": 48.851,
+    "longitude": 2.3348,
+    "mass_times": [
+      {
+        "day": "Dimanche",
+        "time": "09:00"
+      },
+      {
+        "day": "Dimanche",
+        "time": "11:00"
+      },
+      {
+        "day": "Dimanche",
+        "time": "18:30"
+      },
+      {
+        "day": "Samedi",
+        "time": "18:00"
+      }
+    ],
+    "phone": "01 42 34 59 98",
+    "email": "paroisse@stsulpice.com"
+  },
+  {
+    "name": "Église Paris Saint Germain Des Pres",
+    "city": "Paris",
+    "postal_code": "75006",
+    "messesinfo_url": "https://www.messesinfo.fr/eglise/75006-paris-saint-germain-des-pres",
+    "extraction_confidence": 1.7,
+    "street": null,
+    "latitude": 48.851,
+    "longitude": 2.3348,
+    "mass_times": [
+      {
+        "day": "Dimanche",
+        "time": "09:00"
+      },
+      {
+        "day": "Dimanche",
+        "time": "11:00"
+      },
+      {
+        "day": "Dimanche",
+        "time": "18:30"
+      },
+      {
+        "day": "Samedi",
+        "time": "18:00"
+      }
+    ],
+    "phone": "01 42 34 59 98",
+    "email": "paroisse@stsulpice.com"
+  }
+]

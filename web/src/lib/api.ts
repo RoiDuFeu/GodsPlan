@@ -66,6 +66,7 @@ export async function getNearbyChurches(params: NearbySearchParams): Promise<Chu
 }
 
 export async function getChurchById(id: string): Promise<Church> {
-  const response = await fetchApi<ApiResponse<Church>>(`/churches-simple/${id}`);
-  return response.data;
+  // Note: /churches-simple/:id returns direct object, not wrapped in {data: ...}
+  const church = await fetchApi<Church>(`/churches-simple/${id}`);
+  return church;
 }

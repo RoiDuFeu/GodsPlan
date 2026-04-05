@@ -1,28 +1,165 @@
-import { useEffect, useRef, useState } from 'react';
+'use client';
+
+import { useEffect, useState } from 'react';
+import { MapContainer, TileLayer, Marker, useMap, Circle } from 'react-leaflet';
+import MarkerClusterGroup from 'react-leaflet-cluster';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import type { ChurchListItem } from '@/lib/types';
 import { useChurchStore } from '@/store/useChurchStore';
-import { createChurchIcon, injectMarkerStyles } from '@/lib/mapUtils';
 import { Card } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
 import { useTheme } from '@/components/theme-provider';
 import { useTranslation } from 'react-i18next';
+import { Locate, Layers } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+
+// Fix default Leaflet icons
+delete (L.Icon.Default.prototype as any)._getIconUrl;
+L.Icon.Default.mergeOptions({
+  iconRetinaUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png',
+  iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
+  shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
+});
 
 interface MapProps {
   churches: ChurchListItem[];
   onChurchClick?: (churchId: string) => void;
 }
 
-type MarkersMap = { [key: string]: L.Marker };
+const DEFAULT_CENTER: [number, number] = [40.7128, -74.0060]; // NYC center
+const DEFAULT_ZOOM = 11;
 
-const DEFAULT_CENTER: [number, number] = [48.8566, 2.3522];
-const DEFAULT_ZOOM = 12;
+// Custom church icon
+const createChurchIcon = (isSelected = false) => {
+  const color = isSelected ? '#8b5cf6' : '#6366f1';
+  const size = isSelected ? 40 : 32;
+  
+  return L.divIcon({
+    className: 'custom-church-marker-wrapper',
+    html: `
+      <div style="
+        position: relative;
+        width: ${size}px;
+        height: ${size}px;
+      ">
+        <div style="
+          background-color: ${color};
+          width: 100%;
+          height: 100%;
+          border-radius: 50% 50% 50% 0;
+          transform: rotate(-45deg);
+          border: 3px solid white;
+          box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          transition: all 0.2s ease;
+        ">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" style="
+            width: 18px;
+            height: 18px;
+            transform: rotate(45deg);
+          ">
+            <path d="M12 2L10 8H8V12H10V22H14V12H16V8H14L12 2Z M11 4.236L11.8 6.764H12.2L13 4.236V4.236L13 7H14V10H10V7H11V4.236Z"/>
+          </svg>
+        </div>
+      </div>
+    `,
+    iconSize: [size, size],
+    iconAnchor: [size / 2, size],
+    popupAnchor: [0, -size],
+  });
+};
+
+// Custom cluster icon with VERY visible styling
+const createClusterCustomIcon = (cluster: L.MarkerCluster) => {
+  const count = cluster.getChildCount();
+  let size = 40;
+  let fontSize = '14px';
+  let bgColor = '#6366f1';
+  
+  if (count > 100) {
+    size = 60;
+    fontSize = '18px';
+    bgColor = '#8b5cf6';
+  } else if (count > 50) {
+    size = 52;
+    fontSize = '16px';
+    bgColor = '#7c3aed';
+  } else if (count > 10) {
+    size = 46;
+    fontSize = '15px';
+    bgColor = '#6d28d9';
+  }
+  
+  return L.divIcon({
+    html: `
+      <div style="
+        width: ${size}px;
+        height: ${size}px;
+        background: linear-gradient(135deg, ${bgColor}, ${bgColor}dd);
+        border-radius: 50%;
+        border: 4px solid white;
+        box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-weight: 800;
+        font-size: ${fontSize};
+        font-family: system-ui, -apple-system, sans-serif;
+        cursor: pointer;
+        transition: transform 0.2s ease;
+      ">
+        ${count}
+      </div>
+    `,
+    className: 'custom-cluster-icon',
+    iconSize: [size, size],
+  });
+};
+
+// Component to handle map controls and user location
+function MapController({ 
+  userLocation, 
+  selectedChurch, 
+  churches 
+}: { 
+  userLocation: { latitude: number; longitude: number } | null;
+  selectedChurch: string | null;
+  churches: ChurchListItem[];
+}) {
+  const map = useMap();
+  
+  useEffect(() => {
+    if (userLocation) {
+      map.flyTo([userLocation.latitude, userLocation.longitude], 14, {
+        duration: 1.5
+      });
+    }
+  }, [userLocation, map]);
+
+  useEffect(() => {
+    if (selectedChurch && churches.length > 0) {
+      const church = churches.find(c => c.id === selectedChurch);
+      if (church) {
+        const lat = parseFloat(church.latitude);
+        const lng = parseFloat(church.longitude);
+        map.flyTo([lat, lng], 16, { duration: 1 });
+      }
+    }
+  }, [selectedChurch, churches, map]);
+
+  return null;
+}
 
 export function Map({ churches, onChurchClick }: MapProps) {
   const { t } = useTranslation();
+  const { theme } = useTheme();
   const { userLocation, selectedChurch, setUserLocation, loadNearbyChurches } = useChurchStore();
   const [isLocating, setIsLocating] = useState(false);
+  const [mapStyle, setMapStyle] = useState<'light' | 'dark' | 'satellite'>('light');
 
   const handleLocateMe = () => {
     if (!navigator.geolocation) return;
@@ -33,248 +170,131 @@ export function Map({ churches, onChurchClick }: MapProps) {
         setUserLocation(loc);
         loadNearbyChurches(loc.latitude, loc.longitude, 10000);
         setIsLocating(false);
-
-        // Fly to user immediately, skip the fitBounds that will fire from church list update
-        skipNextBoundsRef.current = true;
-        const map = mapInstanceRef.current;
-        if (map) {
-          map.flyTo([loc.latitude, loc.longitude], 14, { duration: 1.5 });
-        }
       },
-      () => setIsLocating(false),
-      { enableHighAccuracy: true, timeout: 10000 }
+      () => setIsLocating(false)
     );
   };
-  const skipNextBoundsRef = useRef(false);
-  const mapRef = useRef<HTMLDivElement>(null);
-  const mapInstanceRef = useRef<L.Map | null>(null);
-  const markersRef = useRef<MarkersMap>({});
-  const userMarkerRef = useRef<L.CircleMarker | null>(null);
-  const darkLayerRef = useRef<L.TileLayer | null>(null);
-  const lightLayerRef = useRef<L.TileLayer | null>(null);
-  const satelliteLayerRef = useRef<L.TileLayer | null>(null);
-  const [isSatellite, setIsSatellite] = useState(false);
-  const { theme } = useTheme();
-  const isDark = theme === 'dark' || (theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
-  const onChurchClickRef = useRef(onChurchClick);
-  onChurchClickRef.current = onChurchClick;
 
-  // Inject marker styles on mount
-  useEffect(() => {
-    injectMarkerStyles();
-  }, []);
+  const cycleMapStyle = () => {
+    setMapStyle(prev => 
+      prev === 'light' ? 'dark' : 
+      prev === 'dark' ? 'satellite' : 
+      'light'
+    );
+  };
 
-  // Initialize map — runs once
-  useEffect(() => {
-    if (!mapRef.current || mapInstanceRef.current) return;
-
-    const map = L.map(mapRef.current, {
-      zoomControl: true,
-      attributionControl: true,
-    }).setView(DEFAULT_CENTER, DEFAULT_ZOOM);
-
-    const darkLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
-      subdomains: 'abcd',
-      maxZoom: 20
-    });
-
-    const lightLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
-      subdomains: 'abcd',
-      maxZoom: 20
-    });
-
-    const satelliteLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-      attribution: '&copy; <a href="https://www.esri.com/">Esri</a> &mdash; Sources: Esri, Maxar, Earthstar Geographics',
-      maxZoom: 19
-    });
-
-    darkLayerRef.current = darkLayer;
-    lightLayerRef.current = lightLayer;
-    satelliteLayerRef.current = satelliteLayer;
-
-    mapInstanceRef.current = map;
-
-    return () => {
-      map.remove();
-      mapInstanceRef.current = null;
-    };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  // Update markers when churches list changes (not on selection)
-  useEffect(() => {
-    const map = mapInstanceRef.current;
-    if (!map) return;
-
-    // Clear existing markers
-    Object.values(markersRef.current).forEach(marker => marker.remove());
-    markersRef.current = {};
-
-    // Add new markers
-    churches.forEach(church => {
-      const lat = parseFloat(church.latitude);
-      const lng = parseFloat(church.longitude);
-      const icon = createChurchIcon(false);
-
-      const marker = L.marker([lat, lng], { icon })
-        .addTo(map);
-
-      marker.on('click', () => {
-        onChurchClickRef.current?.(church.id);
-      });
-
-      markersRef.current[church.id] = marker;
-    });
-
-    // Fit bounds — skip if user just located (flyTo already in progress)
-    if (skipNextBoundsRef.current) {
-      skipNextBoundsRef.current = false;
-      return;
+  const getTileLayerUrl = () => {
+    switch (mapStyle) {
+      case 'dark':
+        return 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png';
+      case 'satellite':
+        return 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}';
+      default:
+        return 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png';
     }
+  };
 
-    if (churches.length > 0) {
-      const points: [number, number][] = churches.map(
-        c => [parseFloat(c.latitude), parseFloat(c.longitude)]
-      );
-      if (userLocation) {
-        points.push([userLocation.latitude, userLocation.longitude]);
-      }
-      const bounds = L.latLngBounds(points);
-      map.flyToBounds(bounds, { padding: [50, 50], maxZoom: 15, duration: 1.2 });
+  const getTileLayerAttribution = () => {
+    if (mapStyle === 'satellite') {
+      return '&copy; <a href="https://www.esri.com/">Esri</a>';
     }
-  }, [churches, userLocation]);
+    return '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>';
+  };
 
-  // Update marker icons when selection changes
-  useEffect(() => {
-    Object.entries(markersRef.current).forEach(([churchId, marker]) => {
-      const isSelected = selectedChurch?.id === churchId;
-      const icon = createChurchIcon(isSelected);
-      marker.setIcon(icon);
-    });
-  }, [selectedChurch]);
-
-  // Add/update user location marker + fly to it
-  useEffect(() => {
-    const map = mapInstanceRef.current;
-    if (!map) return;
-
-    // Remove old markers
-    if (userMarkerRef.current) {
-      userMarkerRef.current.remove();
-      userMarkerRef.current = null;
-    }
-    // Remove old pulse ring if any
-    map.eachLayer((layer) => {
-      if ((layer as any)._isUserPulse) map.removeLayer(layer);
-    });
-
-    if (!userLocation) return;
-
-    const latlng: [number, number] = [userLocation.latitude, userLocation.longitude];
-
-    // Outer pulsing ring
-    const pulseRing = L.circleMarker(latlng, {
-      radius: 20,
-      fillColor: '#a7c8ff',
-      color: 'transparent',
-      fillOpacity: 0.15,
-      className: 'user-pulse-ring',
-    }).addTo(map);
-    (pulseRing as any)._isUserPulse = true;
-
-    // Inner dot
-    const userMarker = L.circleMarker(latlng, {
-      radius: 8,
-      fillColor: '#a7c8ff',
-      color: '#fff',
-      weight: 3,
-      opacity: 1,
-      fillOpacity: 1,
-    }).addTo(map);
-
-    userMarkerRef.current = userMarker;
-  }, [userLocation]);
-
-  // Toggle map layer based on theme + satellite
-  useEffect(() => {
-    const map = mapInstanceRef.current;
-    const dark = darkLayerRef.current;
-    const light = lightLayerRef.current;
-    const satellite = satelliteLayerRef.current;
-    if (!map || !dark || !light || !satellite) return;
-
-    // Remove all tile layers first
-    if (map.hasLayer(dark)) map.removeLayer(dark);
-    if (map.hasLayer(light)) map.removeLayer(light);
-    if (map.hasLayer(satellite)) map.removeLayer(satellite);
-
-    // Add the appropriate layer
-    if (isSatellite) {
-      satellite.addTo(map);
-    } else if (isDark) {
-      dark.addTo(map);
-    } else {
-      light.addTo(map);
-    }
-  }, [isSatellite, isDark]);
-
-  // Center on selected church
-  useEffect(() => {
-    const map = mapInstanceRef.current;
-    if (!map || !selectedChurch) return;
-
-    const lat = parseFloat(selectedChurch.latitude);
-    const lng = parseFloat(selectedChurch.longitude);
-    map.flyTo([lat, lng], 16, { duration: 1, easeLinearity: 0.3 });
-  }, [selectedChurch]);
+  console.log('[Map] Rendering with', churches.length, 'churches');
 
   return (
-    <Card className="h-full w-full overflow-hidden border-0 rounded-none shadow-none bg-surface-container-lowest relative">
-      <div
-        ref={mapRef}
-        className="w-full h-full"
-        style={{ minHeight: '400px' }}
-        aria-label={t('map.ariaLabel')}
-      />
+    <div className="relative h-full w-full">
+      <MapContainer
+        center={DEFAULT_CENTER}
+        zoom={DEFAULT_ZOOM}
+        className="h-full w-full rounded-lg"
+        zoomControl={true}
+      >
+        <TileLayer
+          attribution={getTileLayerAttribution()}
+          url={getTileLayerUrl()}
+          maxZoom={20}
+        />
+
+        <MapController 
+          userLocation={userLocation} 
+          selectedChurch={selectedChurch}
+          churches={churches}
+        />
+
+        {/* User location marker */}
+        {userLocation && (
+          <Circle
+            center={[userLocation.latitude, userLocation.longitude]}
+            radius={100}
+            pathOptions={{
+              fillColor: '#8b5cf6',
+              fillOpacity: 0.3,
+              color: '#8b5cf6',
+              weight: 2,
+            }}
+          />
+        )}
+
+        {/* Clustered church markers */}
+        <MarkerClusterGroup
+          chunkedLoading
+          maxClusterRadius={60}
+          spiderfyOnMaxZoom={true}
+          showCoverageOnHover={false}
+          zoomToBoundsOnClick={true}
+          disableClusteringAtZoom={16}
+          iconCreateFunction={createClusterCustomIcon}
+        >
+          {churches.map((church) => {
+            const lat = parseFloat(church.latitude);
+            const lng = parseFloat(church.longitude);
+            
+            if (isNaN(lat) || isNaN(lng)) {
+              console.warn('[Map] Invalid coordinates for church:', church.name, lat, lng);
+              return null;
+            }
+            
+            const isSelected = selectedChurch === church.id;
+            
+            return (
+              <Marker
+                key={church.id}
+                position={[lat, lng]}
+                icon={createChurchIcon(isSelected)}
+                eventHandlers={{
+                  click: () => {
+                    console.log('[Map] Clicked church:', church.name);
+                    onChurchClick?.(church.id);
+                  },
+                }}
+              />
+            );
+          })}
+        </MarkerClusterGroup>
+      </MapContainer>
 
       {/* Map controls */}
-      <div className="absolute top-3 right-3 z-[1000] flex flex-col gap-2">
-        {/* Locate me */}
-        <button
+      <Card className="absolute top-4 right-4 z-[1000] p-2 flex flex-col gap-2 bg-white/90 backdrop-blur">
+        <Button
+          variant="ghost"
+          size="icon"
           onClick={handleLocateMe}
           disabled={isLocating}
-          className={cn(
-            'flex items-center justify-center w-10 h-10 rounded-lg border border-border/60 shadow-lg backdrop-blur-md transition-all duration-200',
-            'hover:scale-105 active:scale-95 cursor-pointer bg-card/80 text-card-foreground hover:border-primary/50',
-            userLocation && 'border-primary/50 text-primary',
-            isLocating && 'animate-pulse'
-          )}
-          title={t('map.myLocation')}
+          title={t('map.locateMe')}
         >
-          <span
-            className="material-symbols-outlined text-lg"
-            style={userLocation ? { fontVariationSettings: "'FILL' 1" } : undefined}
-          >
-            {isLocating ? 'hourglass_empty' : 'my_location'}
-          </span>
-        </button>
-
-        {/* Layer toggle */}
-        <button
-          onClick={() => setIsSatellite(prev => !prev)}
-          className="flex items-center justify-center w-10 h-10 rounded-lg
-            border border-border/60 shadow-lg backdrop-blur-md transition-all duration-200
-            hover:scale-105 active:scale-95 cursor-pointer
-            bg-card/80 text-card-foreground hover:border-primary/50"
-          title={isSatellite ? t('map.mapView') : t('map.satelliteView')}
+          <Locate className={cn('h-5 w-5', isLocating && 'animate-pulse')} />
+        </Button>
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={cycleMapStyle}
+          title={t('map.changeStyle')}
         >
-          <span className="material-symbols-outlined text-lg">
-            {isSatellite ? 'map' : 'satellite_alt'}
-          </span>
-        </button>
-      </div>
-    </Card>
+          <Layers className="h-5 w-5" />
+        </Button>
+      </Card>
+    </div>
   );
 }

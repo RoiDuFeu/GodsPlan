@@ -1,0 +1,42 @@
+[
+  {
+    "name": "Église Saint-Sulpice",
+    "city": "Paris",
+    "street": "2 Rue Palatine",
+    "postal_code": "75006",
+    "website": "https://www.paroisse-saint-sulpice-paris.fr",
+    "source": "manual_test"
+  },
+  {
+    "name": "Cathédrale Notre-Dame de Paris",
+    "city": "Paris",
+    "street": "6 Parvis Notre-Dame - Pl. Jean-Paul II",
+    "postal_code": "75004",
+    "website": "https://www.notredamedeparis.fr",
+    "source": "manual_test"
+  },
+  {
+    "name": "Basilique du Sacré-Cœur de Montmartre",
+    "city": "Paris",
+    "street": "35 Rue du Chevalier de la Barre",
+    "postal_code": "75018",
+    "website": "https://www.sacre-coeur-montmartre.com",
+    "source": "manual_test"
+  },
+  {
+    "name": "Église de la Madeleine",
+    "city": "Paris",
+    "street": "Place de la Madeleine",
+    "postal_code": "75008",
+    "website": "https://www.eglise-lamadeleine.com",
+    "source": "manual_test"
+  },
+  {
+    "name": "Église Saint-Eustache",
+    "city": "Paris",
+    "street": "2 Impasse Saint-Eustache",
+    "postal_code": "75001",
+    "website": "https://www.saint-eustache.org",
+    "source": "manual_test"
+  }
+]

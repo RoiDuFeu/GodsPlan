@@ -1,0 +1,39 @@
+{
+  "name": "Notre-Dame de La-Gare",
+  "source_url": "https://notredamedelagare.fr/",
+  "phone": "01 45 83 47 34",
+  "email": "paroisse@notredamedelagare.fr",
+  "address": null,
+  "priest_name": null,
+  "mass_times": [
+    {
+      "day": "Mardi",
+      "time": "17:30",
+      "context": "En savoir plus Notre-Dame de la Gare Place Jeanne-d’Arc 75013 Paris En période scolaire, accueil de "
+    },
+    {
+      "day": "Mardi",
+      "time": "18:45",
+      "context": "En savoir plus Notre-Dame de la Gare Place Jeanne-d’Arc 75013 Paris En période scolaire, accueil de "
+    },
+    {
+      "day": "Vendredi",
+      "time": "10:45",
+      "context": "En savoir plus Notre-Dame de la Gare Place Jeanne-d’Arc 75013 Paris En période scolaire, accueil de "
+    },
+    {
+      "day": "Vendredi",
+      "time": "12:00",
+      "context": "En savoir plus Notre-Dame de la Gare Place Jeanne-d’Arc 75013 Paris En période scolaire, accueil de "
+    }
+  ],
+  "confession_times": [],
+  "upcoming_events": [
+    {
+      "date": "3 avril",
+      "description": "Bienvenue ! À Notre-Dame de la gare Nouveau venu ? L&rsquo;équipe qui prie pour vous Horaires des messes et des célébrations Calendrier de la paroisse"
+    }
+  ],
+  "extraction_confidence": 0.7,
+  "extracted_at": "2026-04-05T02:51:56.592443"
+}

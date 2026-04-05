@@ -1,0 +1,68 @@
+{
+  "name": "Saint-Pierre de Paris",
+  "source_url": null,
+  "phone": "01 42 34 56 78",
+  "email": "contact@saintpierre-paris.fr",
+  "address": null,
+  "priest_name": "Jean-Marie Dubois Diacre",
+  "mass_times": [
+    {
+      "day": "Vendredi",
+      "time": "12:15",
+      "context": "Paroisse Saint-Pierre de Paris Bienvenue à la Paroisse Saint-Pierre Horaires des Messes Du lundi au "
+    },
+    {
+      "day": "Vendredi",
+      "time": "18:30",
+      "context": "Paroisse Saint-Pierre de Paris Bienvenue à la Paroisse Saint-Pierre Horaires des Messes Du lundi au "
+    },
+    {
+      "day": "Samedi",
+      "time": "18:30",
+      "context": "Paroisse Saint-Pierre de Paris Bienvenue à la Paroisse Saint-Pierre Horaires des Messes Du lundi au "
+    },
+    {
+      "day": "Dimanche",
+      "time": "09:00",
+      "context": "Paroisse Saint-Pierre de Paris Bienvenue à la Paroisse Saint-Pierre Horaires des Messes Du lundi au "
+    },
+    {
+      "day": "Dimanche",
+      "time": "11:00",
+      "context": "Paroisse Saint-Pierre de Paris Bienvenue à la Paroisse Saint-Pierre Horaires des Messes Du lundi au "
+    },
+    {
+      "day": "Dimanche",
+      "time": "18:30",
+      "context": "Paroisse Saint-Pierre de Paris Bienvenue à la Paroisse Saint-Pierre Horaires des Messes Du lundi au "
+    },
+    {
+      "day": "Dimanche",
+      "time": "17:00",
+      "context": "Paroisse Saint-Pierre de Paris Bienvenue à la Paroisse Saint-Pierre Horaires des Messes Du lundi au "
+    },
+    {
+      "day": "Dimanche",
+      "time": "18:00",
+      "context": "Paroisse Saint-Pierre de Paris Bienvenue à la Paroisse Saint-Pierre Horaires des Messes Du lundi au "
+    }
+  ],
+  "confession_times": [
+    "Vendredi 12:15",
+    "Vendredi 18:30",
+    "Samedi 18:30",
+    "Dimanche 09:00",
+    "Dimanche 11:00",
+    "Dimanche 18:30",
+    "Dimanche 17:00",
+    "Dimanche 18:00"
+  ],
+  "upcoming_events": [
+    {
+      "date": "15 avril",
+      "description": "Pierre Martin Événements à venir 15 avril: Concert de musique sacrée à 20h00 22 avril: Pèlerinage à Lourdes 1er mai: Procession mariale"
+    }
+  ],
+  "extraction_confidence": 1.0,
+  "extracted_at": "2026-04-05T02:35:32.998776"
+}
