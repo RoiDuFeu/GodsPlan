@@ -75,19 +75,27 @@ class MLChurchExtractor:
     # Regex patterns (compiled for performance)
     PATTERNS = {
         'phone': re.compile(r'0[1-9](?:[\s.-]*\d{2}){4}'),
-        'email': re.compile(r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b'),
+        'email': re.compile(r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b', re.IGNORECASE),  # FIX: Added re.IGNORECASE
         'time': re.compile(r'\b([0-2]?[0-9])[h:]([0-5][0-9])?\b'),
         'day': re.compile(r'\b(lundi|mardi|mercredi|jeudi|vendredi|samedi|dimanche)\b', re.IGNORECASE),
-        'mass_keyword': re.compile(r'\b(messe|célébration|eucharistie|office)\b', re.IGNORECASE),
-        'confession_keyword': re.compile(r'\b(confession|sacrement de réconciliation|pardon)\b', re.IGNORECASE),
+        'day_range': re.compile(r'[Dd]u\s+(lundi|mardi|mercredi|jeudi|vendredi|samedi|dimanche)\s+au\s+(lundi|mardi|mercredi|jeudi|vendredi|samedi|dimanche)', re.IGNORECASE),  # NEW: Weekday ranges
+        'address': re.compile(r'\d+[,\s]+(?:rue|avenue|boulevard|place|impasse|chemin|allée|passage|square|cours|quai)\s+[A-Za-zéèêàçùûôîïœ\-\s]{3,50}(?:[,\s]+\d{5}\s+[\wéèêàç\-]+)?', re.IGNORECASE),  # NEW: French addresses (more strict - letters/spaces/hyphens only)
+        'mass_keyword': re.compile(r'\b(messes?|célébrations?|eucharisties?|offices?)\b', re.IGNORECASE),  # Added plural forms
+        'confession_keyword': re.compile(r'\b(confessions?|sacrement de réconciliation|pardons?)\b', re.IGNORECASE),  # Added plural forms
     }
     
-    # Common French clerical titles (greedy multi-word names)
+    # Mapping for weekday ranges expansion
+    WEEKDAYS = ['lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi', 'dimanche']
+    
+    # Common French clerical titles (greedy multi-word names + particles)
     PRIEST_TITLES = [
-        r'Père\s+([A-Z][\wéèêàç\-]+(?:\s+[A-Z][\wéèêàç\-]+)+)',  # Multi-word names
-        r'Abbé\s+([A-Z][\wéèêàç\-]+(?:\s+[A-Z][\wéèêàç\-]+)+)',
-        r'Curé\s*:\s*(?:Père\s+)?([A-Z][\wéèêàç\-]+(?:\s+[A-Z][\wéèêàç\-]+)+)',
-        r'Prêtre\s*:\s*([A-Z][\wéèêàç\-]+(?:\s+[A-Z][\wéèêàç\-]+)+)',
+        r'Père\s+([A-Z][\wéèêàç\-]+(?:\s+(?:de|du|des|d\'|van|von)?\s*[A-Z][\wéèêàç\-]+)*)',  # With particles
+        r'Abbé\s+([A-Z][\wéèêàç\-]+(?:\s+(?:de|du|des|d\'|van|von)?\s*[A-Z][\wéèêàç\-]+)*)',
+        r'Recteur\s+([A-Z][\wéèêàç\-]+(?:\s+(?:de|du|des|d\'|van|von)?\s*[A-Z][\wéèêàç\-]+)*)',  # NEW
+        r'Vicaire\s+([A-Z][\wéèêàç\-]+(?:\s+(?:de|du|des|d\'|van|von)?\s*[A-Z][\wéèêàç\-]+)*)',  # NEW
+        r'Aumônier\s+([A-Z][\wéèêàç\-]+(?:\s+(?:de|du|des|d\'|van|von)?\s*[A-Z][\wéèêàç\-]+)*)',  # NEW
+        r'Curé\s*:\s*(?:Père\s+)?([A-Z][\wéèêàç\-]+(?:\s+(?:de|du|des|d\'|van|von)?\s*[A-Z][\wéèêàç\-]+)*)',
+        r'Prêtre\s*:\s*([A-Z][\wéèêàç\-]+(?:\s+(?:de|du|des|d\'|van|von)?\s*[A-Z][\wéèêàç\-]+)*)',
     ]
     
     def __init__(self):
@@ -125,13 +133,15 @@ class MLChurchExtractor:
         return text.strip()
     
     def extract_contact_info(self, text: str) -> Dict[str, Optional[str]]:
-        """Extract phone and email using regex"""
+        """Extract phone, email, and address using regex"""
         phone_match = self.PATTERNS['phone'].search(text)
         email_match = self.PATTERNS['email'].search(text)
+        address_match = self.PATTERNS['address'].search(text)
         
         return {
             'phone': phone_match.group(0) if phone_match else None,
             'email': email_match.group(0) if email_match else None,
+            'address': address_match.group(0).strip() if address_match else None,  # NEW: Address extraction
         }
     
     def extract_priest_name(self, text: str) -> Optional[str]:
@@ -143,20 +153,39 @@ class MLChurchExtractor:
         
         return None
     
+    def expand_day_range(self, start_day: str, end_day: str) -> List[str]:
+        """Expand day range (e.g., lundi-vendredi → [lundi, mardi, ..., vendredi])"""
+        start_day = start_day.lower()
+        end_day = end_day.lower()
+        
+        try:
+            start_idx = self.WEEKDAYS.index(start_day)
+            end_idx = self.WEEKDAYS.index(end_day)
+            
+            # Handle wrapping (e.g., samedi → lundi)
+            if end_idx >= start_idx:
+                return [self.WEEKDAYS[i].capitalize() for i in range(start_idx, end_idx + 1)]
+            else:
+                # Wrap around week
+                return [self.WEEKDAYS[i].capitalize() for i in range(start_idx, len(self.WEEKDAYS))] + \
+                       [self.WEEKDAYS[i].capitalize() for i in range(0, end_idx + 1)]
+        except ValueError:
+            return []
+    
     def extract_mass_times(self, text: str) -> List[Dict[str, str]]:
         """
         Extract mass schedule using context-aware pattern matching
         
         Strategy:
-        1. Find sentences containing mass keywords + time patterns
-        2. Associate times with days/context
-        3. Structure into day → time mappings
+        1. Find sentences containing mass keywords
+        2. Look for explicit patterns: "Day(s): time" or "Day range: time"
+        3. Extract using regex groups to associate days with times
         4. Deduplicate
         """
         mass_times = []
         seen = set()  # Deduplication
         
-        # Split into sentences (simple approach)
+        # Split into sentences
         sentences = re.split(r'[.!?\n]+', text)
         
         for sentence in sentences:
@@ -164,57 +193,67 @@ class MLChurchExtractor:
             if not self.PATTERNS['mass_keyword'].search(sentence):
                 continue
             
-            # Extract all days mentioned in sentence
-            day_matches = list(self.PATTERNS['day'].finditer(sentence))
+            # Strategy 1: Look for day range patterns: "Du lundi au vendredi: 18h30"
+            day_range_pattern = re.compile(
+                r'[Dd]u\s+(lundi|mardi|mercredi|jeudi|vendredi|samedi|dimanche)\s+au\s+(lundi|mardi|mercredi|jeudi|vendredi|samedi|dimanche)\s*:?\s*((?:[0-2]?[0-9])[h:](?:[0-5][0-9])?(?:\s+et\s+[0-2]?[0-9][h:][0-5][0-9])?)',
+                re.IGNORECASE
+            )
             
-            # Extract times
-            time_matches = list(self.PATTERNS['time'].finditer(sentence))
-            
-            if not time_matches:
-                continue
-            
-            # If multiple days, try to associate each time with its nearest day
-            if day_matches:
+            for match in day_range_pattern.finditer(sentence):
+                start_day = match.group(1)
+                end_day = match.group(2)
+                times_str = match.group(3)
+                
+                expanded_days = self.expand_day_range(start_day, end_day)
+                
+                # Extract all times from the times string
+                time_matches = list(self.PATTERNS['time'].finditer(times_str))
+                
                 for time_match in time_matches:
                     hour = time_match.group(1).zfill(2)
                     minute = time_match.group(2) if time_match.group(2) else '00'
                     time_str = f"{hour}:{minute}"
                     
-                    # Find closest day before this time in the sentence
-                    closest_day = None
-                    time_pos = time_match.start()
-                    
-                    for day_match in day_matches:
-                        if day_match.start() < time_pos:
-                            closest_day = day_match.group(1).capitalize()
-                    
-                    # If no day before, use first day
-                    if not closest_day and day_matches:
-                        closest_day = day_matches[0].group(1).capitalize()
-                    
-                    # Deduplicate
-                    key = f"{closest_day}_{time_str}"
-                    if key not in seen:
-                        seen.add(key)
-                        mass_times.append({
-                            'day': closest_day,
-                            'time': time_str,
-                            'context': sentence.strip()[:100]
-                        })
-            else:
-                # No day mentioned, just extract times
+                    for day in expanded_days:
+                        key = f"{day}_{time_str}"
+                        if key not in seen:
+                            seen.add(key)
+                            mass_times.append({
+                                'day': day,
+                                'time': time_str,
+                                'context': match.group(0)[:100]
+                            })
+            
+            # Strategy 2: Look for individual day patterns: "Samedi: 19h00" or "Dimanche: 9h00 et 11h00"
+            single_day_pattern = re.compile(
+                r'\b(lundi|mardi|mercredi|jeudi|vendredi|samedi|dimanche)\s*:?\s*((?:[0-2]?[0-9])[h:](?:[0-5][0-9])?(?:\s+et\s+[0-2]?[0-9][h:][0-5][0-9])?)',
+                re.IGNORECASE
+            )
+            
+            # Remove already processed day range parts to avoid double extraction
+            sentence_remaining = sentence
+            for match in day_range_pattern.finditer(sentence):
+                sentence_remaining = sentence_remaining.replace(match.group(0), '')
+            
+            for match in single_day_pattern.finditer(sentence_remaining):
+                day = match.group(1).capitalize()
+                times_str = match.group(2)
+                
+                # Extract all times from the times string
+                time_matches = list(self.PATTERNS['time'].finditer(times_str))
+                
                 for time_match in time_matches:
                     hour = time_match.group(1).zfill(2)
                     minute = time_match.group(2) if time_match.group(2) else '00'
                     time_str = f"{hour}:{minute}"
                     
-                    key = f"__{time_str}"
+                    key = f"{day}_{time_str}"
                     if key not in seen:
                         seen.add(key)
                         mass_times.append({
-                            'day': None,
+                            'day': day,
                             'time': time_str,
-                            'context': sentence.strip()[:100]
+                            'context': match.group(0)[:100]
                         })
         
         return mass_times
@@ -299,23 +338,27 @@ class MLChurchExtractor:
         Calculate extraction confidence score (0.0 - 1.0)
         
         Scoring:
-        - Has phone/email: +0.2 each
+        - Has phone: +0.15
+        - Has email: +0.15
+        - Has address: +0.15  # NEW
         - Has priest name: +0.15
         - Has mass times: +0.3
-        - Has confession times: +0.15
+        - Has confession times: +0.1
         """
         score = 0.0
         
         if data.phone:
-            score += 0.2
+            score += 0.15
         if data.email:
-            score += 0.2
+            score += 0.15
+        if data.address:  # NEW
+            score += 0.15
         if data.priest_name:
             score += 0.15
         if data.mass_times:
             score += 0.3
         if data.confession_times:
-            score += 0.15
+            score += 0.1
         
         return min(score, 1.0)
     
@@ -344,6 +387,7 @@ class MLChurchExtractor:
         contact = self.extract_contact_info(text)
         data.phone = contact['phone']
         data.email = contact['email']
+        data.address = contact['address']  # NEW: Address extraction
         
         # Extract priest name
         data.priest_name = self.extract_priest_name(text)

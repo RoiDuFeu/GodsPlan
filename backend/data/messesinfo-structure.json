@@ -1,0 +1,512 @@
+{
+  "allChurchLinks": [
+    {
+      "href": "/communaute/pa/75/sacre-coeur-de-montmartre",
+      "text": "Horaires de la paroisse",
+      "linkClasses": [
+        "cef-kephas-client-resources-Resources-CSS-egliseInfoIconInformation",
+        "cef-kephas-client-resources-Resources-CSS-egliseInfoLinkActionItem"
+      ],
+      "linkId": "gwt-uid-111:community",
+      "parentTag": "DIV",
+      "parentClasses": [
+        "cef-kephas-client-resources-Resources-CSS-egliseInfoCellListActions",
+        "egliseinfo-celebrationtime-actions",
+        "noprint"
+      ],
+      "parentId": null,
+      "parentHTML": "<div class=\"cef-kephas-client-resources-Resources-CSS-egliseInfoCellListActions egliseinfo-celebrationtime-actions noprint\" gwtuirendered=\"gwt-uid-111\"><a class=\"cef-kephas-client-resources-Resources-CSS-egliseInfoIconInformation cef-kephas-client-resources-Resources-CSS-egliseInfoLinkActionItem\" href=\"/communaute/pa/75/sacre-coeur-de-montmartre\" id=\"gwt-uid-111:community\">Horaires de la paroisse</a>  <a class=\"cef-kephas-client-resources-Resources-CSS-egliseInfoIconEmail cef-kephas-client-resources-Resources-CSS-egliseInfoLinkActionItem\" href=\"/contact/info=Basilique%20:%20Sacr%C3%A9-C%C5%93ur%20de%20Montmartre%0ABasilique%20:%20Sacr%C3%A9-C%C5%93ur%20de%20Montmartre%0AParoisse%20:%20Saint-Pierre%20de%20Montmartre%0A35%20rue%20du%20Chevalier-de-la-Barre%0A75018%20Paris,%20fr%0A%20https://messes.info/lieu/75/paris-18/basilique-du-sacre-coeur-de-montmartre%20le%20dim.%205%20avr.%202026%20%C3%A0%2007h00%0A%20P%C3%A2ques%0A,%20P%C3%A2ques,%20;communityId=pa/75/sacre-coeur-de-montmartre\" i",
+      "nextSiblingText": "Signalez une erreur",
+      "previousSiblingText": null,
+      "parentText": "Horaires de la paroisse  Signalez une erreur"
+    },
+    {
+      "href": "/communaute/pa/75/notre-dame-des-champs",
+      "text": "Horaires de la paroisse",
+      "linkClasses": [
+        "cef-kephas-client-resources-Resources-CSS-egliseInfoIconInformation",
+        "cef-kephas-client-resources-Resources-CSS-egliseInfoLinkActionItem"
+      ],
+      "linkId": "gwt-uid-112:community",
+      "parentTag": "DIV",
+      "parentClasses": [
+        "cef-kephas-client-resources-Resources-CSS-egliseInfoCellListActions",
+        "egliseinfo-celebrationtime-actions",
+        "noprint"
+      ],
+      "parentId": null,
+      "parentHTML": "<div class=\"cef-kephas-client-resources-Resources-CSS-egliseInfoCellListActions egliseinfo-celebrationtime-actions noprint\" gwtuirendered=\"gwt-uid-112\"><a class=\"cef-kephas-client-resources-Resources-CSS-egliseInfoIconInformation cef-kephas-client-resources-Resources-CSS-egliseInfoLinkActionItem\" href=\"/communaute/pa/75/notre-dame-des-champs\" id=\"gwt-uid-112:community\">Horaires de la paroisse</a>  <a class=\"cef-kephas-client-resources-Resources-CSS-egliseInfoIconEmail cef-kephas-client-resources-Resources-CSS-egliseInfoLinkActionItem\" href=\"/contact/info=%C3%89glise%20paroissiale%20:%20Notre-Dame%20des%20Champs%0AParoisse%20:%20Notre-Dame%20des%20Champs%0ADioc%C3%A8se%20:%20Paris%0A91%20boulevard%20du%20Montparnasse%0A75006%20Paris,%20fr%0A%20https://messes.info/lieu/75/paris-06/notre-dame-des-champs%20le%20dim.%205%20avr.%202026%20%C3%A0%2007h00%0A%20P%C3%A2ques%0A,%20P%C3%A2ques,%20;communityId=pa/75/notre-dame-des-champs\" id=\"gwt-uid-112:contactCommunity\">Signalez une erreur</a></di",
+      "nextSiblingText": "Signalez une erreur",
+      "previousSiblingText": null,
+      "parentText": "Horaires de la paroisse  Signalez une erreur"
+    },
+    {
+      "href": "/communaute/pa/75/filles-de-la-charite",
+      "text": "Horaires de la paroisse",
+      "linkClasses": [
+        "cef-kephas-client-resources-Resources-CSS-egliseInfoIconInformation",
+        "cef-kephas-client-resources-Resources-CSS-egliseInfoLinkActionItem"
+      ],
+      "linkId": "gwt-uid-113:community",
+      "parentTag": "DIV",
+      "parentClasses": [
+        "cef-kephas-client-resources-Resources-CSS-egliseInfoCellListActions",
+        "egliseinfo-celebrationtime-actions",
+        "noprint"
+      ],
+      "parentId": null,
+      "parentHTML": "<div class=\"cef-kephas-client-resources-Resources-CSS-egliseInfoCellListActions egliseinfo-celebrationtime-actions noprint\" gwtuirendered=\"gwt-uid-113\"><a class=\"cef-kephas-client-resources-Resources-CSS-egliseInfoIconInformation cef-kephas-client-resources-Resources-CSS-egliseInfoLinkActionItem\" href=\"/communaute/pa/75/filles-de-la-charite\" id=\"gwt-uid-113:community\">Horaires de la paroisse</a>  <a class=\"cef-kephas-client-resources-Resources-CSS-egliseInfoIconEmail cef-kephas-client-resources-Resources-CSS-egliseInfoLinkActionItem\" href=\"/contact/info=Chapelle%20:%20Chapelle%20Notre-Dame%20de%20la%20M%C3%A9daille%20Miraculeuse%20(filles%20de%20la%20charit%C3%A9)%0ACommunaut%C3%A9%20religieuse%20:%20Filles%20de%20la%20Charit%C3%A9%0AParoisse%20:%20Saint-Fran%C3%A7ois-Xavier%0A140%20rue%20du%20Bac%0A75007%20Paris,%20fr%0A%20https://messes.info/lieu/75/paris-07/chapelle-de-la-medaille-miraculeuse%20le%20dim.%205%20avr.%202026%20%C3%A0%2008h00%0A%20P%C3%A2ques%0A,%20P%C3%A2ques,%20Fran%C",
+      "nextSiblingText": "Signalez une erreur",
+      "previousSiblingText": null,
+      "parentText": "Horaires de la paroisse  Signalez une erreur"
+    },
+    {
+      "href": "/communaute/pa/75/notre-dame-de-paris",
+      "text": "Horaires de la paroisse",
+      "linkClasses": [
+        "cef-kephas-client-resources-Resources-CSS-egliseInfoIconInformation",
+        "cef-kephas-client-resources-Resources-CSS-egliseInfoLinkActionItem"
+      ],
+      "linkId": "gwt-uid-114:community",
+      "parentTag": "DIV",
+      "parentClasses": [
+        "cef-kephas-client-resources-Resources-CSS-egliseInfoCellListActions",
+        "egliseinfo-celebrationtime-actions",
+        "noprint"
+      ],
+      "parentId": null,
+      "parentHTML": "<div class=\"cef-kephas-client-resources-Resources-CSS-egliseInfoCellListActions egliseinfo-celebrationtime-actions noprint\" gwtuirendered=\"gwt-uid-114\"><a class=\"cef-kephas-client-resources-Resources-CSS-egliseInfoIconInformation cef-kephas-client-resources-Resources-CSS-egliseInfoLinkActionItem\" href=\"/communaute/pa/75/notre-dame-de-paris\" id=\"gwt-uid-114:community\">Horaires de la paroisse</a>  <a class=\"cef-kephas-client-resources-Resources-CSS-egliseInfoIconEmail cef-kephas-client-resources-Resources-CSS-egliseInfoLinkActionItem\" href=\"/contact/info=Cath%C3%A9drale%20:%20Notre-Dame%20de%20Paris%20(Cath%C3%A9drale)%0ACath%C3%A9drale%20:%20Notre-Dame%20de%20Paris%0AParoisse%20:%20Saint-Louis%20en%20l'%C3%8Ele%0A6%20parvis%20Notre-Dame%20%E2%80%93%20Place%20Jean-Paul%20II%0A75004%20Paris,%20fr%0A%20https://messes.info/lieu/75/paris-04/cathedrale-notre-dame-de-paris%20le%20dim.%205%20avr.%202026%20%C3%A0%2008h30%0A%20P%C3%A2ques%0A,%20P%C3%A2ques,%20;communityId=pa/75/notre-dame-de-pari",
+      "nextSiblingText": "Signalez une erreur",
+      "previousSiblingText": null,
+      "parentText": "Horaires de la paroisse  Signalez une erreur"
+    },
+    {
+      "href": "/communaute/pa/75/notre-dame-du-travail",
+      "text": "Horaires de la paroisse",
+      "linkClasses": [
+        "cef-kephas-client-resources-Resources-CSS-egliseInfoIconInformation",
+        "cef-kephas-client-resources-Resources-CSS-egliseInfoLinkActionItem"
+      ],
+      "linkId": "gwt-uid-115:community",
+      "parentTag": "DIV",
+      "parentClasses": [
+        "cef-kephas-client-resources-Resources-CSS-egliseInfoCellListActions",
+        "egliseinfo-celebrationtime-actions",
+        "noprint"
+      ],
+      "parentId": null,
+      "parentHTML": "<div class=\"cef-kephas-client-resources-Resources-CSS-egliseInfoCellListActions egliseinfo-celebrationtime-actions noprint\" gwtuirendered=\"gwt-uid-115\"><a class=\"cef-kephas-client-resources-Resources-CSS-egliseInfoIconInformation cef-kephas-client-resources-Resources-CSS-egliseInfoLinkActionItem\" href=\"/communaute/pa/75/notre-dame-du-travail\" id=\"gwt-uid-115:community\">Horaires de la paroisse</a>  <a class=\"cef-kephas-client-resources-Resources-CSS-egliseInfoIconEmail cef-kephas-client-resources-Resources-CSS-egliseInfoLinkActionItem\" href=\"/contact/info=%C3%89glise%20paroissiale%20:%20Notre-Dame%20du%20Travail%0AParoisse%20:%20Notre-Dame%20du%20Travail%0ADioc%C3%A8se%20:%20Paris%0A59%20rue%20Vercing%C3%A9torix%0A75014%20Paris,%20fr%0A%20https://messes.info/lieu/75/paris-14/notre-dame-du-travail%20le%20dim.%205%20avr.%202026%20%C3%A0%2009h00%0A%20P%C3%A2ques%0A,%20P%C3%A2ques,%20Portugais,%20;communityId=pa/75/notre-dame-du-travail\" id=\"gwt-uid-115:contactCommunity\">Signalez une erreur",
+      "nextSiblingText": "Signalez une erreur",
+      "previousSiblingText": null,
+      "parentText": "Horaires de la paroisse  Signalez une erreur"
+    },
+    {
+      "href": "/communaute/pa/75/notre-dame-de-grace-de-passy",
+      "text": "Horaires de la paroisse",
+      "linkClasses": [
+        "cef-kephas-client-resources-Resources-CSS-egliseInfoIconInformation",
+        "cef-kephas-client-resources-Resources-CSS-egliseInfoLinkActionItem"
+      ],
+      "linkId": "gwt-uid-116:community",
+      "parentTag": "DIV",
+      "parentClasses": [
+        "cef-kephas-client-resources-Resources-CSS-egliseInfoCellListActions",
+        "egliseinfo-celebrationtime-actions",
+        "noprint"
+      ],
+      "parentId": null,
+      "parentHTML": "<div class=\"cef-kephas-client-resources-Resources-CSS-egliseInfoCellListActions egliseinfo-celebrationtime-actions noprint\" gwtuirendered=\"gwt-uid-116\"><a class=\"cef-kephas-client-resources-Resources-CSS-egliseInfoIconInformation cef-kephas-client-resources-Resources-CSS-egliseInfoLinkActionItem\" href=\"/communaute/pa/75/notre-dame-de-grace-de-passy\" id=\"gwt-uid-116:community\">Horaires de la paroisse</a>  <a class=\"cef-kephas-client-resources-Resources-CSS-egliseInfoIconEmail cef-kephas-client-resources-Resources-CSS-egliseInfoLinkActionItem\" href=\"/contact/info=%C3%89glise%20paroissiale%20:%20Notre-Dame%20de%20Gr%C3%A2ce%20de%20Passy%0AParoisse%20:%20Notre-Dame%20de%20Gr%C3%A2ce%20de%20Passy%0ADioc%C3%A8se%20:%20Paris%0A8-10%20rue%20de%20l'Annonciation%0A75016%20Paris,%20fr%0A%20https://messes.info/lieu/75/paris-16/notre-dame-de-grace-de-passy%20le%20dim.%205%20avr.%202026%20%C3%A0%2009h00%0A%20P%C3%A2ques%0A,%20P%C3%A2ques,%20;communityId=pa/75/notre-dame-de-grace-de-passy\" id=\"gwt-ui",
+      "nextSiblingText": "Signalez une erreur",
+      "previousSiblingText": null,
+      "parentText": "Horaires de la paroisse  Signalez une erreur"
+    },
+    {
+      "href": "/communaute/pa/75/notre-dame-d-auteuil",
+      "text": "Horaires de la paroisse",
+      "linkClasses": [
+        "cef-kephas-client-resources-Resources-CSS-egliseInfoIconInformation",
+        "cef-kephas-client-resources-Resources-CSS-egliseInfoLinkActionItem"
+      ],
+      "linkId": "gwt-uid-117:community",
+      "parentTag": "DIV",
+      "parentClasses": [
+        "cef-kephas-client-resources-Resources-CSS-egliseInfoCellListActions",
+        "egliseinfo-celebrationtime-actions",
+        "noprint"
+      ],
+      "parentId": null,
+      "parentHTML": "<div class=\"cef-kephas-client-resources-Resources-CSS-egliseInfoCellListActions egliseinfo-celebrationtime-actions noprint\" gwtuirendered=\"gwt-uid-117\"><a class=\"cef-kephas-client-resources-Resources-CSS-egliseInfoIconInformation cef-kephas-client-resources-Resources-CSS-egliseInfoLinkActionItem\" href=\"/communaute/pa/75/notre-dame-d-auteuil\" id=\"gwt-uid-117:community\">Horaires de la paroisse</a>  <a class=\"cef-kephas-client-resources-Resources-CSS-egliseInfoIconEmail cef-kephas-client-resources-Resources-CSS-egliseInfoLinkActionItem\" href=\"/contact/info=%C3%89glise%20paroissiale%20:%20Notre-Dame%20d'Auteuil%0AParoisse%20:%20Notre-Dame%20d'Auteuil%0ADioc%C3%A8se%20:%20Paris%0APlace%20de%20l'%C3%A9glise-d'Auteuil%0A75016%20Paris,%20fr%0A%20https://messes.info/lieu/75/paris-16/notre-dame-d-auteuil%20le%20dim.%205%20avr.%202026%20%C3%A0%2009h00%0A%20P%C3%A2ques%0A,%20P%C3%A2ques,%20;communityId=pa/75/notre-dame-d-auteuil\" id=\"gwt-uid-117:contactCommunity\">Signalez une erreur</a></div>",
+      "nextSiblingText": "Signalez une erreur",
+      "previousSiblingText": null,
+      "parentText": "Horaires de la paroisse  Signalez une erreur"
+    },
+    {
+      "href": "/communaute/pa/75/communaute-religieuse-carmel-de-montmartre",
+      "text": "Horaires de la paroisse",
+      "linkClasses": [
+        "cef-kephas-client-resources-Resources-CSS-egliseInfoIconInformation",
+        "cef-kephas-client-resources-Resources-CSS-egliseInfoLinkActionItem"
+      ],
+      "linkId": "gwt-uid-118:community",
+      "parentTag": "DIV",
+      "parentClasses": [
+        "cef-kephas-client-resources-Resources-CSS-egliseInfoCellListActions",
+        "egliseinfo-celebrationtime-actions",
+        "noprint"
+      ],
+      "parentId": null,
+      "parentHTML": "<div class=\"cef-kephas-client-resources-Resources-CSS-egliseInfoCellListActions egliseinfo-celebrationtime-actions noprint\" gwtuirendered=\"gwt-uid-118\"><a class=\"cef-kephas-client-resources-Resources-CSS-egliseInfoIconInformation cef-kephas-client-resources-Resources-CSS-egliseInfoLinkActionItem\" href=\"/communaute/pa/75/communaute-religieuse-carmel-de-montmartre\" id=\"gwt-uid-118:community\">Horaires de la paroisse</a>  <a class=\"cef-kephas-client-resources-Resources-CSS-egliseInfoIconEmail cef-kephas-client-resources-Resources-CSS-egliseInfoLinkActionItem\" href=\"/contact/info=Carmel%20:%20Carmel%20de%20Montmartre%20(carm%C3%A9lites)%0ACommunaut%C3%A9%20religieuse%20:%20Communaut%C3%A9%20religieuse%20Carmel%20de%20Montmartre%0AParoisse%20:%20Saint-Pierre%20de%20Montmartre%0A34%20rue%20du%20Chevalier%20de%20La%20Barre%0A75018%20Paris,%20fr%0A%20https://messes.info/lieu/75/paris-18/carmel-de-montmartre-carmelites%20le%20dim.%205%20avr.%202026%20%C3%A0%2009h00%0A%20P%C3%A2ques%0A,%20P%C3%A2",
+      "nextSiblingText": "Signalez une erreur",
+      "previousSiblingText": null,
+      "parentText": "Horaires de la paroisse  Signalez une erreur"
+    },
+    {
+      "href": "/communaute/pa/75/saint-ambroise",
+      "text": "Horaires de la paroisse",
+      "linkClasses": [
+        "cef-kephas-client-resources-Resources-CSS-egliseInfoIconInformation",
+        "cef-kephas-client-resources-Resources-CSS-egliseInfoLinkActionItem"
+      ],
+      "linkId": "gwt-uid-119:community",
+      "parentTag": "DIV",
+      "parentClasses": [
+        "cef-kephas-client-resources-Resources-CSS-egliseInfoCellListActions",
+        "egliseinfo-celebrationtime-actions",
+        "noprint"
+      ],
+      "parentId": null,
+      "parentHTML": "<div class=\"cef-kephas-client-resources-Resources-CSS-egliseInfoCellListActions egliseinfo-celebrationtime-actions noprint\" gwtuirendered=\"gwt-uid-119\"><a class=\"cef-kephas-client-resources-Resources-CSS-egliseInfoIconInformation cef-kephas-client-resources-Resources-CSS-egliseInfoLinkActionItem\" href=\"/communaute/pa/75/saint-ambroise\" id=\"gwt-uid-119:community\">Horaires de la paroisse</a>  <a class=\"cef-kephas-client-resources-Resources-CSS-egliseInfoIconEmail cef-kephas-client-resources-Resources-CSS-egliseInfoLinkActionItem\" href=\"/contact/info=%C3%89glise%20paroissiale%20:%20Saint-Ambroise%0AParoisse%20:%20Saint-Ambroise%0ADioc%C3%A8se%20:%20Paris%0A71%20bis%20boulevard%20Voltaire%0A75011%20Paris,%20fr%0A%20https://messes.info/lieu/75/paris-11/saint-ambroise%20le%20dim.%205%20avr.%202026%20%C3%A0%2009h00%0A%20P%C3%A2ques%0A,%20P%C3%A2ques,%20;communityId=pa/75/saint-ambroise\" id=\"gwt-uid-119:contactCommunity\">Signalez une erreur</a></div>",
+      "nextSiblingText": "Signalez une erreur",
+      "previousSiblingText": null,
+      "parentText": "Horaires de la paroisse  Signalez une erreur"
+    },
+    {
+      "href": "/communaute/pa/75/mission-portugaise",
+      "text": "Horaires de la paroisse",
+      "linkClasses": [
+        "cef-kephas-client-resources-Resources-CSS-egliseInfoIconInformation",
+        "cef-kephas-client-resources-Resources-CSS-egliseInfoLinkActionItem"
+      ],
+      "linkId": "gwt-uid-120:community",
+      "parentTag": "DIV",
+      "parentClasses": [
+        "cef-kephas-client-resources-Resources-CSS-egliseInfoCellListActions",
+        "egliseinfo-celebrationtime-actions",
+        "noprint"
+      ],
+      "parentId": null,
+      "parentHTML": "<div class=\"cef-kephas-client-resources-Resources-CSS-egliseInfoCellListActions egliseinfo-celebrationtime-actions noprint\" gwtuirendered=\"gwt-uid-120\"><a class=\"cef-kephas-client-resources-Resources-CSS-egliseInfoIconInformation cef-kephas-client-resources-Resources-CSS-egliseInfoLinkActionItem\" href=\"/communaute/pa/75/mission-portugaise\" id=\"gwt-uid-120:community\">Horaires de la paroisse</a>  <a class=\"cef-kephas-client-resources-Resources-CSS-egliseInfoIconEmail cef-kephas-client-resources-Resources-CSS-egliseInfoLinkActionItem\" href=\"/contact/info=%C3%89glise%20:%20Notre-Dame%20de%20Fatima%20-%20Marie-M%C3%A9diatrice%0AAum%C3%B4nerie%20et%20communaut%C3%A9%20%C3%A9trang%C3%A8re%20:%20Mission%20portugaise%0AParoisse%20:%20Notre-Dame%20des%20Otages%0A48%20bis%20boulevard%20S%C3%A9rurier%0A75019%20Paris,%20fr%0A%20https://messes.info/lieu/75/paris-20/notre-dame-de-fatima-marie-mediatrice%20le%20dim.%205%20avr.%202026%20%C3%A0%2009h00%0A%20P%C3%A2ques%0A,%20P%C3%A2ques,%20Fran%C3%A7ais",
+      "nextSiblingText": "Signalez une erreur",
+      "previousSiblingText": null,
+      "parentText": "Horaires de la paroisse  Signalez une erreur"
+    },
+    {
+      "href": "/communaute/pa/75/saint-bernard-de-la-chapelle",
+      "text": "Horaires de la paroisse",
+      "linkClasses": [
+        "cef-kephas-client-resources-Resources-CSS-egliseInfoIconInformation",
+        "cef-kephas-client-resources-Resources-CSS-egliseInfoLinkActionItem"
+      ],
+      "linkId": "gwt-uid-121:community",
+      "parentTag": "DIV",
+      "parentClasses": [
+        "cef-kephas-client-resources-Resources-CSS-egliseInfoCellListActions",
+        "egliseinfo-celebrationtime-actions",
+        "noprint"
+      ],
+      "parentId": null,
+      "parentHTML": "<div class=\"cef-kephas-client-resources-Resources-CSS-egliseInfoCellListActions egliseinfo-celebrationtime-actions noprint\" gwtuirendered=\"gwt-uid-121\"><a class=\"cef-kephas-client-resources-Resources-CSS-egliseInfoIconInformation cef-kephas-client-resources-Resources-CSS-egliseInfoLinkActionItem\" href=\"/communaute/pa/75/saint-bernard-de-la-chapelle\" id=\"gwt-uid-121:community\">Horaires de la paroisse</a>  <a class=\"cef-kephas-client-resources-Resources-CSS-egliseInfoIconEmail cef-kephas-client-resources-Resources-CSS-egliseInfoLinkActionItem\" href=\"/contact/info=%C3%89glise%20paroissiale%20:%20%C3%89glise%20paroissiale%20Saint-Bernard%20de%20La%20Chapelle%0AParoisse%20:%20Saint-Bernard%20de%20la%20Chapelle%0ADioc%C3%A8se%20:%20Paris%0A11%20rue%20Affre%0A75018%20Paris,%20fr%0A%20https://messes.info/lieu/75/paris-18/saint-bernard-de-la-chapelle%20le%20dim.%205%20avr.%202026%20%C3%A0%2009h30%0A%20P%C3%A2ques%0A,%20P%C3%A2ques,%20;communityId=pa/75/saint-bernard-de-la-chapelle\" id=\"gwt-uid-",
+      "nextSiblingText": "Signalez une erreur",
+      "previousSiblingText": null,
+      "parentText": "Horaires de la paroisse  Signalez une erreur"
+    },
+    {
+      "href": "/communaute/pa/75/notre-dame-des-champs",
+      "text": "Horaires de la paroisse",
+      "linkClasses": [
+        "cef-kephas-client-resources-Resources-CSS-egliseInfoIconInformation",
+        "cef-kephas-client-resources-Resources-CSS-egliseInfoLinkActionItem"
+      ],
+      "linkId": "gwt-uid-122:community",
+      "parentTag": "DIV",
+      "parentClasses": [
+        "cef-kephas-client-resources-Resources-CSS-egliseInfoCellListActions",
+        "egliseinfo-celebrationtime-actions",
+        "noprint"
+      ],
+      "parentId": null,
+      "parentHTML": "<div class=\"cef-kephas-client-resources-Resources-CSS-egliseInfoCellListActions egliseinfo-celebrationtime-actions noprint\" gwtuirendered=\"gwt-uid-122\"><a class=\"cef-kephas-client-resources-Resources-CSS-egliseInfoIconInformation cef-kephas-client-resources-Resources-CSS-egliseInfoLinkActionItem\" href=\"/communaute/pa/75/notre-dame-des-champs\" id=\"gwt-uid-122:community\">Horaires de la paroisse</a>  <a class=\"cef-kephas-client-resources-Resources-CSS-egliseInfoIconEmail cef-kephas-client-resources-Resources-CSS-egliseInfoLinkActionItem\" href=\"/contact/info=%C3%89glise%20paroissiale%20:%20Notre-Dame%20des%20Champs%0AParoisse%20:%20Notre-Dame%20des%20Champs%0ADioc%C3%A8se%20:%20Paris%0A91%20boulevard%20du%20Montparnasse%0A75006%20Paris,%20fr%0A%20https://messes.info/lieu/75/paris-06/notre-dame-des-champs%20le%20dim.%205%20avr.%202026%20%C3%A0%2009h30%0A%20P%C3%A2ques%0A,%20P%C3%A2ques,%20;communityId=pa/75/notre-dame-des-champs\" id=\"gwt-uid-122:contactCommunity\">Signalez une erreur</a></di",
+      "nextSiblingText": "Signalez une erreur",
+      "previousSiblingText": null,
+      "parentText": "Horaires de la paroisse  Signalez une erreur"
+    },
+    {
+      "href": "/communaute/pa/75/notre-dame-de-la-gare",
+      "text": "Horaires de la paroisse",
+      "linkClasses": [
+        "cef-kephas-client-resources-Resources-CSS-egliseInfoIconInformation",
+        "cef-kephas-client-resources-Resources-CSS-egliseInfoLinkActionItem"
+      ],
+      "linkId": "gwt-uid-123:community",
+      "parentTag": "DIV",
+      "parentClasses": [
+        "cef-kephas-client-resources-Resources-CSS-egliseInfoCellListActions",
+        "egliseinfo-celebrationtime-actions",
+        "noprint"
+      ],
+      "parentId": null,
+      "parentHTML": "<div class=\"cef-kephas-client-resources-Resources-CSS-egliseInfoCellListActions egliseinfo-celebrationtime-actions noprint\" gwtuirendered=\"gwt-uid-123\"><a class=\"cef-kephas-client-resources-Resources-CSS-egliseInfoIconInformation cef-kephas-client-resources-Resources-CSS-egliseInfoLinkActionItem\" href=\"/communaute/pa/75/notre-dame-de-la-gare\" id=\"gwt-uid-123:community\">Horaires de la paroisse</a>  <a class=\"cef-kephas-client-resources-Resources-CSS-egliseInfoIconEmail cef-kephas-client-resources-Resources-CSS-egliseInfoLinkActionItem\" href=\"/contact/info=%C3%89glise%20paroissiale%20:%20Notre-Dame%20de%20La-Gare%20(Jeanne%20d'Arc)%0AParoisse%20:%20Notre-Dame%20de%20la%20Gare%0ADioc%C3%A8se%20:%20Paris%0A2%20place%20Jeanne%20d'Arc%0A75013%20Paris,%20fr%0A%20https://messes.info/lieu/75/paris-13/notre-dame-de-la-gare%20le%20dim.%205%20avr.%202026%20%C3%A0%2009h30%0A%20P%C3%A2ques%0A,%20P%C3%A2ques;communityId=pa/75/notre-dame-de-la-gare\" id=\"gwt-uid-123:contactCommunity\">Signalez une erreu",
+      "nextSiblingText": "Signalez une erreur",
+      "previousSiblingText": null,
+      "parentText": "Horaires de la paroisse  Signalez une erreur"
+    },
+    {
+      "href": "/communaute/pa/75/notre-dame-de-clignancourt",
+      "text": "Horaires de la paroisse",
+      "linkClasses": [
+        "cef-kephas-client-resources-Resources-CSS-egliseInfoIconInformation",
+        "cef-kephas-client-resources-Resources-CSS-egliseInfoLinkActionItem"
+      ],
+      "linkId": "gwt-uid-124:community",
+      "parentTag": "DIV",
+      "parentClasses": [
+        "cef-kephas-client-resources-Resources-CSS-egliseInfoCellListActions",
+        "egliseinfo-celebrationtime-actions",
+        "noprint"
+      ],
+      "parentId": null,
+      "parentHTML": "<div class=\"cef-kephas-client-resources-Resources-CSS-egliseInfoCellListActions egliseinfo-celebrationtime-actions noprint\" gwtuirendered=\"gwt-uid-124\"><a class=\"cef-kephas-client-resources-Resources-CSS-egliseInfoIconInformation cef-kephas-client-resources-Resources-CSS-egliseInfoLinkActionItem\" href=\"/communaute/pa/75/notre-dame-de-clignancourt\" id=\"gwt-uid-124:community\">Horaires de la paroisse</a>  <a class=\"cef-kephas-client-resources-Resources-CSS-egliseInfoIconEmail cef-kephas-client-resources-Resources-CSS-egliseInfoLinkActionItem\" href=\"/contact/info=%C3%89glise%20paroissiale%20:%20Notre-Dame%20de%20Clignancourt%0AParoisse%20:%20Notre-Dame%20de%20Clignancourt%0ADioc%C3%A8se%20:%20Paris%0A2%20place%20Jules-Joffrin%0A75018%20Paris,%20fr%0A%20https://messes.info/lieu/75/paris-18/notre-dame-de-clignancourt%20le%20dim.%205%20avr.%202026%20%C3%A0%2009h30%0A%20P%C3%A2ques%0A,%20P%C3%A2ques,%20;communityId=pa/75/notre-dame-de-clignancourt\" id=\"gwt-uid-124:contactCommunity\">Signalez un",
+      "nextSiblingText": "Signalez une erreur",
+      "previousSiblingText": null,
+      "parentText": "Horaires de la paroisse  Signalez une erreur"
+    },
+    {
+      "href": "/communaute/pa/75/filles-de-la-charite",
+      "text": "Horaires de la paroisse",
+      "linkClasses": [
+        "cef-kephas-client-resources-Resources-CSS-egliseInfoIconInformation",
+        "cef-kephas-client-resources-Resources-CSS-egliseInfoLinkActionItem"
+      ],
+      "linkId": "gwt-uid-125:community",
+      "parentTag": "DIV",
+      "parentClasses": [
+        "cef-kephas-client-resources-Resources-CSS-egliseInfoCellListActions",
+        "egliseinfo-celebrationtime-actions",
+        "noprint"
+      ],
+      "parentId": null,
+      "parentHTML": "<div class=\"cef-kephas-client-resources-Resources-CSS-egliseInfoCellListActions egliseinfo-celebrationtime-actions noprint\" gwtuirendered=\"gwt-uid-125\"><a class=\"cef-kephas-client-resources-Resources-CSS-egliseInfoIconInformation cef-kephas-client-resources-Resources-CSS-egliseInfoLinkActionItem\" href=\"/communaute/pa/75/filles-de-la-charite\" id=\"gwt-uid-125:community\">Horaires de la paroisse</a>  <a class=\"cef-kephas-client-resources-Resources-CSS-egliseInfoIconEmail cef-kephas-client-resources-Resources-CSS-egliseInfoLinkActionItem\" href=\"/contact/info=Chapelle%20:%20Chapelle%20Notre-Dame%20de%20la%20M%C3%A9daille%20Miraculeuse%20(filles%20de%20la%20charit%C3%A9)%0ACommunaut%C3%A9%20religieuse%20:%20Filles%20de%20la%20Charit%C3%A9%0AParoisse%20:%20Saint-Fran%C3%A7ois-Xavier%0A140%20rue%20du%20Bac%0A75007%20Paris,%20fr%0A%20https://messes.info/lieu/75/paris-07/chapelle-de-la-medaille-miraculeuse%20le%20dim.%205%20avr.%202026%20%C3%A0%2010h00%0A%20P%C3%A2ques%0A,%20P%C3%A2ques,%20Fran%C",
+      "nextSiblingText": "Signalez une erreur",
+      "previousSiblingText": null,
+      "parentText": "Horaires de la paroisse  Signalez une erreur"
+    },
+    {
+      "href": "/communaute/pa/75/religieux-de-saint-vincent-de-paul",
+      "text": "Horaires de la paroisse",
+      "linkClasses": [
+        "cef-kephas-client-resources-Resources-CSS-egliseInfoIconInformation",
+        "cef-kephas-client-resources-Resources-CSS-egliseInfoLinkActionItem"
+      ],
+      "linkId": "gwt-uid-126:community",
+      "parentTag": "DIV",
+      "parentClasses": [
+        "cef-kephas-client-resources-Resources-CSS-egliseInfoCellListActions",
+        "egliseinfo-celebrationtime-actions",
+        "noprint"
+      ],
+      "parentId": null,
+      "parentHTML": "<div class=\"cef-kephas-client-resources-Resources-CSS-egliseInfoCellListActions egliseinfo-celebrationtime-actions noprint\" gwtuirendered=\"gwt-uid-126\"><a class=\"cef-kephas-client-resources-Resources-CSS-egliseInfoIconInformation cef-kephas-client-resources-Resources-CSS-egliseInfoLinkActionItem\" href=\"/communaute/pa/75/religieux-de-saint-vincent-de-paul\" id=\"gwt-uid-126:community\">Horaires de la paroisse</a>  <a class=\"cef-kephas-client-resources-Resources-CSS-egliseInfoIconEmail cef-kephas-client-resources-Resources-CSS-egliseInfoLinkActionItem\" href=\"/contact/info=Chapelle%20:%20Chapelle%20Notre-Dame%20de%20Gr%C3%A2ce%20(religieux%20de%20Saint-Vincent-de-Paul)%0ACommunaut%C3%A9%20religieuse%20:%20Religieux%20de%20Saint-Vincent-de-Paul%0AParoisse%20:%20Saint-Jean-Baptiste%20de%20Grenelle%0A4%20rue%20Fondary%0A75015%20Paris,%20fr%0A%20https://messes.info/lieu/75/paris-15/notre-dame-de-grace%20le%20dim.%205%20avr.%202026%20%C3%A0%2010h00%0A%20P%C3%A2ques%0A,%20P%C3%A2ques,%20;community",
+      "nextSiblingText": "Signalez une erreur",
+      "previousSiblingText": null,
+      "parentText": "Horaires de la paroisse  Signalez une erreur"
+    },
+    {
+      "href": "/communaute/pa/75/immaculee-conception",
+      "text": "Horaires de la paroisse",
+      "linkClasses": [
+        "cef-kephas-client-resources-Resources-CSS-egliseInfoIconInformation",
+        "cef-kephas-client-resources-Resources-CSS-egliseInfoLinkActionItem"
+      ],
+      "linkId": "gwt-uid-127:community",
+      "parentTag": "DIV",
+      "parentClasses": [
+        "cef-kephas-client-resources-Resources-CSS-egliseInfoCellListActions",
+        "egliseinfo-celebrationtime-actions",
+        "noprint"
+      ],
+      "parentId": null,
+      "parentHTML": "<div class=\"cef-kephas-client-resources-Resources-CSS-egliseInfoCellListActions egliseinfo-celebrationtime-actions noprint\" gwtuirendered=\"gwt-uid-127\"><a class=\"cef-kephas-client-resources-Resources-CSS-egliseInfoIconInformation cef-kephas-client-resources-Resources-CSS-egliseInfoLinkActionItem\" href=\"/communaute/pa/75/immaculee-conception\" id=\"gwt-uid-127:community\">Horaires de la paroisse</a>  <a class=\"cef-kephas-client-resources-Resources-CSS-egliseInfoIconEmail cef-kephas-client-resources-Resources-CSS-egliseInfoLinkActionItem\" href=\"/contact/info=%C3%89glise%20paroissiale%20:%20Immacul%C3%A9e-Conception%0AParoisse%20:%20Immacul%C3%A9e-Conception%0ADioc%C3%A8se%20:%20Paris%0A34%20rue%20du%20Rendez-vous%0A75012%20Paris,%20fr%0A%20https://messes.info/lieu/75/paris-12/immaculee-conception%20le%20dim.%205%20avr.%202026%20%C3%A0%2010h00%0A%20P%C3%A2ques%0A,%20P%C3%A2ques,%20;communityId=pa/75/immaculee-conception\" id=\"gwt-uid-127:contactCommunity\">Signalez une erreur</a></div>",
+      "nextSiblingText": "Signalez une erreur",
+      "previousSiblingText": null,
+      "parentText": "Horaires de la paroisse  Signalez une erreur"
+    },
+    {
+      "href": "/communaute/pa/75/chapelle-et-oeuvres-notre-dame-du-lys",
+      "text": "Horaires de la paroisse",
+      "linkClasses": [
+        "cef-kephas-client-resources-Resources-CSS-egliseInfoIconInformation",
+        "cef-kephas-client-resources-Resources-CSS-egliseInfoLinkActionItem"
+      ],
+      "linkId": "gwt-uid-128:community",
+      "parentTag": "DIV",
+      "parentClasses": [
+        "cef-kephas-client-resources-Resources-CSS-egliseInfoCellListActions",
+        "egliseinfo-celebrationtime-actions",
+        "noprint"
+      ],
+      "parentId": null,
+      "parentHTML": "<div class=\"cef-kephas-client-resources-Resources-CSS-egliseInfoCellListActions egliseinfo-celebrationtime-actions noprint\" gwtuirendered=\"gwt-uid-128\"><a class=\"cef-kephas-client-resources-Resources-CSS-egliseInfoIconInformation cef-kephas-client-resources-Resources-CSS-egliseInfoLinkActionItem\" href=\"/communaute/pa/75/chapelle-et-oeuvres-notre-dame-du-lys\" id=\"gwt-uid-128:community\">Horaires de la paroisse</a>  <a class=\"cef-kephas-client-resources-Resources-CSS-egliseInfoIconEmail cef-kephas-client-resources-Resources-CSS-egliseInfoLinkActionItem\" href=\"/contact/info=Chapelle%20:%20Notre-Dame%20du%20Lys%0AChapelle%20:%20Chapelle%20et%20%C5%93uvres%20Notre-Dame%20du%20Lys%0AParoisse%20:%20Saint-Jean-Baptiste%20de%20La%20Salle%0A7%20rue%20Blomet%0A75015%20Paris,%20fr%0A%20https://messes.info/lieu/75/paris-15/notre-dame-du-lys%20le%20dim.%205%20avr.%202026%20%C3%A0%2010h00%0A%20P%C3%A2ques%0A,%20P%C3%A2ques;communityId=pa/75/chapelle-et-oeuvres-notre-dame-du-lys\" id=\"gwt-uid-128:contac",
+      "nextSiblingText": "Signalez une erreur",
+      "previousSiblingText": null,
+      "parentText": "Horaires de la paroisse  Signalez une erreur"
+    },
+    {
+      "href": "/communaute/pa/75/notre-dame-de-nazareth",
+      "text": "Horaires de la paroisse",
+      "linkClasses": [
+        "cef-kephas-client-resources-Resources-CSS-egliseInfoIconInformation",
+        "cef-kephas-client-resources-Resources-CSS-egliseInfoLinkActionItem"
+      ],
+      "linkId": "gwt-uid-129:community",
+      "parentTag": "DIV",
+      "parentClasses": [
+        "cef-kephas-client-resources-Resources-CSS-egliseInfoCellListActions",
+        "egliseinfo-celebrationtime-actions",
+        "noprint"
+      ],
+      "parentId": null,
+      "parentHTML": "<div class=\"cef-kephas-client-resources-Resources-CSS-egliseInfoCellListActions egliseinfo-celebrationtime-actions noprint\" gwtuirendered=\"gwt-uid-129\"><a class=\"cef-kephas-client-resources-Resources-CSS-egliseInfoIconInformation cef-kephas-client-resources-Resources-CSS-egliseInfoLinkActionItem\" href=\"/communaute/pa/75/notre-dame-de-nazareth\" id=\"gwt-uid-129:community\">Horaires de la paroisse</a>  <a class=\"cef-kephas-client-resources-Resources-CSS-egliseInfoIconEmail cef-kephas-client-resources-Resources-CSS-egliseInfoLinkActionItem\" href=\"/contact/info=%C3%89glise%20paroissiale%20:%20Notre-Dame%20de%20Nazareth%0AParoisse%20:%20Notre-Dame%20de%20Nazareth%0ADioc%C3%A8se%20:%20Paris%0A351%20rue%20Lecourbe%0A75015%20Paris,%20fr%0A%20https://messes.info/lieu/75/paris-15/notre-dame-de-nazareth%20le%20dim.%205%20avr.%202026%20%C3%A0%2010h00%0A%20P%C3%A2ques%0A,%20P%C3%A2ques,%20;communityId=pa/75/notre-dame-de-nazareth\" id=\"gwt-uid-129:contactCommunity\">Signalez une erreur</a></div>",
+      "nextSiblingText": "Signalez une erreur",
+      "previousSiblingText": null,
+      "parentText": "Horaires de la paroisse  Signalez une erreur"
+    },
+    {
+      "href": "/communaute/pa/75/notre-dame-de-paris",
+      "text": "Horaires de la paroisse",
+      "linkClasses": [
+        "cef-kephas-client-resources-Resources-CSS-egliseInfoIconInformation",
+        "cef-kephas-client-resources-Resources-CSS-egliseInfoLinkActionItem"
+      ],
+      "linkId": "gwt-uid-130:community",
+      "parentTag": "DIV",
+      "parentClasses": [
+        "cef-kephas-client-resources-Resources-CSS-egliseInfoCellListActions",
+        "egliseinfo-celebrationtime-actions",
+        "noprint"
+      ],
+      "parentId": null,
+      "parentHTML": "<div class=\"cef-kephas-client-resources-Resources-CSS-egliseInfoCellListActions egliseinfo-celebrationtime-actions noprint\" gwtuirendered=\"gwt-uid-130\"><a class=\"cef-kephas-client-resources-Resources-CSS-egliseInfoIconInformation cef-kephas-client-resources-Resources-CSS-egliseInfoLinkActionItem\" href=\"/communaute/pa/75/notre-dame-de-paris\" id=\"gwt-uid-130:community\">Horaires de la paroisse</a>  <a class=\"cef-kephas-client-resources-Resources-CSS-egliseInfoIconEmail cef-kephas-client-resources-Resources-CSS-egliseInfoLinkActionItem\" href=\"/contact/info=Cath%C3%A9drale%20:%20Notre-Dame%20de%20Paris%20(Cath%C3%A9drale)%0ACath%C3%A9drale%20:%20Notre-Dame%20de%20Paris%0AParoisse%20:%20Saint-Louis%20en%20l'%C3%8Ele%0A6%20parvis%20Notre-Dame%20%E2%80%93%20Place%20Jean-Paul%20II%0A75004%20Paris,%20fr%0A%20https://messes.info/lieu/75/paris-04/cathedrale-notre-dame-de-paris%20le%20dim.%205%20avr.%202026%20%C3%A0%2010h00%0A%20P%C3%A2ques%0A,%20P%C3%A2ques;communityId=pa/75/notre-dame-de-paris\" i",
+      "nextSiblingText": "Signalez une erreur",
+      "previousSiblingText": null,
+      "parentText": "Horaires de la paroisse  Signalez une erreur"
+    },
+    {
+      "href": "/communaute/pa/75/coeur-eucharistique-de-jesus",
+      "text": "Horaires de la paroisse",
+      "linkClasses": [
+        "cef-kephas-client-resources-Resources-CSS-egliseInfoIconInformation",
+        "cef-kephas-client-resources-Resources-CSS-egliseInfoLinkActionItem"
+      ],
+      "linkId": "gwt-uid-131:community",
+      "parentTag": "DIV",
+      "parentClasses": [
+        "cef-kephas-client-resources-Resources-CSS-egliseInfoCellListActions",
+        "egliseinfo-celebrationtime-actions",
+        "noprint"
+      ],
+      "parentId": null,
+      "parentHTML": "<div class=\"cef-kephas-client-resources-Resources-CSS-egliseInfoCellListActions egliseinfo-celebrationtime-actions noprint\" gwtuirendered=\"gwt-uid-131\"><a class=\"cef-kephas-client-resources-Resources-CSS-egliseInfoIconInformation cef-kephas-client-resources-Resources-CSS-egliseInfoLinkActionItem\" href=\"/communaute/pa/75/coeur-eucharistique-de-jesus\" id=\"gwt-uid-131:community\">Horaires de la paroisse</a>  <a class=\"cef-kephas-client-resources-Resources-CSS-egliseInfoIconEmail cef-kephas-client-resources-Resources-CSS-egliseInfoLinkActionItem\" href=\"/contact/info=%C3%89glise%20paroissiale%20:%20C%C5%93ur-Eucharistique%20de%20J%C3%A9sus%0AParoisse%20:%20C%C5%93ur-Eucharistique%20de%20J%C3%A9sus%0ADioc%C3%A8se%20:%20Paris%0A22%20rue%20du%20Lieutenant-Chaur%C3%A9%0A75020%20Paris,%20fr%0A%20https://messes.info/lieu/75/paris-20/coeur-eucharistique-de-jesus%20le%20dim.%205%20avr.%202026%20%C3%A0%2010h15%0A%20P%C3%A2ques%0A,%20P%C3%A2ques,%20;communityId=pa/75/coeur-eucharistique-de-jesus\" id=\"",
+      "nextSiblingText": "Signalez une erreur",
+      "previousSiblingText": null,
+      "parentText": "Horaires de la paroisse  Signalez une erreur"
+    },
+    {
+      "href": "/communaute/pa/75/notre-dame-de-lourdes",
+      "text": "Horaires de la paroisse",
+      "linkClasses": [
+        "cef-kephas-client-resources-Resources-CSS-egliseInfoIconInformation",
+        "cef-kephas-client-resources-Resources-CSS-egliseInfoLinkActionItem"
+      ],
+      "linkId": "gwt-uid-132:community",
+      "parentTag": "DIV",
+      "parentClasses": [
+        "cef-kephas-client-resources-Resources-CSS-egliseInfoCellListActions",
+        "egliseinfo-celebrationtime-actions",
+        "noprint"
+      ],
+      "parentId": null,
+      "parentHTML": "<div class=\"cef-kephas-client-resources-Resources-CSS-egliseInfoCellListActions egliseinfo-celebrationtime-actions noprint\" gwtuirendered=\"gwt-uid-132\"><a class=\"cef-kephas-client-resources-Resources-CSS-egliseInfoIconInformation cef-kephas-client-resources-Resources-CSS-egliseInfoLinkActionItem\" href=\"/communaute/pa/75/notre-dame-de-lourdes\" id=\"gwt-uid-132:community\">Horaires de la paroisse</a>  <a class=\"cef-kephas-client-resources-Resources-CSS-egliseInfoIconEmail cef-kephas-client-resources-Resources-CSS-egliseInfoLinkActionItem\" href=\"/contact/info=%C3%89glise%20paroissiale%20:%20Notre-Dame%20de%20Lourdes%0AParoisse%20:%20Notre-Dame%20de%20Lourdes%0ADioc%C3%A8se%20:%20Paris%0A130%20rue%20Pelleport%0A75020%20Paris,%20fr%0A%20https://messes.info/lieu/75/paris-20/notre-dame-de-lourdes%20le%20dim.%205%20avr.%202026%20%C3%A0%2010h30%0A%20P%C3%A2ques%0A,%20P%C3%A2ques,%20;communityId=pa/75/notre-dame-de-lourdes\" id=\"gwt-uid-132:contactCommunity\">Signalez une erreur</a></div>",
+      "nextSiblingText": "Signalez une erreur",
+      "previousSiblingText": null,
+      "parentText": "Horaires de la paroisse  Signalez une erreur"
+    },
+    {
+      "href": "/communaute/pa/75/nd-de-l-assomption-des-buttes-chaumont",
+      "text": "Horaires de la paroisse",
+      "linkClasses": [
+        "cef-kephas-client-resources-Resources-CSS-egliseInfoIconInformation",
+        "cef-kephas-client-resources-Resources-CSS-egliseInfoLinkActionItem"
+      ],
+      "linkId": "gwt-uid-133:community",
+      "parentTag": "DIV",
+      "parentClasses": [
+        "cef-kephas-client-resources-Resources-CSS-egliseInfoCellListActions",
+        "egliseinfo-celebrationtime-actions",
+        "noprint"
+      ],
+      "parentId": null,
+      "parentHTML": "<div class=\"cef-kephas-client-resources-Resources-CSS-egliseInfoCellListActions egliseinfo-celebrationtime-actions noprint\" gwtuirendered=\"gwt-uid-133\"><a class=\"cef-kephas-client-resources-Resources-CSS-egliseInfoIconInformation cef-kephas-client-resources-Resources-CSS-egliseInfoLinkActionItem\" href=\"/communaute/pa/75/nd-de-l-assomption-des-buttes-chaumont\" id=\"gwt-uid-133:community\">Horaires de la paroisse</a>  <a class=\"cef-kephas-client-resources-Resources-CSS-egliseInfoIconEmail cef-kephas-client-resources-Resources-CSS-egliseInfoLinkActionItem\" href=\"/contact/info=%C3%89glise%20paroissiale%20:%20Notre-Dame%20de%20l'Assomption%20des%20Buttes-Chaumont%0AParoisse%20:%20Notre-Dame%20de%20l'Assomption%20des%20Buttes-Chaumont%0ADioc%C3%A8se%20:%20Paris%0A80%20rue%20de%20Meaux%0A75019%20Paris,%20fr%0A%20https://messes.info/lieu/75/paris-19/notre-dame-de-l-assomption-des-buttes-chaumont%20le%20dim.%205%20avr.%202026%20%C3%A0%2010h30%0A%20P%C3%A2ques%0A,%20P%C3%A2ques,%20;communityId=pa/",
+      "nextSiblingText": "Signalez une erreur",
+      "previousSiblingText": null,
+      "parentText": "Horaires de la paroisse  Signalez une erreur"
+    },
+    {
+      "href": "/communaute/pa/75/bon-pasteur",
+      "text": "Horaires de la paroisse",
+      "linkClasses": [
+        "cef-kephas-client-resources-Resources-CSS-egliseInfoIconInformation",
+        "cef-kephas-client-resources-Resources-CSS-egliseInfoLinkActionItem"
+      ],
+      "linkId": "gwt-uid-134:community",
+      "parentTag": "DIV",
+      "parentClasses": [
+        "cef-kephas-client-resources-Resources-CSS-egliseInfoCellListActions",
+        "egliseinfo-celebrationtime-actions",
+        "noprint"
+      ],
+      "parentId": null,
+      "parentHTML": "<div class=\"cef-kephas-client-resources-Resources-CSS-egliseInfoCellListActions egliseinfo-celebrationtime-actions noprint\" gwtuirendered=\"gwt-uid-134\"><a class=\"cef-kephas-client-resources-Resources-CSS-egliseInfoIconInformation cef-kephas-client-resources-Resources-CSS-egliseInfoLinkActionItem\" href=\"/communaute/pa/75/bon-pasteur\" id=\"gwt-uid-134:community\">Horaires de la paroisse</a>  <a class=\"cef-kephas-client-resources-Resources-CSS-egliseInfoIconEmail cef-kephas-client-resources-Resources-CSS-egliseInfoLinkActionItem\" href=\"/contact/info=%C3%89glise%20paroissiale%20:%20Bon-Pasteur%0AParoisse%20:%20Bon-Pasteur%0ADioc%C3%A8se%20:%20Paris%0A177%20rue%20de%20Charonne%0A75011%20Paris,%20fr%0A%20https://messes.info/lieu/75/paris/bon-pasteur%20le%20dim.%205%20avr.%202026%20%C3%A0%2010h30%0A%20P%C3%A2ques%0A,%20P%C3%A2ques;communityId=pa/75/bon-pasteur\" id=\"gwt-uid-134:contactCommunity\">Signalez une erreur</a></div>",
+      "nextSiblingText": "Signalez une erreur",
+      "previousSiblingText": null,
+      "parentText": "Horaires de la paroisse  Signalez une erreur"
+    },
+    {
+      "href": "/communaute/pa/75/notre-dame-de-grace-de-passy",
+      "text": "Horaires de la paroisse",
+      "linkClasses": [
+        "cef-kephas-client-resources-Resources-CSS-egliseInfoIconInformation",
+        "cef-kephas-client-resources-Resources-CSS-egliseInfoLinkActionItem"
+      ],
+      "linkId": "gwt-uid-135:community",
+      "parentTag": "DIV",
+      "parentClasses": [
+        "cef-kephas-client-resources-Resources-CSS-egliseInfoCellListActions",
+        "egliseinfo-celebrationtime-actions",
+        "noprint"
+      ],
+      "parentId": null,
+      "parentHTML": "<div class=\"cef-kephas-client-resources-Resources-CSS-egliseInfoCellListActions egliseinfo-celebrationtime-actions noprint\" gwtuirendered=\"gwt-uid-135\"><a class=\"cef-kephas-client-resources-Resources-CSS-egliseInfoIconInformation cef-kephas-client-resources-Resources-CSS-egliseInfoLinkActionItem\" href=\"/communaute/pa/75/notre-dame-de-grace-de-passy\" id=\"gwt-uid-135:community\">Horaires de la paroisse</a>  <a class=\"cef-kephas-client-resources-Resources-CSS-egliseInfoIconEmail cef-kephas-client-resources-Resources-CSS-egliseInfoLinkActionItem\" href=\"/contact/info=%C3%89glise%20paroissiale%20:%20Notre-Dame%20de%20Gr%C3%A2ce%20de%20Passy%0AParoisse%20:%20Notre-Dame%20de%20Gr%C3%A2ce%20de%20Passy%0ADioc%C3%A8se%20:%20Paris%0A8-10%20rue%20de%20l'Annonciation%0A75016%20Paris,%20fr%0A%20https://messes.info/lieu/75/paris-16/notre-dame-de-grace-de-passy%20le%20dim.%205%20avr.%202026%20%C3%A0%2010h30%0A%20P%C3%A2ques%0A,%20P%C3%A2ques,%20;communityId=pa/75/notre-dame-de-grace-de-passy\" id=\"gwt-ui",
+      "nextSiblingText": "Signalez une erreur",
+      "previousSiblingText": null,
+      "parentText": "Horaires de la paroisse  Signalez une erreur"
+    }
+  ],
+  "sampleHTML": "<div class=\"cef-kephas-client-resources-Resources-CSS-egliseInfoCellListActions egliseinfo-celebrationtime-actions noprint\" gwtuirendered=\"gwt-uid-111\"><a class=\"cef-kephas-client-resources-Resources-CSS-egliseInfoIconInformation cef-kephas-client-resources-Resources-CSS-egliseInfoLinkActionItem\" href=\"/communaute/pa/75/sacre-coeur-de-montmartre\" id=\"gwt-uid-111:community\">Horaires de la paroisse</a>  <a class=\"cef-kephas-client-resources-Resources-CSS-egliseInfoIconEmail cef-kephas-client-resources-Resources-CSS-egliseInfoLinkActionItem\" href=\"/contact/info=Basilique%20:%20Sacr%C3%A9-C%C5%93ur%20de%20Montmartre%0ABasilique%20:%20Sacr%C3%A9-C%C5%93ur%20de%20Montmartre%0AParoisse%20:%20Saint-Pierre%20de%20Montmartre%0A35%20rue%20du%20Chevalier-de-la-Barre%0A75018%20Paris,%20fr%0A%20https://messes.info/lieu/75/paris-18/basilique-du-sacre-coeur-de-montmartre%20le%20dim.%205%20avr.%202026%20%C3%A0%2007h00%0A%20P%C3%A2ques%0A,%20P%C3%A2ques,%20;communityId=pa/75/sacre-coeur-de-montmartre\" id=\"gwt-uid-111:contactCommunity\">Signalez une erreur</a></div>",
+  "containerInfo": {
+    "tag": "DIV",
+    "classes": [],
+    "id": null,
+    "childCount": 25,
+    "innerHTML": "<div aria-selected=\"false\" role=\"treeitem\" aria-setsize=\"25\" aria-posinset=\"1\" aria-level=\"2\"><div style=\"padding-left: 16px;\" class=\"com-google-gwt-user-cellview-client-CellTree-Style-cellTreeItem\"><div style=\"padding-left: 16px;position:relative;\" class=\"com-google-gwt-user-cellview-client-CellTree-Style-cellTreeItem com-google-gwt-user-cellview-client-CellTree-Style-cellTreeItemImageValue\"><div style=\"position:absolute;display:none;\"></div><div class=\"com-google-gwt-user-cellview-client-CellTree-Style-cellTreeItemValue\"><span><div style=\"height: 65px; width: 85px; overflow: hidden; float: left; padding: 3px; text-align: center; display: none;\"><img src=\"https://messes.info/kephas/clear.cache.gif\" style=\"width:16px;height:16px;background:url(data:image/gif;base64,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) no-repeat 0px 0px;\" border=\"0\"></div><div style=\"height: 65px; width: 85px; max-height: 65px; max-width: 85px; overflow: hidden; float: left; padding: 3px;\" class=\"egliseinfo-image noprint\"><img width=\"85px\" src=\"https://lh3.googleusercontent.com/RTeyxSxsRJ-06zXn3t7vJTTmtjt48mU04-sw9J2z5Y9SsyVZnNK3csZ2H_6r7ZdITbmkB326JNXmhzpWMhRI0BM=s85\"></div></span><span><div class=\"egliseinfo-celebrationtime\"><div class=\"cef-kephas-client-resources-Resources-CSS-egliseInfoCellTreeTitle print egliseinfo-celebrationtime-title\"><b>07h00</b> - Pâques</div><div class=\"cef-kephas-client-resources-Resources-CSS-egliseInfoCellTreeTitle \"><b>Sacré-Cœur de Montmartre</b></div><div class=\"cef-kephas-client-resources-Resources-CSS-egliseInfoCellTreeBody egliseinfo-celebrationtime-content\">75018 Paris</div><div class=\"cef-kephas-client-resources-Resources-CSS-egliseInfoCellTreeHead  egliseinfo-celebrationtime-content\">Basilique : Sacré-Cœur de Montmartre</div></div></span><span><div class=\"cef-kephas-client-resources-Resources-CSS-egliseInfoCellListActions egliseinfo-celebrationtime-actions noprint\" gwtuirendered=\"gwt-uid-111\"><a class=\"cef-kephas-client-resources-Resources-CSS-egliseInfoIconInformation cef-kephas-client-resources-Resources-CSS-egliseInfoLinkActionItem\" href=\"/communaute/pa/75/sacre-coeur-de-montmartre\" id=\"gwt-uid-111:community\">Horaires de la paroisse</a>  <a class=\"cef-kephas-client-resources-Resources-CSS-egliseInfoIconEmail cef-kephas-client-resources-Resources-CSS-egliseInfoLinkActionItem\" href=\"/contact/info=Basilique%20:%20Sacr%C3%A9-C%C5%93ur%20de%20Montmartre%0ABasilique%20:%20Sacr%C3%A9-C%C5%93ur%20de%20Montmartre%0AParoisse%20:%20Saint-Pierre%20de%20Montmartre%0A35%20rue%20du%20Chevalier-de-la-Barre%0A75018%20Paris,%20fr%0"
+  }
+}

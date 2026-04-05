@@ -1,0 +1,424 @@
+{
+  "url": "https://messes.info/horaires/75/paris",
+  "title": "Recherche d'horaire : 75/paris MessesInfo",
+  "bodyClasses": [
+    "didomi-popup-open"
+  ],
+  "frameworks": [],
+  "allLinks": [
+    {
+      "href": "https://messes.info:443/error/75%2Fparis.html",
+      "text": "Passer en version mobile\ndu site",
+      "classes": [
+        "noprint"
+      ],
+      "id": "return-mobile",
+      "parent": "P",
+      "parentClasses": []
+    },
+    {
+      "href": "/logout",
+      "text": "Se déconnecter",
+      "classes": [
+        "gwt-Anchor"
+      ],
+      "id": null,
+      "parent": "DIV",
+      "parentClasses": [
+        "cef-kephas-client-layout-Header_HeaderUiBinderImpl_GenCss_style-loginBox",
+        "noprint"
+      ]
+    },
+    {
+      "href": "/edit-member",
+      "text": "Mon compte",
+      "classes": [
+        "gwt-Anchor"
+      ],
+      "id": null,
+      "parent": "DIV",
+      "parentClasses": [
+        "cef-kephas-client-layout-Header_HeaderUiBinderImpl_GenCss_style-loginBox",
+        "noprint"
+      ]
+    },
+    {
+      "href": "javascript:void(0);",
+      "text": "Recherche avancée",
+      "classes": [
+        "header"
+      ],
+      "id": null,
+      "parent": "TD",
+      "parentClasses": []
+    },
+    {
+      "href": "javascript:;",
+      "text": "",
+      "classes": [
+        "cef-kephas-client-searchbar-SearchBarViewImpl_SearchBarUiBinderImpl_GenCss_style-searchBarProximitySearch"
+      ],
+      "id": null,
+      "parent": "DIV",
+      "parentClasses": [
+        "cef-kephas-client-searchbar-SearchBarViewImpl_SearchBarUiBinderImpl_GenCss_style-searchBarSearch"
+      ]
+    },
+    {
+      "href": "https://messes.info//horaires/",
+      "text": "",
+      "classes": [
+        "gwt-Anchor"
+      ],
+      "id": null,
+      "parent": "DIV",
+      "parentClasses": [
+        "nav-wrapper"
+      ]
+    },
+    {
+      "href": "https://eglise.catholique.fr/sengager-dans-la-societe/eglise-medias/444055-applications-mobiles-de-leglise-catholique-france/?utm_source=redirection&utm_medium=url_cef&utm_campaign=messesinfo#screenshots-android",
+      "text": "",
+      "classes": [],
+      "id": null,
+      "parent": "DIV",
+      "parentClasses": [
+        "apps-mobile"
+      ]
+    },
+    {
+      "href": "https://eglise.catholique.fr/sengager-dans-la-societe/eglise-medias/444055-applications-mobiles-de-leglise-catholique-france/?utm_source=redirection&utm_medium=url_cef&utm_campaign=messesinfo#screenshots-ios",
+      "text": "",
+      "classes": [],
+      "id": null,
+      "parent": "DIV",
+      "parentClasses": [
+        "apps-mobile"
+      ]
+    },
+    {
+      "href": "/horaires/pontoise",
+      "text": "pontoise",
+      "classes": [],
+      "id": null,
+      "parent": "LI",
+      "parentClasses": []
+    },
+    {
+      "href": "/horaires/94800",
+      "text": "94800",
+      "classes": [],
+      "id": null,
+      "parent": "LI",
+      "parentClasses": []
+    },
+    {
+      "href": "/horaires/st%20malo",
+      "text": "st malo",
+      "classes": [],
+      "id": null,
+      "parent": "LI",
+      "parentClasses": []
+    },
+    {
+      "href": "/horaires/76%20st%20etienne",
+      "text": "76 st etienne",
+      "classes": [],
+      "id": null,
+      "parent": "LI",
+      "parentClasses": []
+    },
+    {
+      "href": "/horaires/paris%2019",
+      "text": "paris 19",
+      "classes": [],
+      "id": null,
+      "parent": "LI",
+      "parentClasses": []
+    },
+    {
+      "href": "/horaires/puteaux",
+      "text": "puteaux",
+      "classes": [],
+      "id": null,
+      "parent": "LI",
+      "parentClasses": []
+    },
+    {
+      "href": "/horaires/%22Saint%20Charles%22%20%C3%A0%20Marseille",
+      "text": "\"Saint Charles\" à Marseille",
+      "classes": [],
+      "id": null,
+      "parent": "LI",
+      "parentClasses": []
+    },
+    {
+      "href": "/horaires/Paroisse%20St%20Sulpice%20%C3%A0%20Laval",
+      "text": "Paroisse St Sulpice à Laval",
+      "classes": [],
+      "id": null,
+      "parent": "LI",
+      "parentClasses": []
+    },
+    {
+      "href": "javascript:;",
+      "text": "Rechercher autour",
+      "classes": [
+        "cef-kephas-client-resources-Resources-CSS-egliseInfoIconAdd",
+        "cef-kephas-client-resources-Resources-CSS-egliseInfoLinkActionItem",
+        "cef-kephas-client-activity-searchcelebrationtime-SearchCelebrationTimeViewImpl_ScheduleViewImplUiBinderImpl_GenCss_style-searchCelebrationTimeAddToWebSite",
+        "cef-kephas-client-activity-searchcelebrationtime-SearchCelebrationTimeViewImpl_ScheduleViewImplUiBinderImpl_GenCss_style-searchAround",
+        "noprint"
+      ],
+      "id": null,
+      "parent": "DIV",
+      "parentClasses": [
+        "egliseinfo-celebrationtime-actions",
+        "cef-kephas-client-activity-searchcelebrationtime-SearchCelebrationTimeViewImpl_ScheduleViewImplUiBinderImpl_GenCss_style-searchCelebrationTimeAddTo"
+      ]
+    },
+    {
+      "href": "javascript:;",
+      "text": "Afficher plus d'horaires",
+      "classes": [
+        "cef-kephas-client-resources-Resources-CSS-egliseInfoIconAdd",
+        "cef-kephas-client-resources-Resources-CSS-egliseInfoLinkActionItem",
+        "cef-kephas-client-activity-searchcelebrationtime-SearchCelebrationTimeViewImpl_ScheduleViewImplUiBinderImpl_GenCss_style-searchCelebrationTimeAddToWebSite",
+        "cef-kephas-client-activity-searchcelebrationtime-SearchCelebrationTimeViewImpl_ScheduleViewImplUiBinderImpl_GenCss_style-loadMore",
+        "noprint"
+      ],
+      "id": null,
+      "parent": "DIV",
+      "parentClasses": [
+        "egliseinfo-celebrationtime-actions",
+        "cef-kephas-client-activity-searchcelebrationtime-SearchCelebrationTimeViewImpl_ScheduleViewImplUiBinderImpl_GenCss_style-searchCelebrationTimeAddTo"
+      ]
+    },
+    {
+      "href": "javascript:;",
+      "text": "Ajouter sur mon site",
+      "classes": [
+        "cef-kephas-client-resources-Resources-CSS-egliseInfoIconAdd",
+        "cef-kephas-client-resources-Resources-CSS-egliseInfoLinkActionItem",
+        "cef-kephas-client-activity-searchcelebrationtime-SearchCelebrationTimeViewImpl_ScheduleViewImplUiBinderImpl_GenCss_style-searchCelebrationTimeAddToWebSite"
+      ],
+      "id": null,
+      "parent": "DIV",
+      "parentClasses": [
+        "egliseinfo-celebrationtime-actions",
+        "cef-kephas-client-activity-searchcelebrationtime-SearchCelebrationTimeViewImpl_ScheduleViewImplUiBinderImpl_GenCss_style-searchCelebrationTimeAddTo"
+      ]
+    },
+    {
+      "href": "http://www.eglise.catholique.fr",
+      "text": "",
+      "classes": [
+        "logo"
+      ],
+      "id": null,
+      "parent": "P",
+      "parentClasses": [
+        "ligne1"
+      ]
+    },
+    {
+      "href": "http://aide.egliseinfo.catholique.fr/integration-des-horaires-messesinfo-sur-un-autre-site/",
+      "text": "Intégrer les horaires de MessesInfo sur votre site",
+      "classes": [
+        "noprint"
+      ],
+      "id": null,
+      "parent": "P",
+      "parentClasses": [
+        "ligne2"
+      ]
+    },
+    {
+      "href": "/liste-diocese/",
+      "text": "Diocèses et paroisses",
+      "classes": [
+        "noprint"
+      ],
+      "id": null,
+      "parent": "P",
+      "parentClasses": [
+        "ligne2"
+      ]
+    },
+    {
+      "href": "/contact",
+      "text": "Nous contacter",
+      "classes": [
+        "noprint"
+      ],
+      "id": null,
+      "parent": "P",
+      "parentClasses": [
+        "ligne3"
+      ]
+    },
+    {
+      "href": "http://aide.egliseinfo.catholique.fr/mentions-legales/",
+      "text": "Mentions légales",
+      "classes": [
+        "noprint"
+      ],
+      "id": null,
+      "parent": "P",
+      "parentClasses": [
+        "ligne3"
+      ]
+    },
+    {
+      "href": "javascript:Didomi.preferences.show()",
+      "text": "Gestion des cookies",
+      "classes": [
+        "noprint"
+      ],
+      "id": null,
+      "parent": "P",
+      "parentClasses": [
+        "ligne3"
+      ]
+    },
+    {
+      "href": "http://aide.egliseinfo.catholique.fr/",
+      "text": "Aide utilisateur",
+      "classes": [
+        "noprint"
+      ],
+      "id": null,
+      "parent": "P",
+      "parentClasses": [
+        "ligne3"
+      ]
+    }
+  ],
+  "churchLinks": [
+    {
+      "href": "https://eglise.catholique.fr/sengager-dans-la-societe/eglise-medias/444055-applications-mobiles-de-leglise-catholique-france/?utm_source=redirection&utm_medium=url_cef&utm_campaign=messesinfo#screenshots-android",
+      "text": "",
+      "classes": [],
+      "id": null,
+      "parent": "DIV",
+      "parentClasses": [
+        "apps-mobile"
+      ]
+    },
+    {
+      "href": "https://eglise.catholique.fr/sengager-dans-la-societe/eglise-medias/444055-applications-mobiles-de-leglise-catholique-france/?utm_source=redirection&utm_medium=url_cef&utm_campaign=messesinfo#screenshots-ios",
+      "text": "",
+      "classes": [],
+      "id": null,
+      "parent": "DIV",
+      "parentClasses": [
+        "apps-mobile"
+      ]
+    },
+    {
+      "href": "/horaires/Paroisse%20St%20Sulpice%20%C3%A0%20Laval",
+      "text": "Paroisse St Sulpice à Laval",
+      "classes": [],
+      "id": null,
+      "parent": "LI",
+      "parentClasses": []
+    },
+    {
+      "href": "http://www.eglise.catholique.fr",
+      "text": "",
+      "classes": [
+        "logo"
+      ],
+      "id": null,
+      "parent": "P",
+      "parentClasses": [
+        "ligne1"
+      ]
+    },
+    {
+      "href": "http://aide.egliseinfo.catholique.fr/integration-des-horaires-messesinfo-sur-un-autre-site/",
+      "text": "Intégrer les horaires de MessesInfo sur votre site",
+      "classes": [
+        "noprint"
+      ],
+      "id": null,
+      "parent": "P",
+      "parentClasses": [
+        "ligne2"
+      ]
+    },
+    {
+      "href": "/liste-diocese/",
+      "text": "Diocèses et paroisses",
+      "classes": [
+        "noprint"
+      ],
+      "id": null,
+      "parent": "P",
+      "parentClasses": [
+        "ligne2"
+      ]
+    },
+    {
+      "href": "http://aide.egliseinfo.catholique.fr/mentions-legales/",
+      "text": "Mentions légales",
+      "classes": [
+        "noprint"
+      ],
+      "id": null,
+      "parent": "P",
+      "parentClasses": [
+        "ligne3"
+      ]
+    },
+    {
+      "href": "http://aide.egliseinfo.catholique.fr/",
+      "text": "Aide utilisateur",
+      "classes": [
+        "noprint"
+      ],
+      "id": null,
+      "parent": "P",
+      "parentClasses": [
+        "ligne3"
+      ]
+    }
+  ],
+  "mainContainers": [
+    {
+      "selector": ".content",
+      "tag": "DIV",
+      "classes": [
+        "cef-kephas-client-searchbar-SearchBarViewImpl_SearchBarUiBinderImpl_GenCss_style-searchBarAvancedSearchBar",
+        "content"
+      ],
+      "childCount": 15,
+      "innerHTML": "<label class=\"cef-kephas-client-searchbar-AdvancedSearchBar_AdvancedSearchBarUiBinderImpl_GenCss_style-avancedSearchBarLabel asearch-label cef-kephas-client-searchbar-AdvancedSearchBar_AdvancedSearchBarUiBinderImpl_GenCss_style-hiddenElement\"> <div class=\"cef-kephas-client-searchbar-AdvancedSearchBar_AdvancedSearchBarUiBinderImpl_GenCss_style-avancedSearchBarLabeltext asearch-label-text\">Recherche globale</div> <input type=\"text\" class=\"cef-kephas-client-resources-Resources-CSS-egliseInfoTextInput cef-kephas-client-searchbar-AdvancedSearchBar_AdvancedSearchBarUiBinderImpl_GenCss_style-avancedSearchBarTextBox cef-kephas-client-searchbar-AdvancedSearchBar_AdvancedSearchBarUiBinderImpl_GenCss_style-avancedSearchBarTextBoxCity\"> </label>  <label class=\"cef-kephas-client-searchbar-AdvancedSearchBar_AdvancedSearchBarUiBinderImpl_GenCss_style-avancedSearchBarLabel asearch-label\"> <div class=\"cef-kephas-client-searchbar-AdvancedSearchBar_AdvancedSearchBarUiBinderImpl_GenCss_style-avancedSearchBarLabeltext asearch-label-text\">Nom de l'église</div> <input type=\"text\" class=\"cef-kephas-client-resources-Resources-CSS-egliseInfoTextInput cef-kephas-client-searchbar-AdvancedSearchBar_AdvancedSearchBarUiBinderImpl_GenCss_style-avancedSearchBarTextBox cef-kephas-client-searchbar-AdvancedSearchBar_AdvancedSearchBarUiBinderImpl_GenCss_style-avancedSearchBarTextBoxName\"> <span class=\"cef-kephas-client-searchbar-AdvancedSearchBar_AdvancedSearchBarUiBinderImpl_GenCss_style-avancedSearchBarData cef-kephas-client-searchbar-AdvancedSearchBar_AdvancedSearchBarUiBinderImpl_GenCss_style-avancedSearchBarCheckExact cef-kephas-client-searchbar-AdvancedSearchBar_AdvancedSearchBarUiBinderImpl_GenCss_style-hiddenElement\"><input type=\"checkbox\" value=\"on\" id=\"gwt-uid-71\" tabindex=\"0\"><label for=\"gwt-uid-71\"></label></span> </label> <label class=\"cef-kephas-client-searchbar-AdvancedSearchBar_AdvancedSearchBarUiBinderImpl_GenCss_style-avancedSearchBarLabel asearch-label\" aria-hidden=\"true\" style=\"display: none;\"> <div class=\"cef-kephas-client-searchbar-AdvancedSearchBar_AdvancedSearchBarUiBinderImpl_GenCss_style-avancedSearchBarLabeltext asearch-label-text\">Adresse</div> <input type=\"text\" class=\"cef-kephas-client-resources-Resources-CSS-egliseInfoTextInput cef-kephas-client-searchbar-AdvancedSearchBar_AdvancedSearchBarUiBinderImpl_GenCss_style-avancedSearchBarTextBox cef-kephas-client-searchbar-AdvancedSearchBar_AdvancedSearchBarUiBinderImpl_GenCss_style-avancedSearchBarTextBoxCity\"> </label> <label class=\"cef-kephas-client-searchbar-AdvancedSearchBar_AdvancedSearchBarUiBinderImpl_GenCss_style-avancedSearchBarLabel asearch-label\"> <div class=\"cef-kephas-client-searchbar-AdvancedSearchBar_AdvancedSearchBarUiBinderImpl_GenCss_style-avancedSearchBarLabeltext asearch-label-text\">Commune, Ville</div> <input type=\"text\" class=\"cef-kephas-client-resources-Resources-CSS-egliseInfoTextInput cef-kephas-client-searchbar-AdvancedSearchBar_AdvancedSearchBarUiBinderImpl_GenCss_style-avancedSear"
+    }
+  ],
+  "listElements": [
+    {
+      "tag": "UL",
+      "classes": [
+        "cef-kephas-client-resources-Resources-CSS-egliseInfoTokenInputList"
+      ],
+      "id": null,
+      "itemCount": 1,
+      "firstItemHTML": "<li class=\"cef-kephas-client-resources-Resources-CSS-egliseInfoTokenInputInputToken\"><input type=\"text\" class=\"gwt-SuggestBox\" id=\"suggestion_box1\" style=\"outline-color: -moz-use-text-color; outline-style: none; outline-width: medium;\"></li>",
+      "firstItemText": ""
+    },
+    {
+      "tag": "UL",
+      "classes": [],
+      "id": null,
+      "itemCount": 8,
+      "firstItemHTML": "<li><a href=\"/horaires/pontoise\" onclick=\"return egliseInfoOpenLink(this);\">pontoise</a></li>",
+      "firstItemText": "pontoise"
+    }
+  ],
+  "bodyHTML": "<style type=\"text/css\" scoped=\"true\" id=\"didomi-css\">#didomi-host .didomi-components-button{background-color:#eee;border:1px solid rgba(34,34,34,.2);color:#555;cursor:pointer;display:block;font-size:16px;font-weight:bold;height:38px;line-height:18px;padding:0 20px;text-align:center}#didomi-host .didomi-components-button:disabled{cursor:auto;opacity:.4}#didomi-host .didomi-components-button:hover{opacity:.7}#didomi-host .didomi-components-button span{background:rgba(0,0,0,0)}#didomi-host .didomi-mobile .didomi-components-button{font-size:14px}#didomi-host .didomi-screen-xsmall .didomi-components-button{padding:0 10px}#didomi-host .didomi-components-radio{display:-webkit-flexbox;display:flex;-moz-flex-direction:row;flex-direction:row;-webkit-flex-pack:justify;-moz-align-items:center;align-items:center;-moz-justify-content:space-between;justify-content:space-between}#didomi-host .didomi-components-radio__option{background-color:#fff;border:1px solid #eee;box-shadow:1px 1px 0 0 rgba(0,0,0,.1);color:#757575;cursor:pointer;font-size:12px;font-weight:bold;height:25px;line-height:12px;margin-right:5px;padding:0 20px;transition:background-color .2s,border-color .2s;transition-timing-function:ease}#didomi-host .didomi-components-radio__option:hover{border-color:#757575;color:#757575}#didomi-host .didomi-components-radio__option:last-child{margin-right:0}[dir=rtl] #didomi-host .didomi-components-radio__option:last-child{margin-right:5px}#didomi-host .didomi-components-radio__option:first-child{margin-right:5px}[dir=rtl] #didomi-host .didomi-components-radio__option:first-child{margin-right:0}#didomi-host .didomi-components-radio__option>svg{margin-right:5px}#didomi-host .didomi-components-radio__option span{background:rgba(0,0,0,0)}#didomi-host .didomi-components-radio__option.didomi-components-radio__option--agree{background-color:#3d8548;border:1px solid rgba(0,0,0,.3);color:#fff;padding:0 11.5px}#didomi-host .didomi-components-radio__option.didomi-components-radio__option--agree>svg{vertical-align:middle}#didomi-host .didomi-components-radio__option.didomi-components-radio__option--disagree{background-color:#e60000;border:1px solid rgba(0,0,0,.3);color:#fff;padding:0 13.5px}#didomi-host .didomi-components-radio__option__reporting{box-sizing:border-box}#didomi-host .didomi-components-radio__option__reporting#didomi-radio-option-disagree-to-all{font-size:12px!important}#didomi-host .didomi-components-radio__option__reporting#didomi-radio-option-agree-to-all{font-size:12px!important}#didomi-host .didomi-components-radio__option__accepter{box-sizing:border-box}#didomi-host .didomi-components-accordion{flex:5}#didomi-host .didomi-components-accordion .label-click{cursor:pointer}#didomi-host .didomi-components-accordion .trigger-icon{display:inline-block;font-size:16px;text-align:center;width:15px}#didomi-host .didomi-components-accordion .didomi-content{display:none;font-weight:300;max-height:0;opacity:0;overflow:hidden;text-align:justify;transition:all .1s ease-in-out;transition-property:opacity,max-height,transform,visibility,padding-bottom;visibility:hidden}#didomi-host .didomi-components-accordion .didomi-content.active{display:block;max-height:3000px;opacity:1;overflow:visible;padding-bottom:10px;transition-property:opacity,max-height,transform,visibility;visibility:visible}#didomi-host .didomi-components-accordion .didomi-components-accordion-label-container{display:-webkit-flexbox;display:flex;-moz-flex-direction:row;flex-direction:row;-webkit-flex-pack:justify;-moz-align-items:center;align-items:center;-moz-justify-content:space-between;justify-content:space-between}#didomi-host .didomi-components-accordion .didomi-components-accordion-label-container .label-click{flex:2}#didomi-host .didomi-mobile .didomi-components-accordion{flex:1 auto;width:100%}#didomi-host .didomi-mobile .didomi-components-accordion .didomi-components-accordion-label-container{display:-webkit-flexbox;display:flex;-moz-flex-direction:column;flex-direction:column;-webkit-flex-pack:start;-moz-align-items:flex-start;align-items:flex-start;-moz-justify-content:flex-start;justify-content:flex-start}#didomi-host .lds-ellipsis-container{align-items:center;display:flex;height:100%;justify-content:center}#didomi-host .lds-ellipsis-container .lds-ellipsis{display:inline-block;height:64px;position:relative;width:64px}#didomi-host .lds-ellipsis-container .lds-ellipsis div{animation-timing-function:cubic-bezier(0,1,1,0);background:#dcdcdc;border-radius:50%;height:11px;position:absolute;top:27px;width:11px}#didomi-host .lds-ellipsis-container .lds-ellipsis div:first-child{animation:lds-ellipsis1 .6s infinite;left:6px}#didomi-host .lds-ellipsis-container .lds-ellipsis div:nth-child(2){animation:lds-ellipsis2 .6s infinite;left:6px}#didomi-host .lds-ellipsis-container .lds-ellipsis div:nth-child(3){animation:lds-ellipsis2 .6s infinite;left:26px}#didomi-host .lds-ellipsis-container .lds-ellipsis div:nth-child(4){animation:lds-ellipsis3 .6s infinite;left:45px}@keyframes lds-ellipsis1{0%{transform:scale(0)}to{transform:scale(1)}}@keyframes lds-ellipsis3{0%{transform:scale(1)}to{transform:scale(0)}}@keyframes lds-ellipsis2{0%{transform:translate(0)}to{transform:translate(19px)}}#didomi-host .didomi-components-skip-link{display:block;left:-100px;margin-bottom:16px;position:fixed;top:-100px}#didomi-host .didomi-components-skip-link:focus{left:0;position:relative;top:0}#didomi-host .didomi-popup-backdrop{align-items:flex-start;background-color:rgba(255,255,255,.8);display:-webkit-flexbox;display:flex;-moz-flex-direction:row;flex-direction:row;height:100%;left:0;overflow:auto;position:fixed;top:0;width:100%;z-index:2147483642}[dir=rtl] #didomi-host .didomi-popup-backdrop{overflow-x:hidden;overflow-y:auto}#didomi-host .didomi-exterior-border{border-radius:5px;border-style:solid;border-width:1px;margin:auto;padding:1px}#didomi-host .didomi-popup-container{background-color:#fff;border-radius:3px;border-style:solid;border-width:1px;max-width:650px;opacity:1;width:100%;-webkit-overflow-scrolling:touch}#didomi-host .didomi-popup-header{display:-webkit-flexbox;display:flex;-moz-flex-direction:row;flex-direction:row;-webkit-flex-pack:justify;-moz-align-items:center;align-items:center;font-family:Arial;font-weight:bold;-moz-justify-content:space-between;justify-content:space-between;padding:30px 20px 0}#didomi-host .didomi-popup-body{display:-webkit-flexbox;display:flex;-moz-flex-direction:column;flex-direction:column;padding:30px 20px}#didomi-host .didomi-popup-body .didomi-popup-body-section{margin-bottom:22px}#didomi-host .didomi-popup-body .didomi-popup-body-section:last-child{margin-bottom:0}#didomi-host .didomi-popup-footer{display:-webkit-flexbox;display:flex;-moz-flex-direction:row;flex-direction:row;-webkit-flex-pack:justify;-moz-align-items:center;align-items:center;background-color:#fff;-moz-justify-content:space-between;justify-content:space-between;min-height:58px}#didomi-host .didomi-popup-footer .didomi-popup-actions{display:-webkit-flexbox;display:flex;-moz-flex-direction:row;flex-direction:row;-webkit-flex-pack:end;-moz-align-items:center;align-items:center;-moz-justify-content:flex-end;justify-content:flex-end}#didomi-host .didomi-popup-footer .didomi-popup-actions button,#didomi-host .didomi-popup-footer .didomi-popup-actions div{margin-right:10px}[dir=rtl] #didomi-host .didomi-popup-footer .didomi-popup-actions button,[dir=rtl] #didomi-host .didomi-popup-footer .didomi-popup-actions div{margin-left:10px;margin-right:0}#didomi-host .didomi-popup-close{color:#000;font-family:Arial;font-size:30px;font-weight:500;line-height:30px;opacity:.5;text-shadow:0 1px 0 #fff;transition:.5s}#didomi-host .didomi-popup-close:hover{opacity:.7}#didomi-host .didomi-mobile .didomi-popup{height:100%;max-width:none;width:100%}body.didomi-popup-open{overflow:hidden!important}body.didomi-popup-open-ios{position:fixed;width:100%}#didomi-host .didomi-notice-data-processing-container{font-size:12px;line-height:160%;padding-top:15px;text-align:justify}#didomi-host .didomi-notice-data-processing-container .didomi-notice-data-processing-title{color:#333;display:block;font-weight:bold}#didomi-host .didomi-notice-data-processing-container .didomi-notice-data-processing-list{color:#526e7a;font-weight:bold}#didomi-host .didomi-notice-data-processing-container .didomi-notice-data-processing-list .didomi-notice-data-processing-item{padding-top:5px}#didomi-host .didomi-notice-data-processing-container .didomi-notice-data-processing-list .didomi-notice-data-processing-item div{display:inline-block}#didomi-host .didomi-notice-data-processing-container p{font-size:12px}#didomi-host .didomi-mobile .didomi-notice-data-processing-container .didomi-notice-data-processing-title{font-size:11px;line-height:160%}#didomi-host .didomi-mobile .didomi-notice-data-processing-container .didomi-notice-data-processing-list{font-size:11px;line-height:160%}#didomi-host .didomi-gpc-label{background:#fff;border:1px solid #3f8964;border-radius:40px;display:inline-block;height:27.93px;width:369.7px}#didomi-host .didomi-gpc-label .left-container{background:#3f8964;border-radius:30px 0 0 30px;display:inline-block;height:27.93px;width:173.7px}#didomi-host .didomi-gpc-label .left-container .gpc-image{background-image:url(https://sdk.privacy-center.org/sdk/5d68cf27fcc4e658e7bf39722c7dd84c606f7f7b/modern/images/cb5b80c89a9fda353482-gpc.large.png);background-size:cover;display:inline-block;height:15.93px;margin:5px 0 0 10px;width:153.7px}#didomi-host .didomi-gpc-label .right-container{display:inline-block;height:27.93px;width:181px}#didomi-host .didomi-gpc-label .right-container .gpc-title{color:#3f8964;display:inline-block;font-family:\"Arial\";font-size:12px;font-style:italic;font-weight:700;height:27.93px;left:5px;line-height:27.93px;position:relative;top:-4px;width:161px}#didomi-host .didomi-gpc-label .right-container .gpc-icon{background-image:url(https://sdk.privacy-center.org/sdk/5d68cf27fcc4e658e7bf39722c7dd84c606f7f7b",
+  "dataAttributes": [],
+  "possibleSelectors": {
+    "potentialItems": []
+  }
+}

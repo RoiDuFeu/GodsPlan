@@ -1,0 +1,51 @@
+{
+  "passed": 9,
+  "failed": 0,
+  "tests": [
+    {
+      "name": "Email detection (case-insensitive)",
+      "passed": true,
+      "errors": []
+    },
+    {
+      "name": "Address extraction (basic)",
+      "passed": true,
+      "errors": []
+    },
+    {
+      "name": "Address extraction (various types)",
+      "passed": true,
+      "errors": []
+    },
+    {
+      "name": "Weekday range parsing (lundi-vendredi)",
+      "passed": true,
+      "errors": []
+    },
+    {
+      "name": "Weekday range (samedi-dimanche)",
+      "passed": true,
+      "errors": []
+    },
+    {
+      "name": "Priest name (Recteur)",
+      "passed": true,
+      "errors": []
+    },
+    {
+      "name": "Priest name (Vicaire)",
+      "passed": true,
+      "errors": []
+    },
+    {
+      "name": "Priest name (Aumônier with particle)",
+      "passed": true,
+      "errors": []
+    },
+    {
+      "name": "Complete church example",
+      "passed": true,
+      "errors": []
+    }
+  ]
+}
