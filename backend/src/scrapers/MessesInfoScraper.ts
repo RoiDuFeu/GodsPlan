@@ -1,5 +1,5 @@
 import puppeteer, { Browser, HTTPResponse, Page } from 'puppeteer';
-import { BaseScraper, ScrapedChurch } from './BaseScraper';
+import { BaseScraper, ScrapedChurch, ScraperCallbacks } from './BaseScraper';
 
 interface AnnuaireChurchPayload {
   id: string;
@@ -37,84 +37,161 @@ interface ExtractedPageData {
 }
 
 /**
+ * Ile-de-France department name mapping for messes.info URLs
+ */
+const DEPARTMENT_NAMES: Record<string, string> = {
+  '75': 'paris',
+  '77': 'seine-et-marne',
+  '78': 'yvelines',
+  '91': 'essonne',
+  '92': 'hauts-de-seine',
+  '93': 'seine-saint-denis',
+  '94': 'val-de-marne',
+  '95': 'val-d-oise',
+};
+
+const DEPARTMENT_CITIES: Record<string, string> = {
+  '75': 'Paris',
+  '77': 'Melun',
+  '78': 'Versailles',
+  '91': 'Évry',
+  '92': 'Nanterre',
+  '93': 'Bobigny',
+  '94': 'Créteil',
+  '95': 'Cergy',
+};
+
+/**
  * messes.info scraper using Puppeteer (JS-rendered pages)
  */
+const DEFAULT_CONCURRENCY = 4;
+
 export class MessesInfoScraper extends BaseScraper {
   private browser: Browser | null = null;
   private listPage: Page | null = null;
-  private detailPage: Page | null = null;
+  private pagePool: Page[] = [];
+  private pagePoolAvailable: Page[] = [];
+  private pagePoolWaiters: Array<(page: Page) => void> = [];
   private seedChurches = new Map<string, SeedChurchData>();
+  private departments: string[];
+  private currentDepartment = '75';
 
-  constructor() {
+  constructor(departments: string[] = ['75'], concurrency: number = DEFAULT_CONCURRENCY) {
     super({
       name: 'messes.info',
       baseUrl: 'https://www.messes.info',
       rateLimit: 500,
+      concurrency,
     });
+    this.departments = departments;
   }
 
-  async scrape(): Promise<ScrapedChurch[]> {
+  private callbacks?: ScraperCallbacks;
+
+  async scrape(callbacks?: ScraperCallbacks): Promise<ScrapedChurch[]> {
+    this.callbacks = callbacks;
     try {
-      return await super.scrape();
+      return await super.scrape(callbacks);
     } finally {
+      this.callbacks = undefined;
       await this.closeBrowser();
     }
   }
 
   async scrapeChurchList(): Promise<string[]> {
-    const departmentCode = '75';
-    const startUrl = `${this.config.baseUrl}/horaires-messes/${departmentCode}-paris`;
-    const annuaireUrl = `${this.config.baseUrl}/annuaire/${departmentCode}`;
-
     try {
       const page = await this.getListPage();
 
-      const onResponse = async (response: HTTPResponse) => {
-        if (!response.url().includes('/gwtRequest')) {
-          return;
+      for (const departmentCode of this.departments) {
+        if (this.callbacks?.shouldCancel?.()) {
+          this.emitLog(this.callbacks, { level: 'warn', message: 'Scraping cancelled by user', phase: 'list' });
+          break;
         }
 
-        const postData = response.request().postData() || '';
-        if (!postData.includes(`"${departmentCode}"`)) {
-          return;
-        }
+        this.currentDepartment = departmentCode;
+        const deptName = DEPARTMENT_NAMES[departmentCode] || departmentCode;
+        console.log(`📍 Scraping department ${departmentCode} (${deptName})...`);
+
+        const startUrl = `${this.config.baseUrl}/horaires-messes/${departmentCode}-${deptName}`;
+        const annuaireUrl = `${this.config.baseUrl}/annuaire/${departmentCode}`;
+
+        this.emitLog(this.callbacks, {
+          level: 'info',
+          message: `Loading department ${departmentCode} (${deptName})`,
+          url: annuaireUrl,
+          phase: 'list',
+        });
+
+        const onResponse = async (response: HTTPResponse) => {
+          if (!response.url().includes('/gwtRequest')) {
+            return;
+          }
+
+          const postData = response.request().postData() || '';
+          if (!postData.includes(`"${departmentCode}"`)) {
+            return;
+          }
+
+          try {
+            const body = await response.text();
+            const payloads = this.extractAnnuairePayloads(body);
+            payloads.forEach((payload) => this.storeSeedChurch(payload));
+          } catch {
+            // ignore payload parsing errors from unrelated gwt calls
+          }
+        };
+
+        page.on('response', onResponse);
 
         try {
-          const body = await response.text();
-          const payloads = this.extractAnnuairePayloads(body);
-          payloads.forEach((payload) => this.storeSeedChurch(payload));
-        } catch {
-          // ignore payload parsing errors from unrelated gwt calls
-        }
-      };
+          await page.goto(startUrl, { waitUntil: 'networkidle2', timeout: 120000 });
 
-      page.on('response', onResponse);
+          await page.goto(annuaireUrl, { waitUntil: 'networkidle2', timeout: 120000 });
+          await this.sleep(1500);
 
-      try {
-        // Required URL from task
-        await page.goto(startUrl, { waitUntil: 'networkidle2', timeout: 120000 });
+          this.emitLog(this.callbacks, {
+            level: 'info',
+            message: `Department ${departmentCode}: initial page loaded, ${this.seedChurches.size} churches found`,
+            phase: 'list',
+          });
 
-        // Practical source for all Paris churches
-        await page.goto(annuaireUrl, { waitUntil: 'networkidle2', timeout: 120000 });
-        await this.sleep(1500);
+          // Load additional batches via "Suite ..."
+          for (let i = 0; i < 20; i += 1) {
+            const beforeCount = this.seedChurches.size;
+            const suiteButton = await this.findSuiteButton(page);
+            if (!suiteButton) {
+              break;
+            }
 
-        // Load additional batches via "Suite ..."
-        for (let i = 0; i < 20; i += 1) {
-          const beforeCount = this.seedChurches.size;
-          const suiteButton = await this.findSuiteButton(page);
-          if (!suiteButton) {
-            break;
+            this.emitLog(this.callbacks, {
+              level: 'info',
+              message: `Department ${departmentCode}: loading batch ${i + 1}... (${this.seedChurches.size} churches so far)`,
+              phase: 'list',
+            });
+
+            await page.evaluate((el) => (el as any).click(), suiteButton);
+            await this.sleep(1300);
+
+            if (this.seedChurches.size === beforeCount) {
+              break;
+            }
+
+            this.emitLog(this.callbacks, {
+              level: 'info',
+              message: `Department ${departmentCode}: batch ${i + 1} loaded, ${this.seedChurches.size} churches total`,
+              phase: 'list',
+            });
           }
-
-          await page.evaluate((el) => (el as any).click(), suiteButton);
-          await this.sleep(1300);
-
-          if (this.seedChurches.size === beforeCount) {
-            break;
-          }
+        } finally {
+          page.off('response', onResponse);
         }
-      } finally {
-        page.off('response', onResponse);
+
+        this.emitLog(this.callbacks, {
+          level: 'success',
+          message: `Department ${departmentCode} complete: ${this.seedChurches.size} churches collected`,
+          phase: 'list',
+        });
+        console.log(`📍 Department ${departmentCode}: ${this.seedChurches.size} churches so far`);
       }
 
       let urls = Array.from(this.seedChurches.keys());
@@ -133,11 +210,11 @@ export class MessesInfoScraper extends BaseScraper {
 
   async scrapeChurchDetails(url: string): Promise<ScrapedChurch | null> {
     const seed = this.seedChurches.get(url);
+    const page = await this.acquirePage();
 
     try {
-      const page = await this.getDetailPage();
       await page.goto(url, { waitUntil: 'networkidle2', timeout: 120000 });
-      await this.sleep(900);
+      await this.sleep(500 + Math.random() * 500);
 
       const extracted = (await page.evaluate(() => {
         const doc = (globalThis as any).document;
@@ -335,6 +412,8 @@ export class MessesInfoScraper extends BaseScraper {
       }
 
       return null;
+    } finally {
+      this.releasePage(page);
     }
   }
 
@@ -381,12 +460,15 @@ export class MessesInfoScraper extends BaseScraper {
       return;
     }
 
+    const defaultPostal = `${this.currentDepartment}000`;
+    const defaultCity = DEPARTMENT_CITIES[this.currentDepartment] || 'Paris';
+
     this.seedChurches.set(sourceUrl, {
       name: payload.name?.trim() || 'Église inconnue',
       address: {
         street: payload.address?.trim() || '',
-        postalCode: payload.zipcode?.trim() || '75000',
-        city: payload.city?.trim() || 'Paris',
+        postalCode: payload.zipcode?.trim() || defaultPostal,
+        city: payload.city?.trim() || defaultCity,
       },
       latitude: payload.latitude,
       longitude: payload.longitude,
@@ -401,11 +483,14 @@ export class MessesInfoScraper extends BaseScraper {
       return seed.address;
     }
 
+    const defaultPostal = `${this.currentDepartment}000`;
+    const defaultCity = DEPARTMENT_CITIES[this.currentDepartment] || 'Paris';
+
     if (!addressText) {
       return {
         street: '',
-        postalCode: '75000',
-        city: 'Paris',
+        postalCode: defaultPostal,
+        city: defaultCity,
       };
     }
 
@@ -422,8 +507,8 @@ export class MessesInfoScraper extends BaseScraper {
 
     return {
       street: compact,
-      postalCode: '75000',
-      city: 'Paris',
+      postalCode: defaultPostal,
+      city: defaultCity,
     };
   }
 
@@ -495,16 +580,39 @@ export class MessesInfoScraper extends BaseScraper {
     return this.listPage;
   }
 
-  private async getDetailPage(): Promise<Page> {
-    if (this.detailPage) {
-      return this.detailPage;
-    }
+  private async initPagePool(): Promise<void> {
+    if (this.pagePool.length > 0) return;
 
+    const concurrency = this.config.concurrency || DEFAULT_CONCURRENCY;
     const browser = await this.getBrowser();
-    this.detailPage = await browser.newPage();
-    this.detailPage.setDefaultTimeout(120000);
 
-    return this.detailPage;
+    for (let i = 0; i < concurrency; i++) {
+      const page = await browser.newPage();
+      page.setDefaultTimeout(120000);
+      this.pagePool.push(page);
+      this.pagePoolAvailable.push(page);
+    }
+  }
+
+  private async acquirePage(): Promise<Page> {
+    await this.initPagePool();
+
+    const page = this.pagePoolAvailable.pop();
+    if (page) return page;
+
+    // All pages busy — wait for one to be released
+    return new Promise<Page>((resolve) => {
+      this.pagePoolWaiters.push(resolve);
+    });
+  }
+
+  private releasePage(page: Page): void {
+    const waiter = this.pagePoolWaiters.shift();
+    if (waiter) {
+      waiter(page);
+    } else {
+      this.pagePoolAvailable.push(page);
+    }
   }
 
   private async findSuiteButton(
@@ -524,14 +632,16 @@ export class MessesInfoScraper extends BaseScraper {
 
   private async closeBrowser(): Promise<void> {
     if (this.listPage) {
-      await this.listPage.close();
+      await this.listPage.close().catch(() => {});
       this.listPage = null;
     }
 
-    if (this.detailPage) {
-      await this.detailPage.close();
-      this.detailPage = null;
+    for (const page of this.pagePool) {
+      await page.close().catch(() => {});
     }
+    this.pagePool = [];
+    this.pagePoolAvailable = [];
+    this.pagePoolWaiters = [];
 
     if (this.browser) {
       await this.browser.close();

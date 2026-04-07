@@ -7,6 +7,7 @@ export interface ScraperConfig {
   userAgent?: string;
   timeout?: number;
   rateLimit?: number; // milliseconds between requests
+  concurrency?: number; // number of parallel detail scrapers (default 1)
 }
 
 export interface ScrapedReview {
@@ -48,6 +49,24 @@ export interface ScrapedChurch {
   userRatingsTotal?: number;
   reviews?: ScrapedReview[];
   sourceUrl: string;
+}
+
+export interface ScraperLogEntry {
+  timestamp: string;
+  level: 'info' | 'success' | 'warn' | 'error';
+  message: string;
+  url?: string;
+  churchName?: string;
+  phase?: 'list' | 'detail';
+  progress?: { current: number; total: number };
+}
+
+export interface ScraperCallbacks {
+  onChurchScraped?: (church: ScrapedChurch) => void;
+  onChurchError?: (url: string, error: Error) => void;
+  onProgress?: (current: number, total: number) => void;
+  onLog?: (entry: ScraperLogEntry) => void;
+  shouldCancel?: () => boolean;
 }
 
 export abstract class BaseScraper {
@@ -101,30 +120,139 @@ export abstract class BaseScraper {
   abstract scrapeChurchList(): Promise<string[]>;
   abstract scrapeChurchDetails(url: string): Promise<ScrapedChurch | null>;
 
-  async scrape(): Promise<ScrapedChurch[]> {
+  protected emitLog(callbacks: ScraperCallbacks | undefined, entry: Omit<ScraperLogEntry, 'timestamp'>) {
+    const full: ScraperLogEntry = { ...entry, timestamp: new Date().toISOString() };
+    callbacks?.onLog?.(full);
+  }
+
+  async scrape(callbacks?: ScraperCallbacks): Promise<ScrapedChurch[]> {
     console.log(`🔍 Starting ${this.config.name} scraper...`);
+    this.emitLog(callbacks, { level: 'info', message: `Starting ${this.config.name} scraper`, phase: 'list' });
 
     try {
       const churchUrls = await this.scrapeChurchList();
-      console.log(`📋 Found ${churchUrls.length} churches to scrape`);
+      const concurrency = this.config.concurrency || 1;
+      console.log(`📋 Found ${churchUrls.length} churches to scrape (concurrency: ${concurrency})`);
+      this.emitLog(callbacks, {
+        level: 'info',
+        message: `Found ${churchUrls.length} churches to scrape (${concurrency} workers)`,
+        phase: 'detail',
+      });
 
       const churches: ScrapedChurch[] = [];
+      let completed = 0;
+      let cancelled = false;
 
-      for (const url of churchUrls) {
-        try {
-          const church = await this.scrapeChurchDetails(url);
-          if (church) {
-            churches.push(church);
-            console.log(`✅ Scraped: ${church.name}`);
+      if (concurrency <= 1) {
+        // Sequential mode (original behavior)
+        for (let i = 0; i < churchUrls.length; i++) {
+          if (callbacks?.shouldCancel?.()) {
+            this.emitLog(callbacks, { level: 'warn', message: 'Scraping cancelled by user' });
+            break;
           }
-        } catch (error) {
-          console.error(`❌ Failed to scrape ${url}:`, error);
+
+          const url = churchUrls[i];
+          completed++;
+          callbacks?.onProgress?.(completed, churchUrls.length);
+          this.emitLog(callbacks, {
+            level: 'info',
+            message: `Scraping church ${completed}/${churchUrls.length}`,
+            url,
+            phase: 'detail',
+            progress: { current: completed, total: churchUrls.length },
+          });
+
+          try {
+            const church = await this.scrapeChurchDetails(url);
+            if (church) {
+              churches.push(church);
+              callbacks?.onChurchScraped?.(church);
+              this.emitLog(callbacks, {
+                level: 'success',
+                message: `Scraped: ${church.name}`,
+                url,
+                churchName: church.name,
+                phase: 'detail',
+                progress: { current: completed, total: churchUrls.length },
+              });
+            }
+          } catch (error) {
+            const err = error instanceof Error ? error : new Error(String(error));
+            callbacks?.onChurchError?.(url, err);
+            this.emitLog(callbacks, {
+              level: 'error',
+              message: `Failed: ${err.message}`,
+              url,
+              phase: 'detail',
+              progress: { current: completed, total: churchUrls.length },
+            });
+          }
         }
+      } else {
+        // Parallel mode with worker pool
+        let nextIndex = 0;
+
+        const worker = async (): Promise<void> => {
+          while (!cancelled) {
+            const idx = nextIndex++;
+            if (idx >= churchUrls.length) break;
+
+            if (callbacks?.shouldCancel?.()) {
+              cancelled = true;
+              this.emitLog(callbacks, { level: 'warn', message: 'Scraping cancelled by user' });
+              break;
+            }
+
+            const url = churchUrls[idx];
+            const current = ++completed;
+
+            callbacks?.onProgress?.(current, churchUrls.length);
+            this.emitLog(callbacks, {
+              level: 'info',
+              message: `Scraping church ${current}/${churchUrls.length}`,
+              url,
+              phase: 'detail',
+              progress: { current, total: churchUrls.length },
+            });
+
+            try {
+              const church = await this.scrapeChurchDetails(url);
+              if (church) {
+                churches.push(church);
+                callbacks?.onChurchScraped?.(church);
+                this.emitLog(callbacks, {
+                  level: 'success',
+                  message: `Scraped: ${church.name}`,
+                  url,
+                  churchName: church.name,
+                  phase: 'detail',
+                  progress: { current, total: churchUrls.length },
+                });
+              }
+            } catch (error) {
+              const err = error instanceof Error ? error : new Error(String(error));
+              callbacks?.onChurchError?.(url, err);
+              this.emitLog(callbacks, {
+                level: 'error',
+                message: `Failed: ${err.message}`,
+                url,
+                phase: 'detail',
+                progress: { current, total: churchUrls.length },
+              });
+            }
+          }
+        };
+
+        const workers = Array.from({ length: concurrency }, () => worker());
+        await Promise.all(workers);
       }
 
+      this.emitLog(callbacks, { level: 'success', message: `Completed: ${churches.length} churches scraped` });
       console.log(`✅ ${this.config.name} scraper completed: ${churches.length} churches`);
       return churches;
     } catch (error) {
+      const err = error instanceof Error ? error : new Error(String(error));
+      this.emitLog(callbacks, { level: 'error', message: `Scraper failed: ${err.message}` });
       console.error(`❌ ${this.config.name} scraper failed:`, error);
       throw error;
     }

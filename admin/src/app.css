@@ -1,0 +1,70 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* Dark Mode - King Blue & Gold (default for admin) */
+  --background: 234 26% 9%;
+  --foreground: 240 14% 91%;
+
+  --surface: 234 26% 9%;
+  --surface-dim: 234 22% 7%;
+  --surface-bright: 234 18% 14%;
+  --surface-container-low: 234 20% 11%;
+  --surface-container: 234 18% 13%;
+  --surface-container-high: 234 16% 16%;
+  --surface-container-highest: 234 14% 20%;
+
+  --primary: 42 85% 48%;
+  --primary-foreground: 0 0% 100%;
+  --primary-container: 42 60% 20%;
+
+  --secondary: 216 70% 45%;
+  --secondary-foreground: 0 0% 100%;
+  --secondary-container: 216 50% 20%;
+
+  --muted: 234 15% 20%;
+  --muted-foreground: 234 10% 55%;
+
+  --destructive: 0 72% 51%;
+
+  --on-surface: 240 14% 91%;
+  --on-surface-variant: 234 10% 65%;
+
+  --outline: 234 8% 35%;
+  --outline-variant: 234 10% 25%;
+
+  --border: 234 12% 22%;
+  --ring: 42 85% 48%;
+}
+
+@layer base {
+  * {
+    @apply border-outline-variant;
+  }
+
+  body {
+    @apply antialiased;
+  }
+
+  /* Custom scrollbar for dark theme */
+  ::-webkit-scrollbar {
+    @apply w-2;
+  }
+  ::-webkit-scrollbar-track {
+    @apply bg-surface-dim;
+  }
+  ::-webkit-scrollbar-thumb {
+    @apply bg-outline rounded-full;
+  }
+}
+
+/* Pulse animation for running status */
+@keyframes pulse-glow {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
+}

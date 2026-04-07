@@ -17,7 +17,14 @@
       "Bash(npx vite:*)",
       "Bash(npm run:*)",
       "Bash(find C:UsersRoiDuFeuDocumentsCodeGodsPlanwebsrc -name *scroll* -o -name *landing* -o -name *home*)",
-      "mcp__Claude_Preview__preview_start"
+      "mcp__Claude_Preview__preview_start",
+      "Bash(./node_modules/.bin/tsc --noEmit)",
+      "Bash(psql --version)",
+      "Read(//c/Program Files/PostgreSQL//**)",
+      "Read(//c/Program Files/PostgreSQL/**)",
+      "Read(//c/Users/RoiDuFeu/Documents/Code/**)",
+      "Bash(PGPASSWORD=secret \"/c/Program Files/PostgreSQL/18/bin/psql.exe\" -U fertiscale -p 5433 -d fertiscale_db -c \"SELECT version\\(\\);\")",
+      "Bash(PGPASSWORD=secret \"/c/Program Files/PostgreSQL/18/bin/psql.exe\" -U fertiscale -p 5433 -d fertiscale_db -c \"CREATE USER godsplan WITH PASSWORD ''godsplan_dev'';\")"
     ]
   }
 }

@@ -17,6 +17,7 @@ interface ScraperCliOptions {
   fixtures: boolean;
   limit?: number;
   churchNames: string[];
+  departments: string[];
 }
 
 interface GoogleEnrichmentRow {
@@ -41,6 +42,7 @@ function parseCliArgs(): ScraperCliOptions {
   };
 
   const churchArg = getValue('--church') || getValue('--churches');
+  const deptArg = getValue('--departments') || getValue('--dept');
 
   return {
     withMesses: args.includes('--with-messes'),
@@ -53,6 +55,12 @@ function parseCliArgs(): ScraperCliOptions {
           .map((name) => name.trim())
           .filter(Boolean)
       : [],
+    departments: deptArg
+      ? deptArg
+          .split(',')
+          .map((d) => d.trim())
+          .filter(Boolean)
+      : ['75'],
   };
 }
 
@@ -441,7 +449,7 @@ async function runScrapers(): Promise<void> {
   await initializeDatabase();
 
   if (!options.googleOnly && options.withMesses) {
-    const messesInfoScraper = new MessesInfoScraper();
+    const messesInfoScraper = new MessesInfoScraper(options.departments);
     const messesInfoChurches = await messesInfoScraper.scrape();
     await saveChurches(messesInfoChurches, 'messes.info');
   }

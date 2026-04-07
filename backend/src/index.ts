@@ -7,6 +7,7 @@ import { initializeDatabase } from './config/database';
 import churchRoutes from './routes/churches';
 import churchSimpleRoutes from './routes/churches-simple';
 import adminStatsRoutes from './routes/admin-stats';
+import adminScrapersRoutes from './routes/admin-scrapers';
 import liturgyRoutes from './routes/liturgy';
 import { liturgySyncJob } from './jobs/liturgySync';
 
@@ -20,7 +21,12 @@ const API_PREFIX = process.env.API_PREFIX || '/api/v1';
 app.use(helmet({
   contentSecurityPolicy: false, // Allow inline scripts for React
 }));
-app.use(cors());
+app.use(cors({
+  origin: [
+    'http://localhost:3022',  // React frontend
+    'http://localhost:5174',  // Svelte admin
+  ],
+}));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -43,6 +49,7 @@ app.get('/health', (req: Request, res: Response) => {
 app.use(`${API_PREFIX}/churches`, churchRoutes);
 app.use(`${API_PREFIX}/churches-simple`, churchSimpleRoutes);
 app.use(`${API_PREFIX}/admin`, adminStatsRoutes);
+app.use(`${API_PREFIX}/admin/scrapers`, adminScrapersRoutes);
 app.use(`${API_PREFIX}/liturgy`, liturgyRoutes);
 
 // Serve static frontend (production)
@@ -80,10 +87,45 @@ const startServer = async () => {
     // Start liturgy sync job
     liturgySyncJob.scheduleDailySync();
     
-    app.listen(PORT, () => {
+    const server = app.listen(PORT, () => {
       console.log(`🚀 God's Plan API running on http://localhost:${PORT}`);
       console.log(`📍 API prefix: ${API_PREFIX}`);
       console.log(`🌍 Environment: ${process.env.NODE_ENV || 'development'}`);
+    });
+
+    server.on('error', (err: NodeJS.ErrnoException) => {
+      if (err.code === 'EADDRINUSE') {
+        console.error(`❌ Port ${PORT} is already in use. Kill the other process or use a different port.`);
+        process.exit(1);
+      }
+      throw err;
+    });
+
+    const shutdown = () => {
+      console.log('\n🛑 Shutting down gracefully...');
+      server.close(() => {
+        console.log('Server closed');
+        process.exit(0);
+      });
+      // Force exit after 3s if connections hang
+      setTimeout(() => {
+        console.log('Forcing exit');
+        process.exit(0);
+      }, 3000).unref();
+    };
+
+    process.on('SIGTERM', shutdown);
+    process.on('SIGINT', shutdown);
+    process.on('SIGHUP', shutdown);
+
+    // Windows: handle parent process kill (e.g. ts-node-dev, tsx watch)
+    process.on('message', (msg) => {
+      if (msg === 'shutdown') shutdown();
+    });
+
+    // Ensure cleanup on uncaught exceptions
+    process.on('beforeExit', () => {
+      server.close();
     });
   } catch (error) {
     console.error('Failed to start server:', error);
