@@ -54,3 +54,7 @@ Thumbs.db
 
 # React Native
 .bundle/
+
+# Xcode
+*.xcuserstate
+xcuserdata/
