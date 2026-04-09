@@ -138,6 +138,25 @@ export class RateLimiter {
 }
 
 /**
+ * Concurrent-safe rate limiter using a promise chain.
+ * Unlike SimpleRateLimiter, this correctly spaces requests
+ * even when multiple callers enter wait() concurrently.
+ */
+export class ConcurrentRateLimiter {
+  private chain: Promise<void> = Promise.resolve();
+
+  constructor(private readonly delayMs: number) {}
+
+  async wait(): Promise<void> {
+    const ticket = this.chain.then(
+      () => new Promise<void>((r) => setTimeout(r, this.delayMs)),
+    );
+    this.chain = ticket;
+    await ticket;
+  }
+}
+
+/**
  * Simple delay-based rate limiter (legacy compatibility)
  */
 export class SimpleRateLimiter {

@@ -4,6 +4,9 @@
   import type { ScraperInfo, ScraperRunSummary } from '$lib/types';
   import StatusBadge from '$lib/components/StatusBadge.svelte';
   import RunHistoryTable from '$lib/components/RunHistoryTable.svelte';
+  import FadeIn from '$lib/components/ui/FadeIn.svelte';
+  import NumberTicker from '$lib/components/ui/NumberTicker.svelte';
+  import Skeleton from '$lib/components/ui/Skeleton.svelte';
 
   let scrapers = $state<ScraperInfo[]>([]);
   let recentRuns = $state<ScraperRunSummary[]>([]);
@@ -23,9 +26,9 @@
       recentRuns = runsData;
       if (statsData) {
         stats = {
-          total: parseInt(String(statsData.overview.total)),
-          active: parseInt(String(statsData.overview.active)),
-          avgReliability: parseFloat(String(statsData.overview.avg_reliability)) || 0,
+          total: parseInt(String(statsData.total)),
+          active: parseInt(String(statsData.active)),
+          avgReliability: parseFloat(String(statsData.avgReliabilityScore)) || 0,
         };
       }
     } catch {
@@ -71,73 +74,102 @@
   });
 </script>
 
-<div class="p-4 md:p-8 max-w-7xl mx-auto space-y-8">
+<div class="page-container space-y-8">
   <!-- Header -->
-  <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-    <div>
-      <h1 class="font-headline text-2xl font-bold text-on-surface">Dashboard</h1>
-      <p class="text-sm text-on-surface-variant mt-1">Scraper monitoring overview</p>
+  <FadeIn>
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 page-header">
+      <div>
+        <h1 class="page-title">Dashboard</h1>
+        <p class="page-subtitle">Scraper monitoring overview</p>
+      </div>
+      <button onclick={triggerIdf} disabled={triggeringIdf} class="btn-primary">
+        {#if triggeringIdf}
+          <svg class="w-4 h-4 animate-spin" viewBox="0 0 24 24" fill="none">
+            <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="3" opacity="0.25"/>
+            <path d="M4 12a8 8 0 018-8" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+          </svg>
+          Starting...
+        {:else}
+          Scrape Ile-de-France
+        {/if}
+      </button>
     </div>
-    <button
-      onclick={triggerIdf}
-      disabled={triggeringIdf}
-      class="px-5 py-3 rounded-xl text-sm font-medium bg-primary text-primary-foreground hover:bg-primary/90 transition-colors disabled:opacity-40 min-h-[44px]"
-    >
-      {triggeringIdf ? 'Starting...' : 'Scrape Ile-de-France'}
-    </button>
-  </div>
+  </FadeIn>
 
   {#if loading}
     <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
       {#each Array(4) as _}
-        <div class="bg-surface-container rounded-xl border border-outline-variant p-5 h-24 animate-pulse"></div>
+        <Skeleton class="h-[100px]" />
       {/each}
     </div>
   {:else}
     <!-- Stats cards -->
     <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
-      <div class="bg-surface-container rounded-xl border border-outline-variant p-5">
-        <p class="text-xs text-on-surface-variant uppercase tracking-wide font-medium">Total Churches</p>
-        <p class="text-2xl font-headline font-bold text-on-surface mt-2">{stats?.total ?? '-'}</p>
-      </div>
-      <div class="bg-surface-container rounded-xl border border-outline-variant p-5">
-        <p class="text-xs text-on-surface-variant uppercase tracking-wide font-medium">Active Scrapers</p>
-        <p class="text-2xl font-headline font-bold mt-2 {activeScrapers > 0 ? 'text-secondary' : 'text-on-surface'}">
-          {activeScrapers}
-        </p>
-      </div>
-      <div class="bg-surface-container rounded-xl border border-outline-variant p-5">
-        <p class="text-xs text-on-surface-variant uppercase tracking-wide font-medium">Last Scrape</p>
-        <p class="text-2xl font-headline font-bold text-on-surface mt-2">{lastScrapeTime()}</p>
-      </div>
-      <div class="bg-surface-container rounded-xl border border-outline-variant p-5">
-        <p class="text-xs text-on-surface-variant uppercase tracking-wide font-medium">Error Rate</p>
-        <p class="text-2xl font-headline font-bold text-on-surface mt-2">{errorRate()}</p>
-      </div>
+      <FadeIn delay={0}>
+        <div class="stat-card">
+          <p class="stat-label">Total Churches</p>
+          <p class="stat-value">
+            {#if stats?.total}
+              <NumberTicker value={stats.total} />
+            {:else}
+              -
+            {/if}
+          </p>
+        </div>
+      </FadeIn>
+      <FadeIn delay={60}>
+        <div class="stat-card">
+          <p class="stat-label">Active Scrapers</p>
+          <p class="stat-value {activeScrapers > 0 ? 'text-success' : ''}">
+            <NumberTicker value={activeScrapers} duration={600} />
+          </p>
+        </div>
+      </FadeIn>
+      <FadeIn delay={120}>
+        <div class="stat-card">
+          <p class="stat-label">Last Scrape</p>
+          <p class="stat-value">{lastScrapeTime()}</p>
+        </div>
+      </FadeIn>
+      <FadeIn delay={180}>
+        <div class="stat-card">
+          <p class="stat-label">Error Rate</p>
+          <p class="stat-value">{errorRate()}</p>
+        </div>
+      </FadeIn>
     </div>
 
     <!-- Scrapers quick status -->
-    <div class="bg-surface-container rounded-xl border border-outline-variant p-5">
-      <h2 class="font-headline font-bold text-on-surface mb-4">Scrapers</h2>
-      <div class="space-y-3">
-        {#each scrapers as scraper}
-          <a href="/scrapers/{scraper.name}" class="flex items-center justify-between p-3 rounded-lg hover:bg-surface-container-high transition-colors">
-            <div class="flex items-center gap-3">
-              <StatusBadge status={scraper.isRunning ? 'running' : (scraper.lastRun?.status || 'idle')} size="sm" />
-              <span class="text-sm font-medium text-on-surface">{scraper.name}</span>
-            </div>
-            <span class="text-xs text-on-surface-variant">
-              {scraper.lastRun?.churchesFound ?? 0} churches
-            </span>
-          </a>
-        {/each}
+    <FadeIn delay={200}>
+      <div class="card p-6">
+        <h2 class="section-title mb-5">Scrapers</h2>
+        <div class="space-y-1">
+          {#each scrapers as scraper}
+            <a href="/scrapers/{scraper.name}" class="flex items-center justify-between p-3.5 rounded-xl hover:bg-surface-container-high/60 transition-colors group">
+              <div class="flex items-center gap-3">
+                <StatusBadge status={scraper.isRunning ? 'running' : (scraper.lastRun?.status || 'idle')} size="sm" />
+                <span class="text-sm font-medium text-on-surface group-hover:text-on-surface transition-colors">{scraper.name}</span>
+              </div>
+              <div class="flex items-center gap-3">
+                <span class="text-xs text-on-surface-variant tabular-nums">
+                  {scraper.lastRun?.churchesFound ?? 0} churches
+                </span>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-4 h-4 text-on-surface-variant/40 group-hover:text-on-surface-variant transition-colors">
+                  <path d="M9 18l6-6-6-6"/>
+                </svg>
+              </div>
+            </a>
+          {/each}
+        </div>
       </div>
-    </div>
+    </FadeIn>
 
     <!-- Recent runs -->
-    <div class="bg-surface-container rounded-xl border border-outline-variant p-5">
-      <h2 class="font-headline font-bold text-on-surface mb-4">Recent Runs</h2>
-      <RunHistoryTable runs={recentRuns} showScraperName={true} onCancel={loadData} />
-    </div>
+    <FadeIn delay={300}>
+      <div class="card p-6">
+        <h2 class="section-title mb-5">Recent Runs</h2>
+        <RunHistoryTable runs={recentRuns} showScraperName={true} onCancel={loadData} />
+      </div>
+    </FadeIn>
   {/if}
 </div>

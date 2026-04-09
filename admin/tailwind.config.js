@@ -40,8 +40,8 @@ export default {
           DEFAULT: 'hsl(var(--outline))',
           variant: 'hsl(var(--outline-variant))',
         },
-        success: '#22c55e',
-        warning: '#f59e0b',
+        success: 'hsl(var(--success))',
+        warning: 'hsl(var(--warning))',
       },
       fontFamily: {
         headline: ['Manrope', 'sans-serif'],

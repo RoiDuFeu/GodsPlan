@@ -1,13 +1,20 @@
 import axios from 'axios';
 import { AppDataSource } from '../config/database';
-import { Church, ChurchRite, DataSource } from '../models/Church';
+import { Church, ChurchRite, DataSource, OfficeSchedule } from '../models/Church';
 import { ScrapedChurch } from '../scrapers/BaseScraper';
 import { calculateSourceCompleteness } from '../scrapers/reliabilityScoring';
 
 function mapRite(riteString: string): ChurchRite {
   const mapping: Record<string, ChurchRite> = {
+    // New clean values
+    'Tridentine': ChurchRite.LATIN_TRADITIONAL,
+    'Paul VI': ChurchRite.PAUL_VI,
+    'Byzantine': ChurchRite.BYZANTINE,
+    'Armenian': ChurchRite.ARMENIAN,
+    'Maronite': ChurchRite.MARONITE,
+    // Legacy values for existing data
     latin_traditional: ChurchRite.LATIN_TRADITIONAL,
-    french_paul_vi: ChurchRite.FRENCH_PAUL_VI,
+    french_paul_vi: ChurchRite.PAUL_VI,
     byzantine: ChurchRite.BYZANTINE,
     armenian: ChurchRite.ARMENIAN,
     maronite: ChurchRite.MARONITE,
@@ -21,6 +28,16 @@ function mapMassSchedules(church: ScrapedChurch): Church['massSchedules'] {
     time: schedule.time,
     rite: mapRite(schedule.rite),
     language: schedule.language,
+    notes: schedule.notes,
+  }));
+}
+
+function mapOfficeSchedules(church: ScrapedChurch): OfficeSchedule[] {
+  return (church.officeSchedules || []).map((schedule) => ({
+    type: schedule.type,
+    dayOfWeek: schedule.dayOfWeek,
+    startTime: schedule.startTime,
+    endTime: schedule.endTime,
     notes: schedule.notes,
   }));
 }
@@ -83,39 +100,77 @@ export async function saveChurches(
   const churchRepository = AppDataSource.getRepository(Church);
   const result: SaveResult = { saved: 0, skipped: 0, errors: 0 };
 
+  // Phase 1: Bulk-fetch existing churches to avoid N+1 queries
+  const existingMap = new Map<string, Church>();
+  const CHUNK_SIZE = 200;
+  for (let i = 0; i < scrapedChurches.length; i += CHUNK_SIZE) {
+    const chunk = scrapedChurches.slice(i, i + CHUNK_SIZE);
+    const params: Record<string, string> = {};
+    const conditions = chunk.map((c, idx) => {
+      params[`name${i + idx}`] = c.name;
+      params[`pc${i + idx}`] = c.address.postalCode;
+      return `(church.name = :name${i + idx} AND church.address->>'postalCode' = :pc${i + idx})`;
+    });
+
+    const existing = await churchRepository
+      .createQueryBuilder('church')
+      .where(conditions.join(' OR '), params)
+      .getMany();
+
+    for (const church of existing) {
+      const key = `${church.name}::${church.address.postalCode}`;
+      existingMap.set(key, church);
+    }
+  }
+
+  // Phase 2: Resolve coordinates (geocoding stays sequential — Nominatim 1 req/sec)
+  interface ResolvedEntry {
+    scraped: ScrapedChurch;
+    existing: Church | undefined;
+    coords: { lat: number; lng: number };
+  }
+  const resolved: ResolvedEntry[] = [];
+
   for (let i = 0; i < scrapedChurches.length; i++) {
     const scraped = scrapedChurches[i];
     onProgress?.(i + 1, scrapedChurches.length, scraped.name);
 
+    const key = `${scraped.name}::${scraped.address.postalCode}`;
+    const existing = existingMap.get(key);
+
+    let coords =
+      scraped.latitude !== undefined && scraped.longitude !== undefined
+        ? { lat: scraped.latitude, lng: scraped.longitude }
+        : null;
+
+    if (!coords && existing?.latitude && existing?.longitude) {
+      coords = { lat: existing.latitude, lng: existing.longitude };
+    }
+
+    if (!coords) {
+      coords = await geocodeAddress(scraped.address);
+    }
+
+    if (!coords) {
+      result.skipped++;
+      continue;
+    }
+
+    resolved.push({ scraped, existing, coords });
+  }
+
+  // Phase 3: Build entities and batch-save
+  const SAVE_BATCH = 50;
+  const toSave: Church[] = [];
+
+  for (const { scraped, existing, coords } of resolved) {
     try {
-      const existingChurch = await churchRepository
-        .createQueryBuilder('church')
-        .where('church.name = :name', { name: scraped.name })
-        .andWhere("church.address->>'postalCode' = :postalCode", {
-          postalCode: scraped.address.postalCode,
-        })
-        .getOne();
-
-      let coords =
-        scraped.latitude !== undefined && scraped.longitude !== undefined
-          ? { lat: scraped.latitude, lng: scraped.longitude }
-          : null;
-
-      if (!coords) {
-        coords = await geocodeAddress(scraped.address);
-      }
-
-      if (!coords) {
-        result.skipped++;
-        continue;
-      }
-
       const sourceReliability = Math.min(
         100,
         Math.max(
           0,
           calculateSourceCompleteness(sourceName, {
-            ...(existingChurch || {}),
+            ...(existing || {}),
             name: scraped.name,
             address: scraped.address,
             latitude: coords.lat,
@@ -133,39 +188,44 @@ export async function saveChurches(
         reliability: sourceReliability,
         metadata: {
           massSchedulesCount: scraped.massSchedules?.length || 0,
+          officeSchedulesCount: scraped.officeSchedules?.length || 0,
         },
       };
 
-      if (existingChurch) {
-        existingChurch.address = scraped.address;
-        existingChurch.latitude = coords.lat;
-        existingChurch.longitude = coords.lng;
-        existingChurch.location = { type: 'Point', coordinates: [coords.lng, coords.lat] };
-        existingChurch.contact = {
-          ...existingChurch.contact,
+      if (existing) {
+        existing.address = scraped.address;
+        existing.latitude = coords.lat;
+        existing.longitude = coords.lng;
+        existing.location = { type: 'Point', coordinates: [coords.lng, coords.lat] };
+        existing.contact = {
+          ...existing.contact,
           ...scraped.contact,
         };
 
         if (scraped.massSchedules?.length) {
-          existingChurch.massSchedules = mapMassSchedules(scraped);
+          existing.massSchedules = mapMassSchedules(scraped);
         }
 
-        existingChurch.rites =
-          scraped.rites?.map(mapRite) || existingChurch.rites || [ChurchRite.FRENCH_PAUL_VI];
-        existingChurch.languages =
-          scraped.languages || existingChurch.languages || ['French'];
+        if (scraped.officeSchedules?.length) {
+          existing.officeSchedules = mapOfficeSchedules(scraped);
+        }
+
+        existing.rites =
+          scraped.rites?.map(mapRite) || existing.rites || [ChurchRite.PAUL_VI];
+        existing.languages =
+          scraped.languages || existing.languages || ['French'];
 
         if (scraped.photos?.length) {
-          existingChurch.photos = [
-            ...new Set([...(existingChurch.photos || []), ...scraped.photos]),
+          existing.photos = [
+            ...new Set([...(existing.photos || []), ...scraped.photos]),
           ];
         }
 
-        upsertDataSource(existingChurch, sourceEntry);
-        existingChurch.reliabilityScore = computeAverageSourceReliability(existingChurch);
-        existingChurch.lastVerified = new Date();
+        upsertDataSource(existing, sourceEntry);
+        existing.reliabilityScore = computeAverageSourceReliability(existing);
+        existing.lastVerified = new Date();
 
-        await churchRepository.save(existingChurch);
+        toSave.push(existing);
       } else {
         const newChurch = churchRepository.create({
           name: scraped.name,
@@ -176,7 +236,8 @@ export async function saveChurches(
           location: { type: 'Point', coordinates: [coords.lng, coords.lat] },
           contact: scraped.contact,
           massSchedules: mapMassSchedules(scraped),
-          rites: scraped.rites?.map(mapRite) || [ChurchRite.FRENCH_PAUL_VI],
+          officeSchedules: mapOfficeSchedules(scraped),
+          rites: scraped.rites?.map(mapRite) || [ChurchRite.PAUL_VI],
           languages: scraped.languages || ['French'],
           photos: scraped.photos || [],
           dataSources: [sourceEntry],
@@ -185,13 +246,31 @@ export async function saveChurches(
           lastVerified: new Date(),
         });
 
-        await churchRepository.save(newChurch);
+        toSave.push(newChurch);
       }
-
-      result.saved++;
     } catch (error) {
-      console.error(`Failed to save ${scraped.name}:`, error);
+      console.error(`Failed to prepare ${scraped.name}:`, error);
       result.errors++;
+    }
+  }
+
+  // Save in batches
+  for (let i = 0; i < toSave.length; i += SAVE_BATCH) {
+    const batch = toSave.slice(i, i + SAVE_BATCH);
+    try {
+      await churchRepository.save(batch);
+      result.saved += batch.length;
+    } catch (error) {
+      // Fallback: save individually to isolate failures
+      for (const entity of batch) {
+        try {
+          await churchRepository.save(entity);
+          result.saved++;
+        } catch (entityError) {
+          console.error(`Failed to save ${entity.name}:`, entityError);
+          result.errors++;
+        }
+      }
     }
   }
 

@@ -48,54 +48,51 @@
   });
 </script>
 
-<div class="bg-surface-container rounded-xl border border-outline-variant p-5">
-  <div class="flex items-center justify-between mb-4">
-    <h2 class="font-headline font-bold text-on-surface">Run Results</h2>
-    <button
-      onclick={onDismiss}
-      class="text-xs text-on-surface-variant hover:text-on-surface transition-colors px-2 py-1"
-    >
+<div class="card p-6">
+  <div class="flex items-center justify-between mb-5">
+    <h2 class="section-title">Run Results</h2>
+    <button onclick={onDismiss} class="btn-ghost !text-xs">
       Dismiss
     </button>
   </div>
 
   <!-- Summary cards -->
   {#if displaySummary}
-    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 mb-5">
-      <div class="bg-surface-dim rounded-lg p-3 text-center">
-        <p class="text-xs text-on-surface-variant">Total</p>
-        <p class="text-lg font-bold text-on-surface">{displaySummary.total}</p>
+    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 mb-6">
+      <div class="bg-surface-dim rounded-xl p-3.5 text-center">
+        <p class="text-[11px] text-on-surface-variant font-medium uppercase tracking-wider">Total</p>
+        <p class="text-lg font-bold text-on-surface mt-1 tabular-nums">{displaySummary.total}</p>
       </div>
-      <div class="bg-surface-dim rounded-lg p-3 text-center">
-        <p class="text-xs text-on-surface-variant">Success</p>
-        <p class="text-lg font-bold text-success">{displaySummary.success}</p>
+      <div class="bg-surface-dim rounded-xl p-3.5 text-center">
+        <p class="text-[11px] text-on-surface-variant font-medium uppercase tracking-wider">Success</p>
+        <p class="text-lg font-bold text-success mt-1 tabular-nums">{displaySummary.success}</p>
       </div>
-      <div class="bg-surface-dim rounded-lg p-3 text-center">
-        <p class="text-xs text-on-surface-variant">Errors</p>
-        <p class="text-lg font-bold text-destructive">{displaySummary.errors}</p>
+      <div class="bg-surface-dim rounded-xl p-3.5 text-center">
+        <p class="text-[11px] text-on-surface-variant font-medium uppercase tracking-wider">Errors</p>
+        <p class="text-lg font-bold text-destructive mt-1 tabular-nums">{displaySummary.errors}</p>
       </div>
-      <div class="bg-surface-dim rounded-lg p-3 text-center">
-        <p class="text-xs text-on-surface-variant">No Schedules</p>
-        <p class="text-lg font-bold text-primary">{displaySummary.missingSchedules}</p>
+      <div class="bg-surface-dim rounded-xl p-3.5 text-center">
+        <p class="text-[11px] text-on-surface-variant font-medium uppercase tracking-wider">No Schedules</p>
+        <p class="text-lg font-bold text-warning mt-1 tabular-nums">{displaySummary.missingSchedules}</p>
       </div>
-      <div class="bg-surface-dim rounded-lg p-3 text-center">
-        <p class="text-xs text-on-surface-variant">No Phone</p>
-        <p class="text-lg font-bold text-primary">{displaySummary.missingPhone}</p>
+      <div class="bg-surface-dim rounded-xl p-3.5 text-center">
+        <p class="text-[11px] text-on-surface-variant font-medium uppercase tracking-wider">No Phone</p>
+        <p class="text-lg font-bold text-warning mt-1 tabular-nums">{displaySummary.missingPhone}</p>
       </div>
-      <div class="bg-surface-dim rounded-lg p-3 text-center">
-        <p class="text-xs text-on-surface-variant">No Coords</p>
-        <p class="text-lg font-bold text-primary">{displaySummary.missingCoords}</p>
+      <div class="bg-surface-dim rounded-xl p-3.5 text-center">
+        <p class="text-[11px] text-on-surface-variant font-medium uppercase tracking-wider">No Coords</p>
+        <p class="text-lg font-bold text-warning mt-1 tabular-nums">{displaySummary.missingCoords}</p>
       </div>
     </div>
   {/if}
 
   {#if expired && !results}
-    <p class="text-sm text-on-surface-variant text-center py-4">
+    <p class="text-sm text-on-surface-variant text-center py-6">
       Detailed results have expired. Only the summary above is available.
     </p>
   {:else if results}
     <!-- Filters -->
-    <div class="flex flex-col sm:flex-row gap-3 mb-4">
+    <div class="flex flex-col sm:flex-row gap-3 mb-5">
       <div class="flex gap-1.5">
         {#each [
           { key: 'all', label: 'All' },
@@ -105,9 +102,7 @@
         ] as opt}
           <button
             onclick={() => (filter = opt.key as typeof filter)}
-            class="px-3 py-1.5 rounded-lg text-xs font-medium transition-colors {filter === opt.key
-              ? 'bg-primary text-primary-foreground'
-              : 'bg-surface-container-high text-on-surface-variant hover:text-on-surface'}"
+            class="{filter === opt.key ? 'filter-chip-active' : 'filter-chip-inactive'}"
           >
             {opt.label}
           </button>
@@ -117,32 +112,32 @@
         type="text"
         placeholder="Search churches..."
         bind:value={searchQuery}
-        class="flex-1 px-3 py-1.5 rounded-lg text-sm bg-surface-dim text-on-surface placeholder:text-on-surface-variant border border-outline-variant focus:border-primary focus:outline-none"
+        class="input flex-1 !min-h-[36px] !py-1.5 !text-xs"
       />
     </div>
 
     <!-- Results table -->
-    <div class="max-h-96 overflow-y-auto rounded-lg">
+    <div class="max-h-96 overflow-y-auto rounded-xl">
       <table class="w-full text-xs">
-        <thead class="sticky top-0 bg-surface-container">
-          <tr class="border-b border-outline-variant text-left text-on-surface-variant">
-            <th class="py-2 px-2 font-medium">Church</th>
-            <th class="py-2 px-2 font-medium text-center w-16">Schedules</th>
-            <th class="py-2 px-2 font-medium text-center w-14">Phone</th>
-            <th class="py-2 px-2 font-medium text-center w-14">Email</th>
-            <th class="py-2 px-2 font-medium text-center w-14">Web</th>
-            <th class="py-2 px-2 font-medium text-center w-14">GPS</th>
+        <thead class="sticky top-0 bg-surface-container z-10">
+          <tr class="table-header">
+            <th>Church</th>
+            <th class="text-center w-16">Schedules</th>
+            <th class="text-center w-14">Phone</th>
+            <th class="text-center w-14">Email</th>
+            <th class="text-center w-14">Web</th>
+            <th class="text-center w-14">GPS</th>
           </tr>
         </thead>
         <tbody>
           {#if filteredResults && filteredResults.length > 0}
             {#each filteredResults as church (church.url)}
-              <tr class="border-b border-outline-variant/30 hover:bg-surface-container-low/50">
-                <td class="py-1.5 px-2">
+              <tr class="table-row">
+                <td>
                   {#if church.status === 'error'}
                     <span class="text-destructive">{church.name}</span>
                     {#if church.errorMessage}
-                      <span class="block text-[10px] text-destructive/70 truncate max-w-xs" title={church.errorMessage}>
+                      <span class="block text-[10px] text-destructive/60 truncate max-w-xs" title={church.errorMessage}>
                         {church.errorMessage}
                       </span>
                     {/if}
@@ -150,16 +145,16 @@
                     <span class="text-on-surface">{church.name}</span>
                   {/if}
                 </td>
-                <td class="py-1.5 px-2 text-center">{church.hasSchedules ? '\u2713' : '\u2717'}</td>
-                <td class="py-1.5 px-2 text-center">{church.hasPhone ? '\u2713' : '\u2717'}</td>
-                <td class="py-1.5 px-2 text-center">{church.hasEmail ? '\u2713' : '\u2717'}</td>
-                <td class="py-1.5 px-2 text-center">{church.hasWebsite ? '\u2713' : '\u2717'}</td>
-                <td class="py-1.5 px-2 text-center">{church.hasCoordinates ? '\u2713' : '\u2717'}</td>
+                <td class="text-center {church.hasSchedules ? 'text-success' : 'text-on-surface-variant/40'}">{church.hasSchedules ? '\u2713' : '\u2717'}</td>
+                <td class="text-center {church.hasPhone ? 'text-success' : 'text-on-surface-variant/40'}">{church.hasPhone ? '\u2713' : '\u2717'}</td>
+                <td class="text-center {church.hasEmail ? 'text-success' : 'text-on-surface-variant/40'}">{church.hasEmail ? '\u2713' : '\u2717'}</td>
+                <td class="text-center {church.hasWebsite ? 'text-success' : 'text-on-surface-variant/40'}">{church.hasWebsite ? '\u2713' : '\u2717'}</td>
+                <td class="text-center {church.hasCoordinates ? 'text-success' : 'text-on-surface-variant/40'}">{church.hasCoordinates ? '\u2713' : '\u2717'}</td>
               </tr>
             {/each}
           {:else}
             <tr>
-              <td colspan="6" class="py-4 text-center text-on-surface-variant">No results match this filter</td>
+              <td colspan="6" class="py-6 text-center text-on-surface-variant">No results match this filter</td>
             </tr>
           {/if}
         </tbody>
@@ -167,7 +162,7 @@
     </div>
 
     {#if filteredResults}
-      <p class="text-[10px] text-on-surface-variant mt-2 text-right">
+      <p class="text-[10px] text-on-surface-variant mt-3 text-right tabular-nums">
         Showing {filteredResults.length} of {results.length} churches
       </p>
     {/if}

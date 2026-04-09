@@ -1,32 +1,42 @@
 /**
  * LiturgyScraper.ts
- * 
- * Fetches daily Catholic Mass readings with full text
- * 
- * Two-step process:
+ *
+ * Fetches daily Catholic Mass readings in English AND French
+ *
+ * English (USCCB):
  * 1. Get references from catholic-readings-api (GitHub)
  * 2. Scrape full text from USCCB.org
- * 
- * API Coverage: 2025-2026 (EN only, references to USCCB)
- * No rate limits, no API key, hosted on GitHub Pages
+ * API Coverage: 2025-2026, no rate limits, no API key
+ *
+ * French (AELF):
+ * 1. Get full readings from AELF API (api.aelf.org)
+ * Full text included, no API key needed
  */
 
 import axios from 'axios';
 
 const API_BASE = 'https://cpbjr.github.io/catholic-readings-api';
+const AELF_API_BASE = 'https://api.aelf.org/v1';
 
 export interface LiturgyReading {
   title: string;       // e.g., "First Reading", "Gospel"
   reference: string;   // e.g., "Isaiah 42:1-7"
-  text: string;        // Full text (not provided by API, only references)
+  text: string;        // Full text
 }
 
 export interface DailyLiturgy {
   date: string;              // ISO date (YYYY-MM-DD)
-  liturgicalDay: string;     // e.g., "Holy Week"
-  liturgicalColor: string;   // e.g., "purple" (not provided by API)
+  liturgicalDay: string;     // English: e.g., "Holy Week"
+  liturgicalDayFr?: string;  // French: e.g., "Jeudi dans l'Octave de Pâques"
+  liturgicalColor: string;   // e.g., "purple"
   readings: LiturgyReading[];
   psalm?: {
+    reference: string;
+    refrain: string;
+    text: string;
+  };
+  readingsFr?: LiturgyReading[];
+  psalmFr?: {
     reference: string;
     refrain: string;
     text: string;
@@ -113,20 +123,44 @@ export class LiturgyScraper {
       };
       
       console.log(`[LiturgyScraper] ✓ Fetched ${readings.length} readings (references only)`);
-      
-      // Now fetch full text from USCCB
+
+      // Fetch full text from USCCB (English)
       if (data.usccbLink) {
         await this.enrichWithFullText(liturgy, data.usccbLink);
       }
-      
+
+      // Fetch French readings from AELF
+      await this.fetchAelfReadings(liturgy);
+
       return liturgy;
-      
+
     } catch (error: any) {
       if (error.response?.status === 404) {
-        console.warn(`[LiturgyScraper] No liturgy data for date: ${date}`);
+        console.warn(`[LiturgyScraper] No English liturgy data for date: ${date}`);
       } else {
-        console.error('[LiturgyScraper] Error fetching liturgy:', error.message);
+        console.error('[LiturgyScraper] Error fetching English liturgy:', error.message);
       }
+
+      // Even if English fails, try French-only
+      try {
+        const targetDate = date || this.getTodayISO();
+        const liturgy: DailyLiturgy = {
+          date: targetDate,
+          liturgicalDay: '',
+          liturgicalColor: 'green',
+          readings: [],
+          usccbLink: ''
+        };
+        await this.fetchAelfReadings(liturgy);
+
+        if (liturgy.readingsFr && liturgy.readingsFr.length > 0) {
+          console.log(`[LiturgyScraper] ✓ French-only fallback succeeded`);
+          return liturgy;
+        }
+      } catch (frError: any) {
+        console.error('[LiturgyScraper] French fallback also failed:', frError.message);
+      }
+
       return null;
     }
   }
@@ -234,6 +268,143 @@ export class LiturgyScraper {
     }
   }
   
+  /**
+   * Fetch French readings from AELF API
+   */
+  private async fetchAelfReadings(liturgy: DailyLiturgy): Promise<void> {
+    try {
+      const url = `${AELF_API_BASE}/messes/${liturgy.date}/france`;
+      console.log(`[LiturgyScraper] Fetching French readings from AELF: ${url}`);
+
+      const response = await axios.get(url, {
+        headers: {
+          'User-Agent': 'GodsPlan/1.0 (Catholic church finder app)',
+          'Accept': 'application/json'
+        },
+        timeout: 15000
+      });
+
+      const data = response.data;
+      if (!data?.messes?.[0]?.lectures) {
+        console.warn(`[LiturgyScraper] No AELF data for ${liturgy.date}`);
+        return;
+      }
+
+      const info = data.informations;
+      const lectures = data.messes[0].lectures;
+
+      // Set French liturgical day info
+      liturgy.liturgicalDayFr = info?.jour_liturgique_nom || '';
+
+      // Map AELF color to our color system (AELF uses French color names)
+      if (info?.couleur && !liturgy.liturgicalColor) {
+        liturgy.liturgicalColor = this.mapAelfColor(info.couleur);
+      }
+
+      const readingsFr: LiturgyReading[] = [];
+      let psalmFr: DailyLiturgy['psalmFr'] = undefined;
+
+      for (const lecture of lectures) {
+        const text = this.stripHtml(lecture.contenu || '');
+        const reference = lecture.ref || '';
+
+        switch (lecture.type) {
+          case 'lecture_1':
+            readingsFr.push({
+              title: 'Première lecture',
+              reference,
+              text
+            });
+            break;
+
+          case 'lecture_2':
+            readingsFr.push({
+              title: 'Deuxième lecture',
+              reference,
+              text
+            });
+            break;
+
+          case 'psaume':
+            psalmFr = {
+              reference,
+              refrain: this.stripHtml(lecture.refrain_psalmique || ''),
+              text
+            };
+            readingsFr.push({
+              title: 'Psaume',
+              reference,
+              text
+            });
+            break;
+
+          case 'evangile':
+            readingsFr.push({
+              title: 'Évangile',
+              reference,
+              text
+            });
+            break;
+
+          default:
+            // Other types (sequence, verset_evangile, etc.) — skip
+            break;
+        }
+      }
+
+      liturgy.readingsFr = readingsFr;
+      liturgy.psalmFr = psalmFr;
+
+      console.log(`[LiturgyScraper] ✓ Fetched ${readingsFr.length} French readings from AELF`);
+
+    } catch (error: any) {
+      if (error.response?.status === 404) {
+        console.warn(`[LiturgyScraper] No AELF data for ${liturgy.date}`);
+      } else {
+        console.error('[LiturgyScraper] Error fetching AELF readings:', error.message);
+      }
+    }
+  }
+
+  /**
+   * Strip HTML tags and decode entities from AELF content
+   */
+  private stripHtml(html: string): string {
+    return html
+      .replace(/<br\s*\/?>/gi, '\n')
+      .replace(/<p[^>]*>/gi, '\n')
+      .replace(/<\/p>/gi, '\n')
+      .replace(/<[^>]+>/g, '')
+      .replace(/&nbsp;/g, ' ')
+      .replace(/&laquo;/g, '«')
+      .replace(/&raquo;/g, '»')
+      .replace(/&rsquo;/g, '\u2019')
+      .replace(/&lsquo;/g, '\u2018')
+      .replace(/&rdquo;/g, '\u201D')
+      .replace(/&ldquo;/g, '\u201C')
+      .replace(/&ndash;/g, '\u2013')
+      .replace(/&mdash;/g, '\u2014')
+      .replace(/&hellip;/g, '\u2026')
+      .replace(/&amp;/g, '&')
+      .replace(/&#(\d+);/g, (_, code) => String.fromCharCode(parseInt(code)))
+      .replace(/\n{3,}/g, '\n\n')
+      .trim();
+  }
+
+  /**
+   * Map AELF French color names to our standard color system
+   */
+  private mapAelfColor(couleur: string): string {
+    switch (couleur.toLowerCase()) {
+      case 'blanc': return 'white';
+      case 'vert': return 'green';
+      case 'violet': return 'purple';
+      case 'rouge': return 'red';
+      case 'rose': return 'rose';
+      default: return 'green';
+    }
+  }
+
   /**
    * Map liturgical season to color
    */

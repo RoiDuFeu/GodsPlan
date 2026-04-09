@@ -64,60 +64,60 @@
 </script>
 
 {#if runs.length === 0}
-  <p class="text-sm text-muted-foreground py-8 text-center">No runs yet</p>
+  <p class="text-sm text-muted-foreground py-10 text-center">No runs yet</p>
 {:else}
   <!-- Desktop table -->
   <div class="hidden md:block overflow-x-auto">
     <table class="w-full text-sm">
       <thead>
-        <tr class="border-b border-outline-variant text-left text-on-surface-variant">
+        <tr class="table-header">
           {#if showScraperName}
-            <th class="py-3 px-3 font-medium">Scraper</th>
+            <th>Scraper</th>
           {/if}
-          <th class="py-3 px-3 font-medium">Status</th>
-          <th class="py-3 px-3 font-medium">Started</th>
-          <th class="py-3 px-3 font-medium">Duration</th>
-          <th class="py-3 px-3 font-medium text-right">Churches</th>
-          <th class="py-3 px-3 font-medium text-right">Errors</th>
-          <th class="py-3 px-3 font-medium">Depts</th>
+          <th>Status</th>
+          <th>Started</th>
+          <th>Duration</th>
+          <th class="text-right">Churches</th>
+          <th class="text-right">Errors</th>
+          <th>Depts</th>
         </tr>
       </thead>
       <tbody>
         {#each runs as run}
           <tr
-            class="border-b border-outline-variant/50 hover:bg-surface-container-low cursor-pointer transition-colors"
+            class="table-row cursor-pointer"
             onclick={() => toggleExpand(run.id)}
           >
             {#if showScraperName}
-              <td class="py-3 px-3 font-medium text-on-surface">{run.scraperName}</td>
+              <td class="font-medium text-on-surface">{run.scraperName}</td>
             {/if}
-            <td class="py-3 px-3">
+            <td>
               <div class="flex items-center gap-2">
                 <StatusBadge status={run.status} size="sm" />
                 {#if run.status === 'running'}
                   <button
                     onclick={(e) => handleCancel(e, run)}
                     disabled={cancellingRun === run.id}
-                    class="px-2 py-0.5 rounded text-[10px] font-medium bg-destructive/15 text-destructive hover:bg-destructive/25 transition-colors disabled:opacity-40"
+                    class="px-2 py-0.5 rounded text-[10px] font-semibold bg-destructive/12 text-destructive hover:bg-destructive/20 transition-colors disabled:opacity-40"
                   >
                     {cancellingRun === run.id ? '...' : 'Cancel'}
                   </button>
                 {/if}
               </div>
             </td>
-            <td class="py-3 px-3 text-on-surface-variant">{formatDate(run.startedAt)}</td>
-            <td class="py-3 px-3 text-on-surface-variant">{formatDuration(run.durationMs)}</td>
-            <td class="py-3 px-3 text-right text-on-surface">{run.churchesFound}</td>
-            <td class="py-3 px-3 text-right {run.errorCount > 0 ? 'text-destructive font-medium' : 'text-on-surface-variant'}">
+            <td class="text-on-surface-variant">{formatDate(run.startedAt)}</td>
+            <td class="text-on-surface-variant tabular-nums">{formatDuration(run.durationMs)}</td>
+            <td class="text-right text-on-surface tabular-nums">{run.churchesFound}</td>
+            <td class="text-right tabular-nums {run.errorCount > 0 ? 'text-destructive font-medium' : 'text-on-surface-variant'}">
               {run.errorCount}
             </td>
-            <td class="py-3 px-3 text-on-surface-variant text-xs">
+            <td class="text-on-surface-variant text-xs">
               {run.departments.length > 0 ? run.departments.join(', ') : '-'}
             </td>
           </tr>
           {#if expandedId === run.id}
             <tr>
-              <td colspan={showScraperName ? 7 : 6} class="p-4 bg-surface-container-low">
+              <td colspan={showScraperName ? 7 : 6} class="p-5 bg-surface-dim/50">
                 {#if loadingDetail}
                   <p class="text-sm text-muted-foreground">Loading errors...</p>
                 {:else if expandedDetail}
@@ -134,10 +134,10 @@
   <!-- Mobile card view -->
   <!-- svelte-ignore a11y_click_events_have_key_events -->
   <!-- svelte-ignore a11y_no_static_element_interactions -->
-  <div class="md:hidden space-y-3">
+  <div class="md:hidden space-y-2.5">
     {#each runs as run}
       <div
-        class="w-full text-left bg-surface-container rounded-xl border border-outline-variant p-4 space-y-3 cursor-pointer"
+        class="w-full text-left card p-4 space-y-3 cursor-pointer hover:bg-surface-container-high/30 transition-colors"
         onclick={() => toggleExpand(run.id)}
       >
         <div class="flex items-center justify-between">
@@ -152,7 +152,7 @@
               <button
                 onclick={(e) => handleCancel(e, run)}
                 disabled={cancellingRun === run.id}
-                class="px-2 py-0.5 rounded text-[10px] font-medium bg-destructive/15 text-destructive hover:bg-destructive/25 transition-colors disabled:opacity-40"
+                class="px-2 py-0.5 rounded text-[10px] font-semibold bg-destructive/12 text-destructive hover:bg-destructive/20 transition-colors disabled:opacity-40"
               >
                 {cancellingRun === run.id ? '...' : 'Cancel'}
               </button>
@@ -163,15 +163,15 @@
         <div class="grid grid-cols-3 gap-2 text-xs">
           <div>
             <p class="text-muted-foreground">Duration</p>
-            <p class="text-on-surface font-medium">{formatDuration(run.durationMs)}</p>
+            <p class="text-on-surface font-medium tabular-nums">{formatDuration(run.durationMs)}</p>
           </div>
           <div>
             <p class="text-muted-foreground">Churches</p>
-            <p class="text-on-surface font-medium">{run.churchesFound}</p>
+            <p class="text-on-surface font-medium tabular-nums">{run.churchesFound}</p>
           </div>
           <div>
             <p class="text-muted-foreground">Errors</p>
-            <p class="{run.errorCount > 0 ? 'text-destructive' : 'text-on-surface'} font-medium">{run.errorCount}</p>
+            <p class="{run.errorCount > 0 ? 'text-destructive' : 'text-on-surface'} font-medium tabular-nums">{run.errorCount}</p>
           </div>
         </div>
 
@@ -180,7 +180,7 @@
         {/if}
 
         {#if expandedId === run.id}
-          <div class="pt-2 border-t border-outline-variant" onclick={(e) => e.stopPropagation()}>
+          <div class="pt-3 border-t border-outline-variant/40" onclick={(e) => e.stopPropagation()}>
             {#if loadingDetail}
               <p class="text-sm text-muted-foreground">Loading...</p>
             {:else if expandedDetail}

@@ -6,7 +6,7 @@
       "WebFetch(domain:stitch.withgoogle.com)",
       "Bash(npx @_davideast/stitch-mcp tool --help)",
       "Bash(echo $STITCH_API_KEY)",
-      "Bash(npx @_davideast/stitch-mcp tool)",
+      "Bash(npx @_davideast/stitch-mcp tool)"
     ]
   }
 }

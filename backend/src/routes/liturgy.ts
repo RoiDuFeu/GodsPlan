@@ -6,6 +6,53 @@ import { liturgyScraper } from '../scrapers/LiturgyScraper';
 const router = Router();
 
 /**
+ * Format liturgy response based on requested language.
+ * ?lang=fr  → French readings only
+ * ?lang=en  → English readings only
+ * (default) → Both languages
+ */
+function formatLiturgyResponse(liturgy: Liturgy, lang?: string) {
+  const base = {
+    id: liturgy.id,
+    date: liturgy.date,
+    liturgicalColor: liturgy.liturgicalColor,
+    createdAt: liturgy.createdAt,
+    updatedAt: liturgy.updatedAt,
+  };
+
+  if (lang === 'fr') {
+    return {
+      ...base,
+      liturgicalDay: liturgy.liturgicalDayFr || liturgy.liturgicalDay,
+      readings: liturgy.readingsFr || [],
+      psalm: liturgy.psalmFr || null,
+    };
+  }
+
+  if (lang === 'en') {
+    return {
+      ...base,
+      liturgicalDay: liturgy.liturgicalDay,
+      readings: liturgy.readings,
+      psalm: liturgy.psalm || null,
+      usccbLink: liturgy.usccbLink,
+    };
+  }
+
+  // Default: return both
+  return {
+    ...base,
+    liturgicalDay: liturgy.liturgicalDay,
+    liturgicalDayFr: liturgy.liturgicalDayFr,
+    readings: liturgy.readings,
+    psalm: liturgy.psalm || null,
+    readingsFr: liturgy.readingsFr || [],
+    psalmFr: liturgy.psalmFr || null,
+    usccbLink: liturgy.usccbLink,
+  };
+}
+
+/**
  * GET /liturgy/today
  * Get today's liturgy readings
  */
@@ -13,12 +60,12 @@ router.get('/today', async (req: Request, res: Response) => {
   try {
     const today = new Date().toISOString().split('T')[0];
     const liturgy = await getOrFetchLiturgy(today);
-    
+
     if (!liturgy) {
       return res.status(404).json({ error: 'Liturgy not found for today' });
     }
-    
-    res.json(liturgy);
+
+    res.json(formatLiturgyResponse(liturgy, req.query.lang as string));
   } catch (error) {
     console.error('[Liturgy API] Error fetching today:', error);
     res.status(500).json({ error: 'Failed to fetch liturgy' });
@@ -33,20 +80,18 @@ router.get('/sunday', async (req: Request, res: Response) => {
   try {
     const today = new Date();
     const dayOfWeek = today.getDay();
-    
-    // If today is Sunday, return today's liturgy
-    // Otherwise return next Sunday's
-    const targetSunday = dayOfWeek === 0 
+
+    const targetSunday = dayOfWeek === 0
       ? today.toISOString().split('T')[0]
       : getNextSunday();
-    
+
     const liturgy = await getOrFetchLiturgy(targetSunday);
-    
+
     if (!liturgy) {
       return res.status(404).json({ error: 'Sunday liturgy not found' });
     }
-    
-    res.json(liturgy);
+
+    res.json(formatLiturgyResponse(liturgy, req.query.lang as string));
   } catch (error) {
     console.error('[Liturgy API] Error fetching Sunday:', error);
     res.status(500).json({ error: 'Failed to fetch Sunday liturgy' });
@@ -60,19 +105,18 @@ router.get('/sunday', async (req: Request, res: Response) => {
 router.get('/:date', async (req: Request, res: Response) => {
   try {
     const { date } = req.params;
-    
-    // Validate date format
+
     if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) {
       return res.status(400).json({ error: 'Invalid date format. Use YYYY-MM-DD' });
     }
-    
+
     const liturgy = await getOrFetchLiturgy(date);
-    
+
     if (!liturgy) {
       return res.status(404).json({ error: 'Liturgy not found for this date' });
     }
-    
-    res.json(liturgy);
+
+    res.json(formatLiturgyResponse(liturgy, req.query.lang as string));
   } catch (error) {
     console.error('[Liturgy API] Error fetching date:', error);
     res.status(500).json({ error: 'Failed to fetch liturgy' });
@@ -81,32 +125,30 @@ router.get('/:date', async (req: Request, res: Response) => {
 
 /**
  * POST /liturgy/refresh
- * Manually trigger refresh of liturgy data (admin only in production)
+ * Manually trigger refresh of liturgy data
  */
 router.post('/refresh', async (req: Request, res: Response) => {
   try {
     const { date, days = 7 } = req.body;
-    
+
     if (date) {
-      // Refresh specific date
       await fetchAndStoreLiturgy(date);
       return res.json({ message: `Liturgy refreshed for ${date}` });
     }
-    
-    // Refresh next N days
+
     const refreshedDates = [];
     for (let i = 0; i < days; i++) {
       const targetDate = new Date();
       targetDate.setDate(targetDate.getDate() + i);
       const dateStr = targetDate.toISOString().split('T')[0];
-      
+
       await fetchAndStoreLiturgy(dateStr);
       refreshedDates.push(dateStr);
     }
-    
-    res.json({ 
-      message: `Refreshed ${refreshedDates.length} days`, 
-      dates: refreshedDates 
+
+    res.json({
+      message: `Refreshed ${refreshedDates.length} days`,
+      dates: refreshedDates
     });
   } catch (error) {
     console.error('[Liturgy API] Error refreshing:', error);
@@ -115,79 +157,86 @@ router.post('/refresh', async (req: Request, res: Response) => {
 });
 
 /**
- * Helper: Get liturgy from DB or fetch from AELF if missing
+ * Helper: Get liturgy from DB or fetch if missing/incomplete
  */
 async function getOrFetchLiturgy(date: string): Promise<Liturgy | null> {
   const liturgyRepository = AppDataSource.getRepository(Liturgy);
-  
-  // Try to get from database
+
   let liturgy = await liturgyRepository.findOne({ where: { date: date as any } });
 
   if (!liturgy) {
-    // Not in DB, fetch and store
     console.log(`[Liturgy API] Cache miss for ${date}, fetching...`);
     liturgy = await fetchAndStoreLiturgy(date);
-  } else if (liturgy.readings.some(r => !r.text || r.text.length === 0)) {
-    // Cached but missing full text — re-enrich
-    console.log(`[Liturgy API] Re-enriching ${date} (empty text detected)...`);
-    liturgy = await fetchAndStoreLiturgy(date) ?? liturgy;
+  } else {
+    const missingEnglish = liturgy.readings.some(r => !r.text || r.text.length === 0);
+    const missingFrench = !liturgy.readingsFr || liturgy.readingsFr.length === 0;
+
+    if (missingEnglish || missingFrench) {
+      const missing = [missingEnglish ? 'EN' : null, missingFrench ? 'FR' : null].filter(Boolean).join('+');
+      console.log(`[Liturgy API] Re-fetching ${date} (missing ${missing})...`);
+      liturgy = await fetchAndStoreLiturgy(date) ?? liturgy;
+    }
   }
-  
+
   return liturgy;
 }
 
 /**
- * Helper: Fetch from GitHub API and store/update in database
+ * Helper: Fetch from scraper and store/update in database
  */
 async function fetchAndStoreLiturgy(date: string): Promise<Liturgy | null> {
   const liturgyRepository = AppDataSource.getRepository(Liturgy);
-  
+
   const data = await liturgyScraper.fetchDailyLiturgy(date);
-  
+
   if (!data) {
     return null;
   }
-  
-  // Check if already exists
+
   let liturgy = await liturgyRepository.findOne({ where: { date: date as any } });
 
   if (liturgy) {
-    // Update existing
-    liturgy.liturgicalDay = data.liturgicalDay;
-    liturgy.liturgicalColor = data.liturgicalColor;
-    liturgy.readings = data.readings;
-    liturgy.psalm = data.psalm;
-    liturgy.usccbLink = data.usccbLink;
+    liturgy.liturgicalDay = data.liturgicalDay || liturgy.liturgicalDay;
+    liturgy.liturgicalDayFr = data.liturgicalDayFr || liturgy.liturgicalDayFr;
+    liturgy.liturgicalColor = data.liturgicalColor || liturgy.liturgicalColor;
+    if (data.readings.length > 0) liturgy.readings = data.readings;
+    if (data.psalm) liturgy.psalm = data.psalm;
+    if (data.readingsFr && data.readingsFr.length > 0) liturgy.readingsFr = data.readingsFr;
+    if (data.psalmFr) liturgy.psalmFr = data.psalmFr;
+    liturgy.usccbLink = data.usccbLink || liturgy.usccbLink;
   } else {
-    // Create new
     liturgy = liturgyRepository.create({
       date: date as any,
       liturgicalDay: data.liturgicalDay,
+      liturgicalDayFr: data.liturgicalDayFr,
       liturgicalColor: data.liturgicalColor,
       readings: data.readings,
       psalm: data.psalm,
+      readingsFr: data.readingsFr,
+      psalmFr: data.psalmFr,
       usccbLink: data.usccbLink
     });
   }
-  
+
   await liturgyRepository.save(liturgy);
-  
-  console.log(`[Liturgy API] ✓ Stored liturgy for ${date} - ${data.liturgicalDay}`);
-  
+
+  const langStatus = [
+    data.readings.length > 0 ? 'EN' : null,
+    data.readingsFr && data.readingsFr.length > 0 ? 'FR' : null
+  ].filter(Boolean).join('+');
+  console.log(`[Liturgy API] ✓ Stored liturgy for ${date} [${langStatus}]`);
+
   return liturgy;
 }
 
-/**
- * Helper: Get next Sunday's date
- */
 function getNextSunday(): string {
   const today = new Date();
   const dayOfWeek = today.getDay();
   const daysUntilSunday = dayOfWeek === 0 ? 7 : (7 - dayOfWeek);
-  
+
   const nextSunday = new Date(today);
   nextSunday.setDate(today.getDate() + daysUntilSunday);
-  
+
   return nextSunday.toISOString().split('T')[0];
 }
 

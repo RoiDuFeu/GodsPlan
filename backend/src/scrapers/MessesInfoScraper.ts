@@ -1,5 +1,5 @@
-import puppeteer, { Browser, HTTPResponse, Page } from 'puppeteer';
-import { BaseScraper, ScrapedChurch, ScraperCallbacks } from './BaseScraper';
+import puppeteer, { Browser, CDPSession, HTTPResponse, Page } from 'puppeteer';
+import { BaseScraper, ScrapedChurch, ScraperCallbacks, ScreencastFrame } from './BaseScraper';
 
 interface AnnuaireChurchPayload {
   id: string;
@@ -11,19 +11,23 @@ interface AnnuaireChurchPayload {
   longitude?: number;
 }
 
-interface SeedChurchData {
+export interface SeedChurchData {
   name: string;
   address: ScrapedChurch['address'];
   latitude?: number;
   longitude?: number;
 }
 
+type CelebrationCategory = 'mass' | 'confession' | 'adoration' | 'vespers' | 'lauds' | 'permanence' | 'other';
+
 interface ExtractedSchedule {
   dayOfWeek: number;
   time: string;
+  endTime?: string;
   title: string;
   notes?: string;
   tags: string[];
+  category: CelebrationCategory;
 }
 
 interface ExtractedPageData {
@@ -72,9 +76,12 @@ export class MessesInfoScraper extends BaseScraper {
   private pagePool: Page[] = [];
   private pagePoolAvailable: Page[] = [];
   private pagePoolWaiters: Array<(page: Page) => void> = [];
+  private cdpSessions: CDPSession[] = [];
   private seedChurches = new Map<string, SeedChurchData>();
   private departments: string[];
   private currentDepartment = '75';
+  private _skipDiscovery = false;
+  private _staleUrls = new Set<string>();
 
   constructor(departments: string[] = ['75'], concurrency: number = DEFAULT_CONCURRENCY) {
     super({
@@ -88,6 +95,34 @@ export class MessesInfoScraper extends BaseScraper {
 
   private callbacks?: ScraperCallbacks;
 
+  set skipDiscovery(value: boolean) {
+    this._skipDiscovery = value;
+  }
+
+  /**
+   * Pre-populate seedChurches from cached DB data so we can skip the
+   * expensive annuaire discovery phase on subsequent runs.
+   */
+  loadCachedUrls(entries: Array<{ url: string; seed: SeedChurchData }>): void {
+    for (const entry of entries) {
+      if (!this.seedChurches.has(entry.url)) {
+        this.seedChurches.set(entry.url, entry.seed);
+      }
+    }
+  }
+
+  /**
+   * Returns URLs that were in the cache but returned no usable data
+   * during detail scraping (page gone or changed).
+   */
+  getStaleUrls(): string[] {
+    return Array.from(this._staleUrls);
+  }
+
+  protected getChurchDisplayName(url: string): string {
+    return this.seedChurches.get(url)?.name || url;
+  }
+
   async scrape(callbacks?: ScraperCallbacks): Promise<ScrapedChurch[]> {
     this.callbacks = callbacks;
     try {
@@ -99,100 +134,49 @@ export class MessesInfoScraper extends BaseScraper {
   }
 
   async scrapeChurchList(): Promise<string[]> {
+    // If cache is loaded and discovery is skipped, return cached URLs directly
+    if (this._skipDiscovery && this.seedChurches.size > 0) {
+      this.emitLog(this.callbacks, {
+        level: 'info',
+        message: `Using ${this.seedChurches.size} cached URLs, skipping annuaire discovery`,
+        phase: 'list',
+      });
+
+      let urls = Array.from(this.seedChurches.keys());
+      const maxChurches = Number(process.env.SCRAPE_MAX_CHURCHES || '0');
+      if (Number.isFinite(maxChurches) && maxChurches > 0) {
+        urls = urls.slice(0, maxChurches);
+      }
+      return urls;
+    }
+
     try {
-      const page = await this.getListPage();
+      const browser = await this.getBrowser();
 
-      for (const departmentCode of this.departments) {
-        if (this.callbacks?.shouldCancel?.()) {
-          this.emitLog(this.callbacks, { level: 'warn', message: 'Scraping cancelled by user', phase: 'list' });
-          break;
-        }
+      // Run departments in parallel (max 3 concurrent to avoid overloading messes.info)
+      const DEPT_CONCURRENCY = Math.min(3, this.departments.length);
+      const deptQueue = [...this.departments];
 
-        this.currentDepartment = departmentCode;
-        const deptName = DEPARTMENT_NAMES[departmentCode] || departmentCode;
-        console.log(`📍 Scraping department ${departmentCode} (${deptName})...`);
-
-        const startUrl = `${this.config.baseUrl}/horaires-messes/${departmentCode}-${deptName}`;
-        const annuaireUrl = `${this.config.baseUrl}/annuaire/${departmentCode}`;
-
-        this.emitLog(this.callbacks, {
-          level: 'info',
-          message: `Loading department ${departmentCode} (${deptName})`,
-          url: annuaireUrl,
-          phase: 'list',
-        });
-
-        const onResponse = async (response: HTTPResponse) => {
-          if (!response.url().includes('/gwtRequest')) {
-            return;
+      const deptWorker = async () => {
+        while (deptQueue.length > 0) {
+          if (this.callbacks?.shouldCancel?.()) {
+            this.emitLog(this.callbacks, { level: 'warn', message: 'Scraping cancelled by user', phase: 'list' });
+            break;
           }
 
-          const postData = response.request().postData() || '';
-          if (!postData.includes(`"${departmentCode}"`)) {
-            return;
-          }
+          const departmentCode = deptQueue.shift()!;
+          const page = await browser.newPage();
+          page.setDefaultTimeout(120000);
 
           try {
-            const body = await response.text();
-            const payloads = this.extractAnnuairePayloads(body);
-            payloads.forEach((payload) => this.storeSeedChurch(payload));
-          } catch {
-            // ignore payload parsing errors from unrelated gwt calls
+            await this.scrapeDepartment(page, departmentCode);
+          } finally {
+            await page.close().catch(() => {});
           }
-        };
-
-        page.on('response', onResponse);
-
-        try {
-          await page.goto(startUrl, { waitUntil: 'networkidle2', timeout: 120000 });
-
-          await page.goto(annuaireUrl, { waitUntil: 'networkidle2', timeout: 120000 });
-          await this.sleep(1500);
-
-          this.emitLog(this.callbacks, {
-            level: 'info',
-            message: `Department ${departmentCode}: initial page loaded, ${this.seedChurches.size} churches found`,
-            phase: 'list',
-          });
-
-          // Load additional batches via "Suite ..."
-          for (let i = 0; i < 20; i += 1) {
-            const beforeCount = this.seedChurches.size;
-            const suiteButton = await this.findSuiteButton(page);
-            if (!suiteButton) {
-              break;
-            }
-
-            this.emitLog(this.callbacks, {
-              level: 'info',
-              message: `Department ${departmentCode}: loading batch ${i + 1}... (${this.seedChurches.size} churches so far)`,
-              phase: 'list',
-            });
-
-            await page.evaluate((el) => (el as any).click(), suiteButton);
-            await this.sleep(1300);
-
-            if (this.seedChurches.size === beforeCount) {
-              break;
-            }
-
-            this.emitLog(this.callbacks, {
-              level: 'info',
-              message: `Department ${departmentCode}: batch ${i + 1} loaded, ${this.seedChurches.size} churches total`,
-              phase: 'list',
-            });
-          }
-        } finally {
-          page.off('response', onResponse);
         }
+      };
 
-        this.emitLog(this.callbacks, {
-          level: 'success',
-          message: `Department ${departmentCode} complete: ${this.seedChurches.size} churches collected`,
-          phase: 'list',
-        });
-        console.log(`📍 Department ${departmentCode}: ${this.seedChurches.size} churches so far`);
-      }
+      await Promise.all(Array.from({ length: DEPT_CONCURRENCY }, () => deptWorker()));
 
       let urls = Array.from(this.seedChurches.keys());
 
@@ -208,12 +192,115 @@ export class MessesInfoScraper extends BaseScraper {
     }
   }
 
+  private async scrapeDepartment(page: Page, departmentCode: string): Promise<void> {
+    const deptName = DEPARTMENT_NAMES[departmentCode] || departmentCode;
+    console.log(`📍 Scraping department ${departmentCode} (${deptName})...`);
+
+    const startUrl = `${this.config.baseUrl}/horaires-messes/${departmentCode}-${deptName}`;
+    const annuaireUrl = `${this.config.baseUrl}/annuaire/${departmentCode}`;
+
+    this.emitLog(this.callbacks, {
+      level: 'info',
+      message: `Loading department ${departmentCode} (${deptName})`,
+      url: annuaireUrl,
+      phase: 'list',
+    });
+
+    const onResponse = async (response: HTTPResponse) => {
+      if (!response.url().includes('/gwtRequest')) {
+        return;
+      }
+
+      const postData = response.request().postData() || '';
+      if (!postData.includes(`"${departmentCode}"`)) {
+        return;
+      }
+
+      try {
+        const body = await response.text();
+        const payloads = this.extractAnnuairePayloads(body);
+        payloads.forEach((payload) => this.storeSeedChurch(payload, departmentCode));
+      } catch {
+        // ignore payload parsing errors from unrelated gwt calls
+      }
+    };
+
+    page.on('response', onResponse);
+
+    try {
+      await page.goto(startUrl, { waitUntil: 'networkidle2', timeout: 120000 });
+
+      await page.goto(annuaireUrl, { waitUntil: 'networkidle2', timeout: 120000 });
+      await this.sleep(1500);
+
+      this.emitLog(this.callbacks, {
+        level: 'info',
+        message: `Department ${departmentCode}: initial page loaded, ${this.seedChurches.size} churches found`,
+        phase: 'list',
+      });
+
+      // Load additional batches via "Suite ..."
+      for (let i = 0; i < 20; i += 1) {
+        const beforeCount = this.seedChurches.size;
+        const suiteButton = await this.findSuiteButton(page);
+        if (!suiteButton) {
+          break;
+        }
+
+        this.emitLog(this.callbacks, {
+          level: 'info',
+          message: `Department ${departmentCode}: loading batch ${i + 1}... (${this.seedChurches.size} churches so far)`,
+          phase: 'list',
+        });
+
+        await page.evaluate((el) => (el as any).click(), suiteButton);
+        await this.sleep(1300);
+
+        if (this.seedChurches.size === beforeCount) {
+          break;
+        }
+
+        this.emitLog(this.callbacks, {
+          level: 'info',
+          message: `Department ${departmentCode}: batch ${i + 1} loaded, ${this.seedChurches.size} churches total`,
+          phase: 'list',
+        });
+      }
+    } finally {
+      page.off('response', onResponse);
+    }
+
+    this.emitLog(this.callbacks, {
+      level: 'success',
+      message: `Department ${departmentCode} complete: ${this.seedChurches.size} churches collected`,
+      phase: 'list',
+    });
+    console.log(`📍 Department ${departmentCode}: ${this.seedChurches.size} churches so far`);
+  }
+
   async scrapeChurchDetails(url: string): Promise<ScrapedChurch | null> {
     const seed = this.seedChurches.get(url);
     const page = await this.acquirePage();
+    const workerIndex = this.pagePool.indexOf(page);
 
     try {
       await page.goto(url, { waitUntil: 'networkidle2', timeout: 120000 });
+
+      // Emit a manual frame so every worker is visible in the live browser preview
+      if (this.callbacks?.onFrame) {
+        try {
+          const screenshot = await page.screenshot({ encoding: 'base64', type: 'jpeg', quality: 40 }) as string;
+          this.callbacks.onFrame({
+            image: screenshot,
+            pageUrl: page.url(),
+            workerIndex: workerIndex >= 0 ? workerIndex : 0,
+            timestamp: new Date().toISOString(),
+          });
+        } catch {
+          // Screenshot is best-effort
+        }
+      }
+
       await this.sleep(500 + Math.random() * 500);
 
       const extracted = (await page.evaluate(() => {
@@ -234,6 +321,48 @@ export class MessesInfoScraper extends BaseScraper {
           vendredi: 5,
           sam: 6,
           samedi: 6,
+        };
+
+        // Map category header text to celebration types
+        const categoryMap: Record<string, string> = {
+          messe: 'mass',
+          messes: 'mass',
+          eucharistie: 'mass',
+          confession: 'confession',
+          confessions: 'confession',
+          réconciliation: 'confession',
+          reconciliation: 'confession',
+          pénitence: 'confession',
+          penitence: 'confession',
+          adoration: 'adoration',
+          adorations: 'adoration',
+          'saint sacrement': 'adoration',
+          'saint-sacrement': 'adoration',
+          vêpres: 'vespers',
+          vepres: 'vespers',
+          laudes: 'lauds',
+          permanence: 'permanence',
+          permanences: 'permanence',
+          accueil: 'permanence',
+          chapelet: 'other',
+          rosaire: 'other',
+          prière: 'other',
+          priere: 'other',
+          office: 'other',
+          complies: 'other',
+          tierce: 'other',
+          sexte: 'other',
+          none: 'other',
+        };
+
+        const detectCategory = (text: string): string | null => {
+          const lower = text.toLowerCase().trim();
+          for (const [keyword, category] of Object.entries(categoryMap)) {
+            if (lower.includes(keyword)) {
+              return category;
+            }
+          }
+          return null;
         };
 
         const rawName =
@@ -258,28 +387,62 @@ export class MessesInfoScraper extends BaseScraper {
             ?.trim() || undefined;
 
         const websiteCandidates = Array.from(doc.querySelectorAll('a[href^="http"]') || []);
+        const EXCLUDED_DOMAINS = [
+          'messes.info',
+          'google.',
+          'wikipedia.org',
+          'eglise.catholique.fr',
+          'facebook.com',
+          'twitter.com',
+          'instagram.com',
+          'youtube.com',
+          'linkedin.com',
+          'tiktok.com',
+          'apple.com',
+          'play.google.com',
+          'apps.apple.com',
+        ];
         const website =
           websiteCandidates
             .map((a: any) => a.getAttribute('href') || '')
             .find((href: string) => {
               const lower = href.toLowerCase();
-              return (
-                !lower.includes('messes.info') &&
-                !lower.includes('google.') &&
-                !lower.includes('wikipedia.org')
-              );
+              return EXCLUDED_DOMAINS.every((domain) => !lower.includes(domain));
             }) || undefined;
 
+        // ── Parse the GWT CellTree for ALL celebration types ──
+        // The tree structure has top-level items (categories) that contain
+        // day headers and celebration entries as children.
+        const treeItems = Array.from(
+          doc.querySelectorAll(
+            '.com-google-gwt-user-cellview-client-CellTree-Style-cellTreeItem'
+          ) || []
+        );
+
+        const schedules: Array<{
+          dayOfWeek: number;
+          time: string;
+          endTime?: string;
+          title: string;
+          notes?: string;
+          tags: string[];
+          category: string;
+        }> = [];
+
+        // Walk through top-level tree items to detect categories
+        let currentCategory: string = 'mass'; // default to mass
+        let currentDay: number | null = null;
+
+        // Flat approach: iterate ALL cellTreeItemValue > div nodes,
+        // detecting category headers, day headers, and celebration entries
         const nodes = Array.from(
           doc.querySelectorAll(
             '.com-google-gwt-user-cellview-client-CellTree-Style-cellTreeItemValue > div'
           ) || []
         );
 
-        const schedules: ExtractedSchedule[] = [];
-        let currentDay: number | null = null;
-
         for (const node of nodes as any[]) {
+          // Check if this is a day header
           if (node.classList?.contains('titre-date')) {
             const token = (node.innerText || '')
               .trim()
@@ -293,40 +456,69 @@ export class MessesInfoScraper extends BaseScraper {
             continue;
           }
 
-          if (!node.classList?.contains('egliseinfo-celebrationtime')) {
+          // Check if this is a celebration time entry
+          if (node.classList?.contains('egliseinfo-celebrationtime')) {
+            const title =
+              node.querySelector('.egliseinfo-celebrationtime-title')?.innerText?.trim() || '';
+
+            // Parse single time (e.g., "09 h 30") or time range (e.g., "14 h 00 - 17 h 00")
+            const rangeMatch = title.match(
+              /(\d{1,2})\s*h\s*(\d{2})\s*[-–àa]\s*(\d{1,2})\s*h\s*(\d{2})/iu
+            );
+            const singleMatch = title.match(/(\d{1,2})\s*h\s*(\d{2})/iu);
+
+            if (!singleMatch || currentDay === null) {
+              continue;
+            }
+
+            const hh = singleMatch[1].padStart(2, '0');
+            const mm = singleMatch[2].padStart(2, '0');
+
+            let endTime: string | undefined;
+            if (rangeMatch) {
+              endTime = `${rangeMatch[3].padStart(2, '0')}:${rangeMatch[4].padStart(2, '0')}`;
+            }
+
+            const tags = Array.from(
+              node.querySelectorAll('.egliseinfo-celebrationtime-tags') || []
+            )
+              .map((el: any) => el.innerText?.trim())
+              .filter(Boolean) as string[];
+
+            const notes =
+              node
+                .querySelector(
+                  '.cef-kephas-client-resources-Resources-CSS-egliseInfoCellTreeBody'
+                )
+                ?.innerText
+                ?.trim() || undefined;
+
+            // Check if title/tags/notes hint at a different category
+            const combinedText = `${title} ${tags.join(' ')} ${notes || ''}`;
+            const inferredCategory = detectCategory(combinedText);
+
+            schedules.push({
+              dayOfWeek: currentDay,
+              time: `${hh}:${mm}`,
+              endTime,
+              title,
+              notes,
+              tags,
+              category: inferredCategory || currentCategory,
+            });
             continue;
           }
 
-          const title =
-            node.querySelector('.egliseinfo-celebrationtime-title')?.innerText?.trim() || '';
-          const timeMatch = title.match(/(\d{1,2})\s*h\s*(\d{2})/iu);
-
-          if (!timeMatch || currentDay === null) {
-            continue;
+          // Otherwise, this might be a category header (top-level tree node text)
+          const nodeText = (node.innerText || node.textContent || '').trim();
+          if (nodeText.length > 0 && nodeText.length < 100) {
+            const detected = detectCategory(nodeText);
+            if (detected) {
+              currentCategory = detected;
+              // Reset day when entering a new category section
+              currentDay = null;
+            }
           }
-
-          const hh = timeMatch[1].padStart(2, '0');
-          const mm = timeMatch[2].padStart(2, '0');
-
-          const tags = Array.from(node.querySelectorAll('.egliseinfo-celebrationtime-tags') || [])
-            .map((el: any) => el.innerText?.trim())
-            .filter(Boolean) as string[];
-
-          const notes =
-            node
-              .querySelector(
-                '.cef-kephas-client-resources-Resources-CSS-egliseInfoCellTreeBody'
-              )
-              ?.innerText
-              ?.trim() || undefined;
-
-          schedules.push({
-            dayOfWeek: currentDay,
-            time: `${hh}:${mm}`,
-            title,
-            notes,
-            tags,
-          });
         }
 
         return {
@@ -342,6 +534,7 @@ export class MessesInfoScraper extends BaseScraper {
 
       const name = extracted.name || seed?.name;
       if (!name) {
+        this._staleUrls.add(url);
         return null;
       }
 
@@ -350,24 +543,50 @@ export class MessesInfoScraper extends BaseScraper {
       const languageSet = new Set<string>();
       const riteSet = new Set<string>();
       const massSchedules: NonNullable<ScrapedChurch['massSchedules']> = [];
+      const officeSchedules: NonNullable<ScrapedChurch['officeSchedules']> = [];
+
+      const OFFICE_CATEGORY_MAP: Record<string, 'confession' | 'adoration' | 'vespers' | 'lauds' | 'other'> = {
+        confession: 'confession',
+        adoration: 'adoration',
+        vespers: 'vespers',
+        lauds: 'lauds',
+        permanence: 'other',
+        other: 'other',
+      };
 
       for (const schedule of extracted.schedules) {
         const combined = `${schedule.title} ${schedule.notes || ''} ${schedule.tags.join(' ')}`;
-        const language = this.inferLanguage(combined);
+        let language = this.inferLanguage(combined);
         const rite = this.inferRite(combined);
+
+        // Infer language from rite when not explicitly detected
+        if (!language) {
+          if (rite === 'Tridentine') language = 'Latin';
+        }
 
         if (language) {
           languageSet.add(language);
         }
         riteSet.add(rite);
 
-        massSchedules.push({
-          dayOfWeek: schedule.dayOfWeek,
-          time: schedule.time,
-          rite,
-          language,
-          notes: schedule.notes,
-        });
+        if (schedule.category === 'mass') {
+          massSchedules.push({
+            dayOfWeek: schedule.dayOfWeek,
+            time: schedule.time,
+            rite,
+            language,
+            notes: schedule.notes,
+          });
+        } else {
+          const officeType = OFFICE_CATEGORY_MAP[schedule.category] || 'other';
+          officeSchedules.push({
+            type: officeType,
+            dayOfWeek: schedule.dayOfWeek,
+            startTime: schedule.time,
+            endTime: schedule.endTime,
+            notes: schedule.notes,
+          });
+        }
       }
 
       const pageLanguage = this.inferLanguage(extracted.pageText);
@@ -391,6 +610,7 @@ export class MessesInfoScraper extends BaseScraper {
               }
             : undefined,
         massSchedules,
+        officeSchedules: officeSchedules.length > 0 ? officeSchedules : undefined,
         rites: Array.from(riteSet),
         languages: languageSet.size > 0 ? Array.from(languageSet) : ['French'],
         sourceUrl: url,
@@ -405,12 +625,13 @@ export class MessesInfoScraper extends BaseScraper {
           latitude: seed.latitude,
           longitude: seed.longitude,
           massSchedules: [],
-          rites: ['french_paul_vi'],
+          rites: ['Paul VI'],
           languages: ['French'],
           sourceUrl: url,
         };
       }
 
+      this._staleUrls.add(url);
       return null;
     } finally {
       this.releasePage(page);
@@ -452,7 +673,7 @@ export class MessesInfoScraper extends BaseScraper {
     }
   }
 
-  private storeSeedChurch(payload: AnnuaireChurchPayload): void {
+  private storeSeedChurch(payload: AnnuaireChurchPayload, departmentCode?: string): void {
     const normalizedId = payload.id.startsWith('/') ? payload.id.slice(1) : payload.id;
     const sourceUrl = `${this.config.baseUrl}/lieu/${normalizedId}`;
 
@@ -460,8 +681,9 @@ export class MessesInfoScraper extends BaseScraper {
       return;
     }
 
-    const defaultPostal = `${this.currentDepartment}000`;
-    const defaultCity = DEPARTMENT_CITIES[this.currentDepartment] || 'Paris';
+    const dept = departmentCode || this.currentDepartment;
+    const defaultPostal = `${dept}000`;
+    const defaultCity = DEPARTMENT_CITIES[dept] || 'Paris';
 
     this.seedChurches.set(sourceUrl, {
       name: payload.name?.trim() || 'Église inconnue',
@@ -520,14 +742,22 @@ export class MessesInfoScraper extends BaseScraper {
       content.includes('missel de 1962') ||
       content.includes('forme extraordinaire')
     ) {
-      return 'latin_traditional';
+      return 'Tridentine';
     }
 
     if (content.includes('byzantin')) {
-      return 'byzantine';
+      return 'Byzantine';
     }
 
-    return 'french_paul_vi';
+    if (content.includes('maronite')) {
+      return 'Maronite';
+    }
+
+    if (content.includes('arménien') || content.includes('armenien')) {
+      return 'Armenian';
+    }
+
+    return 'Paul VI';
   }
 
   private inferLanguage(text: string): string | undefined {
@@ -576,6 +806,7 @@ export class MessesInfoScraper extends BaseScraper {
     const browser = await this.getBrowser();
     this.listPage = await browser.newPage();
     this.listPage.setDefaultTimeout(120000);
+    await this.listPage.evaluateOnNewDocument('if(!window.__name)window.__name=function(fn){return fn}');
 
     return this.listPage;
   }
@@ -589,8 +820,36 @@ export class MessesInfoScraper extends BaseScraper {
     for (let i = 0; i < concurrency; i++) {
       const page = await browser.newPage();
       page.setDefaultTimeout(120000);
+      await page.evaluateOnNewDocument('if(!window.__name)window.__name=function(fn){return fn}');
       this.pagePool.push(page);
       this.pagePoolAvailable.push(page);
+
+      // Start CDP screencast for live browser preview
+      if (this.callbacks?.onFrame) {
+        try {
+          const cdp = await page.createCDPSession();
+          this.cdpSessions.push(cdp);
+          const workerIndex = i;
+          cdp.on('Page.screencastFrame', (event: any) => {
+            this.callbacks?.onFrame?.({
+              image: event.data,
+              pageUrl: page.url(),
+              workerIndex,
+              timestamp: new Date().toISOString(),
+            });
+            cdp.send('Page.screencastFrameAck', { sessionId: event.sessionId }).catch(() => {});
+          });
+          await cdp.send('Page.startScreencast', {
+            format: 'jpeg',
+            quality: 40,
+            maxWidth: 800,
+            maxHeight: 600,
+            everyNthFrame: 1,
+          });
+        } catch {
+          // Screencast is best-effort, don't fail scraping
+        }
+      }
     }
   }
 
@@ -615,6 +874,28 @@ export class MessesInfoScraper extends BaseScraper {
     }
   }
 
+  /**
+   * Scrape a single church by its messes.info URL.
+   * This is a lightweight operation — opens a browser, scrapes one page, closes.
+   */
+  async scrapeSingleChurch(url: string, seed?: SeedChurchData, onFrame?: (data: ScreencastFrame) => void): Promise<ScrapedChurch | null> {
+    if (seed) {
+      this.seedChurches.set(url, seed);
+    }
+
+    if (onFrame) {
+      this.callbacks = { ...this.callbacks, onFrame };
+    }
+
+    try {
+      const result = await this.scrapeChurchDetails(url);
+      return result;
+    } finally {
+      this.callbacks = undefined;
+      await this.closeBrowser();
+    }
+  }
+
   private async findSuiteButton(
     page: Page
   ): Promise<import('puppeteer').ElementHandle<any> | null> {
@@ -635,6 +916,12 @@ export class MessesInfoScraper extends BaseScraper {
       await this.listPage.close().catch(() => {});
       this.listPage = null;
     }
+
+    for (const cdp of this.cdpSessions) {
+      await cdp.send('Page.stopScreencast').catch(() => {});
+      await cdp.detach().catch(() => {});
+    }
+    this.cdpSessions = [];
 
     for (const page of this.pagePool) {
       await page.close().catch(() => {});

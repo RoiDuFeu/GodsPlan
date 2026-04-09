@@ -3,39 +3,42 @@
 @tailwind utilities;
 
 :root {
-  /* Dark Mode - King Blue & Gold (default for admin) */
-  --background: 234 26% 9%;
-  --foreground: 240 14% 91%;
+  /* Neutral dark mode */
+  --background: 0 0% 4%;
+  --foreground: 0 0% 95%;
 
-  --surface: 234 26% 9%;
-  --surface-dim: 234 22% 7%;
-  --surface-bright: 234 18% 14%;
-  --surface-container-low: 234 20% 11%;
-  --surface-container: 234 18% 13%;
-  --surface-container-high: 234 16% 16%;
-  --surface-container-highest: 234 14% 20%;
+  --surface: 0 0% 4%;
+  --surface-dim: 0 0% 3%;
+  --surface-bright: 0 0% 10%;
+  --surface-container-low: 0 0% 6%;
+  --surface-container: 0 0% 8%;
+  --surface-container-high: 0 0% 11%;
+  --surface-container-highest: 0 0% 14%;
 
-  --primary: 42 85% 48%;
-  --primary-foreground: 0 0% 100%;
-  --primary-container: 42 60% 20%;
+  --primary: 0 0% 98%;
+  --primary-foreground: 0 0% 4%;
+  --primary-container: 0 0% 18%;
 
-  --secondary: 216 70% 45%;
+  --secondary: 215 20% 55%;
   --secondary-foreground: 0 0% 100%;
-  --secondary-container: 216 50% 20%;
+  --secondary-container: 215 15% 18%;
 
-  --muted: 234 15% 20%;
-  --muted-foreground: 234 10% 55%;
+  --muted: 0 0% 14%;
+  --muted-foreground: 0 0% 45%;
 
-  --destructive: 0 72% 51%;
+  --destructive: 0 62% 55%;
 
-  --on-surface: 240 14% 91%;
-  --on-surface-variant: 234 10% 65%;
+  --on-surface: 0 0% 93%;
+  --on-surface-variant: 0 0% 52%;
 
-  --outline: 234 8% 35%;
-  --outline-variant: 234 10% 25%;
+  --outline: 0 0% 25%;
+  --outline-variant: 0 0% 16%;
 
-  --border: 234 12% 22%;
-  --ring: 42 85% 48%;
+  --border: 0 0% 16%;
+  --ring: 0 0% 98%;
+
+  --success: 142 60% 45%;
+  --warning: 38 92% 50%;
 }
 
 @layer base {
@@ -44,18 +47,143 @@
   }
 
   body {
-    @apply antialiased;
+    @apply antialiased bg-surface text-on-surface font-body;
   }
 
-  /* Custom scrollbar for dark theme */
+  /* Custom scrollbar */
   ::-webkit-scrollbar {
-    @apply w-2;
+    @apply w-1.5;
   }
   ::-webkit-scrollbar-track {
-    @apply bg-surface-dim;
+    @apply bg-transparent;
   }
   ::-webkit-scrollbar-thumb {
-    @apply bg-outline rounded-full;
+    @apply bg-outline/50 rounded-full hover:bg-outline;
+  }
+
+  /* Focus ring */
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-primary/40;
+  }
+}
+
+@layer components {
+  /* Card component */
+  .card {
+    @apply bg-surface-container rounded-2xl border border-outline-variant;
+  }
+
+  .card-hover {
+    @apply card transition-all duration-200 hover:border-outline hover:shadow-lg hover:shadow-black/20;
+  }
+
+  /* Section title */
+  .section-title {
+    @apply font-headline text-base font-bold text-on-surface;
+  }
+
+  /* Page container */
+  .page-container {
+    @apply p-5 md:p-8 lg:p-10 max-w-7xl mx-auto;
+  }
+
+  /* Page header */
+  .page-header {
+    @apply mb-8;
+  }
+
+  .page-title {
+    @apply font-headline text-2xl font-bold text-on-surface tracking-tight;
+  }
+
+  .page-subtitle {
+    @apply text-sm text-on-surface-variant mt-1.5;
+  }
+
+  /* Stat card */
+  .stat-card {
+    @apply card p-5;
+  }
+
+  .stat-label {
+    @apply text-[11px] text-on-surface-variant uppercase tracking-wider font-semibold;
+  }
+
+  .stat-value {
+    @apply text-2xl font-headline font-bold text-on-surface mt-2;
+  }
+
+  /* Button styles */
+  .btn-primary {
+    @apply px-5 py-2.5 rounded-xl text-sm font-semibold bg-primary text-primary-foreground
+           hover:bg-primary/90 active:scale-[0.97] transition-all duration-150
+           disabled:opacity-40 disabled:cursor-not-allowed disabled:active:scale-100
+           min-h-[44px] inline-flex items-center justify-center gap-2;
+  }
+
+  .btn-secondary {
+    @apply px-5 py-2.5 rounded-xl text-sm font-semibold bg-surface-container-high text-on-surface
+           hover:bg-surface-container-highest active:scale-[0.97] transition-all duration-150
+           disabled:opacity-40 disabled:cursor-not-allowed disabled:active:scale-100
+           min-h-[44px] inline-flex items-center justify-center gap-2;
+  }
+
+  .btn-danger {
+    @apply px-5 py-2.5 rounded-xl text-sm font-semibold bg-destructive text-white
+           hover:bg-destructive/85 active:scale-[0.97] transition-all duration-150
+           disabled:opacity-40 disabled:cursor-not-allowed disabled:active:scale-100
+           min-h-[44px] inline-flex items-center justify-center gap-2;
+  }
+
+  .btn-ghost {
+    @apply px-3 py-2 rounded-lg text-sm font-medium text-on-surface-variant
+           hover:bg-surface-container-high hover:text-on-surface transition-colors
+           min-h-[36px] inline-flex items-center justify-center gap-1.5;
+  }
+
+  /* Input styles */
+  .input {
+    @apply px-4 py-2.5 rounded-xl bg-surface-container border border-outline-variant
+           text-on-surface placeholder:text-on-surface-variant/60 text-sm
+           focus:border-outline focus:ring-1 focus:ring-outline/30 focus:outline-none
+           transition-colors min-h-[44px];
+  }
+
+  /* Table styles */
+  .table-header {
+    @apply border-b border-outline-variant text-left text-[11px] text-on-surface-variant uppercase tracking-wider;
+  }
+
+  .table-header th {
+    @apply py-3 px-4 font-semibold;
+  }
+
+  .table-row {
+    @apply border-b border-outline-variant/50 hover:bg-surface-container-high/50 transition-colors;
+  }
+
+  .table-row td {
+    @apply py-3 px-4;
+  }
+
+  /* Back link */
+  .back-link {
+    @apply inline-flex items-center gap-1.5 text-sm text-on-surface-variant hover:text-on-surface
+           transition-colors font-medium;
+  }
+
+  /* Filter chip */
+  .filter-chip {
+    @apply px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all duration-150 min-h-[32px]
+           inline-flex items-center justify-center;
+  }
+
+  .filter-chip-active {
+    @apply filter-chip bg-primary text-primary-foreground;
+  }
+
+  .filter-chip-inactive {
+    @apply filter-chip bg-surface-container-high text-on-surface-variant hover:text-on-surface hover:bg-surface-container-highest;
   }
 }
 
@@ -67,4 +195,20 @@
 
 .animate-pulse-glow {
   animation: pulse-glow 2s ease-in-out infinite;
+}
+
+/* Smooth page transitions */
+@keyframes page-enter {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.page-enter {
+  animation: page-enter 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }

@@ -5,6 +5,8 @@ import type {
   DepartmentCoverage,
   ChurchResult,
   ResultsSummary,
+  ChurchAdmin,
+  LiturgyEntry,
 } from './types';
 
 const BASE = '/api/v1';
@@ -49,12 +51,18 @@ export async function getScraperHistory(
 
 export async function triggerScraper(
   name: string,
-  departments: string[] = []
+  departments: string[] = [],
+  concurrency?: number,
+  options?: { onlyMissingData?: boolean },
 ): Promise<{ runId: string; message: string }> {
   return fetchJson(`${BASE}/admin/scrapers/${name}/trigger`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ departments }),
+    body: JSON.stringify({
+      departments,
+      ...(concurrency != null && { concurrency }),
+      ...(options?.onlyMissingData && { onlyMissingData: true }),
+    }),
   });
 }
 
@@ -70,6 +78,16 @@ export async function getRunResults(
   return fetchJson(`${BASE}/admin/scrapers/runs/${id}/results`);
 }
 
+// --- Purge ---
+
+export async function purgeData(): Promise<{ message: string; deleted: { churches: number; scraperRuns: number } }> {
+  return fetchJson(`${BASE}/admin/scrapers/purge`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ confirm: true }),
+  });
+}
+
 // --- Coverage ---
 
 export async function getIdfCoverage(): Promise<{
@@ -81,11 +99,82 @@ export async function getIdfCoverage(): Promise<{
   return fetchJson(`${BASE}/admin/scrapers/coverage/idf`);
 }
 
+// --- Churches ---
+
+export async function getChurches(
+  city?: string,
+  limit = 50,
+  offset = 0
+): Promise<{ data: ChurchAdmin[]; meta: { total: number; limit: number; offset: number } }> {
+  const params = new URLSearchParams({ limit: String(limit), offset: String(offset) });
+  if (city) params.set('city', city);
+  return fetchJson(`${BASE}/churches-simple?${params}`);
+}
+
+export async function getChurch(id: string): Promise<ChurchAdmin> {
+  return fetchJson(`${BASE}/churches-simple/${id}`);
+}
+
+// --- Single Church Scraping ---
+
+export async function scrapeChurchFromMessesInfo(
+  url: string,
+  seed?: { name: string; address: { street: string; postalCode: string; city: string }; latitude?: number; longitude?: number },
+): Promise<{ message: string; church: Record<string, unknown>; saved: boolean }> {
+  return fetchJson(`${BASE}/admin/scrapers/messes.info/scrape-church`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ url, seed }),
+  });
+}
+
+export function scrapeMessesInfoStream(
+  url: string,
+  seed?: { name: string; address: { street: string; postalCode: string; city: string }; latitude?: number; longitude?: number },
+): EventSource {
+  const params = new URLSearchParams({ url });
+  if (seed) params.set('seed', JSON.stringify(seed));
+  return new EventSource(`${BASE}/admin/scrapers/messes.info/scrape-church/stream?${params}`);
+}
+
+export function scrapeChurchWebsiteStream(churchId: string): EventSource {
+  return new EventSource(`${BASE}/admin/scrapers/church-website/scrape-church/${churchId}/stream`);
+}
+
+export async function scrapeChurchWebsite(
+  churchId: string,
+): Promise<{ message: string; massSchedules: number; officeSchedules: number; events: number; confidence: number }> {
+  return fetchJson(`${BASE}/admin/scrapers/church-website/scrape-church`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ churchId }),
+  });
+}
+
+// --- Liturgy ---
+
+export async function getLiturgy(date: string): Promise<LiturgyEntry> {
+  return fetchJson(`${BASE}/liturgy/${date}`);
+}
+
+export async function getLiturgyToday(): Promise<LiturgyEntry> {
+  return fetchJson(`${BASE}/liturgy/today`);
+}
+
+export async function refreshLiturgy(days = 7): Promise<{ message: string; dates: string[] }> {
+  return fetchJson(`${BASE}/liturgy/refresh`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ days }),
+  });
+}
+
 // --- Admin Stats (existing endpoint) ---
 
 export async function getAdminStats(): Promise<{
-  overview: { total: number; active: number; avg_reliability: number };
-  coverage: Record<string, number>;
+  total: number;
+  active: number;
+  avgReliabilityScore: number;
 }> {
   return fetchJson(`${BASE}/admin/stats`);
 }

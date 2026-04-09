@@ -66,8 +66,15 @@ function parseCliArgs(): ScraperCliOptions {
 
 function mapRite(riteString: string): ChurchRite {
   const mapping: Record<string, ChurchRite> = {
+    // New clean values
+    'Tridentine': ChurchRite.LATIN_TRADITIONAL,
+    'Paul VI': ChurchRite.PAUL_VI,
+    'Byzantine': ChurchRite.BYZANTINE,
+    'Armenian': ChurchRite.ARMENIAN,
+    'Maronite': ChurchRite.MARONITE,
+    // Legacy values for existing data
     latin_traditional: ChurchRite.LATIN_TRADITIONAL,
-    french_paul_vi: ChurchRite.FRENCH_PAUL_VI,
+    french_paul_vi: ChurchRite.PAUL_VI,
     byzantine: ChurchRite.BYZANTINE,
     armenian: ChurchRite.ARMENIAN,
     maronite: ChurchRite.MARONITE,
@@ -204,7 +211,7 @@ async function saveChurches(scrapedChurches: ScrapedChurch[], sourceName: string
         }
 
         existingChurch.rites =
-          scraped.rites?.map(mapRite) || existingChurch.rites || [ChurchRite.FRENCH_PAUL_VI];
+          scraped.rites?.map(mapRite) || existingChurch.rites || [ChurchRite.PAUL_VI];
 
         existingChurch.languages =
           scraped.languages || existingChurch.languages || ['French'];
@@ -228,7 +235,7 @@ async function saveChurches(scrapedChurches: ScrapedChurch[], sourceName: string
           location: { type: 'Point', coordinates: [coords.lng, coords.lat] },
           contact: scraped.contact,
           massSchedules: mapMassSchedules(scraped),
-          rites: scraped.rites?.map(mapRite) || [ChurchRite.FRENCH_PAUL_VI],
+          rites: scraped.rites?.map(mapRite) || [ChurchRite.PAUL_VI],
           languages: scraped.languages || ['French'],
           photos: scraped.photos || [],
           dataSources: [sourceEntry],

@@ -8,12 +8,12 @@ import {
 } from 'typeorm';
 
 export enum ChurchRite {
-  LATIN_TRADITIONAL = 'latin_traditional',
-  FRENCH_PAUL_VI = 'french_paul_vi',
-  BYZANTINE = 'byzantine',
-  ARMENIAN = 'armenian',
-  MARONITE = 'maronite',
-  OTHER = 'other',
+  LATIN_TRADITIONAL = 'Tridentine',
+  PAUL_VI = 'Paul VI',
+  BYZANTINE = 'Byzantine',
+  ARMENIAN = 'Armenian',
+  MARONITE = 'Maronite',
+  OTHER = 'Other',
 }
 
 export interface ChurchAddress {
@@ -66,6 +66,14 @@ export interface ChurchEvent {
   metadata?: Record<string, unknown>;
 }
 
+export interface OfficeSchedule {
+  type: 'confession' | 'adoration' | 'vespers' | 'lauds' | 'other';
+  dayOfWeek: number; // 0 = Sunday, 1 = Monday, etc.
+  startTime: string; // HH:MM format
+  endTime?: string; // HH:MM format (optional)
+  notes?: string;
+}
+
 @Entity('churches')
 export class Church {
   @PrimaryGeneratedColumn('uuid')
@@ -100,7 +108,7 @@ export class Church {
   @Column({
     type: 'varchar',
     array: true,
-    default: [ChurchRite.FRENCH_PAUL_VI],
+    default: [ChurchRite.PAUL_VI],
   })
   rites!: ChurchRite[];
 
@@ -112,6 +120,9 @@ export class Church {
 
   @Column({ type: 'varchar', array: true, default: [] })
   photos!: string[]; // URLs to photos
+
+  @Column({ type: 'jsonb', default: [] })
+  officeSchedules!: OfficeSchedule[]; // Confessions, adoration, vespers, etc.
 
   @Column({ type: 'jsonb', default: [] })
   upcomingEvents!: ChurchEvent[]; // Concerts, pilgrimages, special events

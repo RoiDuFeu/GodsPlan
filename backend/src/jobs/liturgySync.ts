@@ -31,14 +31,20 @@ export class LiturgySyncJob {
           where: { date: dateStr as any }
         });
         
-        if (existing && existing.readings.every((r: { text: string }) => r.text && r.text.length > 0)) {
-          console.log(`[LiturgySyncJob] ⏭️  ${dateStr} already synced`);
+        const hasEnglishText = existing?.readings?.every((r: { text: string }) => r.text && r.text.length > 0);
+        const hasFrenchText = existing?.readingsFr && existing.readingsFr.length > 0;
+
+        if (existing && hasEnglishText && hasFrenchText) {
+          console.log(`[LiturgySyncJob] ⏭️  ${dateStr} already synced (EN+FR)`);
           skipCount++;
           continue;
         }
 
         if (existing) {
-          console.log(`[LiturgySyncJob] 🔄 ${dateStr} has empty text, re-enriching...`);
+          const missing = [];
+          if (!hasEnglishText) missing.push('EN');
+          if (!hasFrenchText) missing.push('FR');
+          console.log(`[LiturgySyncJob] 🔄 ${dateStr} missing ${missing.join('+')}, re-fetching...`);
         }
         
         // Fetch from GitHub API
@@ -49,19 +55,39 @@ export class LiturgySyncJob {
           continue;
         }
         
-        // Store in DB
-        const liturgy = liturgyRepository.create({
-          date: dateStr as any,
-          liturgicalDay: data.liturgicalDay,
-          liturgicalColor: data.liturgicalColor,
-          readings: data.readings,
-          psalm: data.psalm,
-          usccbLink: data.usccbLink
-        });
-        
+        // Store in DB (upsert)
+        let liturgy = await liturgyRepository.findOne({ where: { date: dateStr as any } });
+
+        if (liturgy) {
+          liturgy.liturgicalDay = data.liturgicalDay || liturgy.liturgicalDay;
+          liturgy.liturgicalDayFr = data.liturgicalDayFr || liturgy.liturgicalDayFr;
+          liturgy.liturgicalColor = data.liturgicalColor || liturgy.liturgicalColor;
+          if (data.readings.length > 0) liturgy.readings = data.readings;
+          if (data.psalm) liturgy.psalm = data.psalm;
+          if (data.readingsFr && data.readingsFr.length > 0) liturgy.readingsFr = data.readingsFr;
+          if (data.psalmFr) liturgy.psalmFr = data.psalmFr;
+          liturgy.usccbLink = data.usccbLink || liturgy.usccbLink;
+        } else {
+          liturgy = liturgyRepository.create({
+            date: dateStr as any,
+            liturgicalDay: data.liturgicalDay,
+            liturgicalDayFr: data.liturgicalDayFr,
+            liturgicalColor: data.liturgicalColor,
+            readings: data.readings,
+            psalm: data.psalm,
+            readingsFr: data.readingsFr,
+            psalmFr: data.psalmFr,
+            usccbLink: data.usccbLink
+          });
+        }
+
         await liturgyRepository.save(liturgy);
-        
-        console.log(`[LiturgySyncJob] ✓ Synced ${dateStr} - ${liturgy.liturgicalDay}`);
+
+        const langStatus = [
+          data.readings.length > 0 ? 'EN' : null,
+          data.readingsFr && data.readingsFr.length > 0 ? 'FR' : null
+        ].filter(Boolean).join('+');
+        console.log(`[LiturgySyncJob] ✓ Synced ${dateStr} [${langStatus}] - ${liturgy.liturgicalDay || liturgy.liturgicalDayFr}`);
         successCount++;
         
         // Small delay to be polite to AELF API

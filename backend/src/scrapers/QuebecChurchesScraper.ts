@@ -148,7 +148,7 @@ export class QuebecChurchesScraper extends BaseScraper {
           ? { website: church.churches[0].massesUrl }
           : undefined,
         massSchedules,
-        rites: ['french_paul_vi'], // Default rite for Quebec
+        rites: ['Paul VI'], // Default rite for Quebec
         languages: ['French'], // Primary language in Quebec
         description: `Église catholique située à ${church.place.name}`,
         sourceUrl: `https://www.wikidata.org/wiki/Q${church.id}`,
@@ -225,7 +225,7 @@ export class QuebecChurchesScraper extends BaseScraper {
       {
         dayOfWeek: 0, // Sunday
         time: '10:00',
-        rite: 'french_paul_vi',
+        rite: 'Paul VI',
         language: 'French',
         notes: 'Horaire à confirmer',
       },

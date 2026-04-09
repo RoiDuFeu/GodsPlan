@@ -1,5 +1,6 @@
 import { Router, Request, Response } from 'express';
 import { AppDataSource } from '../config/database';
+import { Church } from '../models/Church';
 import { ScraperRun } from '../models/ScraperRun';
 import { scraperRunner } from '../services/ScraperRunner';
 
@@ -149,6 +150,11 @@ router.get('/runs/:id/logs', async (req: Request, res: Response) => {
     res.write(`data: ${JSON.stringify(entry)}\n\n`);
   });
 
+  // Subscribe to live browser frames
+  const unsubscribeFrames = scraperRunner.subscribeFrames(id, (data) => {
+    res.write(`event: frame\ndata: ${JSON.stringify(data)}\n\n`);
+  });
+
   // When the run finishes, the scraper won't be running anymore.
   // Poll briefly to detect completion and send done event.
   const checkDone = setInterval(() => {
@@ -156,6 +162,7 @@ router.get('/runs/:id/logs', async (req: Request, res: Response) => {
       res.write(`event: done\ndata: ${JSON.stringify({ status: 'completed' })}\n\n`);
       clearInterval(checkDone);
       unsubscribe();
+      unsubscribeFrames();
       res.end();
     }
   }, 2000);
@@ -164,7 +171,192 @@ router.get('/runs/:id/logs', async (req: Request, res: Response) => {
   req.on('close', () => {
     clearInterval(checkDone);
     unsubscribe();
+    unsubscribeFrames();
   });
+});
+
+/**
+ * GET /admin/scrapers/messes.info/scrape-church/stream
+ * SSE endpoint that scrapes a single church from messes.info and streams live browser frames.
+ * Query: url (required), seed as JSON string (optional)
+ */
+router.get('/messes.info/scrape-church/stream', async (req: Request, res: Response) => {
+  const url = req.query.url as string;
+  const seedParam = req.query.seed as string | undefined;
+
+  if (!url || !url.includes('messes.info')) {
+    return res.status(400).json({ error: 'Missing or invalid messes.info URL' });
+  }
+
+  let seed: any;
+  if (seedParam) {
+    try { seed = JSON.parse(seedParam); } catch { /* ignore */ }
+  }
+
+  res.writeHead(200, {
+    'Content-Type': 'text/event-stream',
+    'Cache-Control': 'no-cache',
+    Connection: 'keep-alive',
+    'X-Accel-Buffering': 'no',
+  });
+
+  let closed = false;
+  req.on('close', () => { closed = true; });
+
+  try {
+    const result = await scraperRunner.scrapeSingleChurch(url, seed, (frame) => {
+      if (!closed) {
+        res.write(`event: frame\ndata: ${JSON.stringify(frame)}\n\n`);
+      }
+    });
+
+    if (!closed) {
+      if (result.church) {
+        res.write(`event: result\ndata: ${JSON.stringify({
+          message: result.saved ? 'Church scraped and saved' : 'Church scraped but not saved (missing coordinates)',
+          church: {
+            name: result.church.name,
+            address: result.church.address,
+            massSchedules: result.church.massSchedules,
+          },
+          saved: result.saved,
+        })}\n\n`);
+      } else {
+        res.write(`event: result\ndata: ${JSON.stringify({ error: 'No data could be scraped from this URL' })}\n\n`);
+      }
+      res.write(`event: done\ndata: {}\n\n`);
+    }
+  } catch (error) {
+    if (!closed) {
+      const message = error instanceof Error ? error.message : 'Failed to scrape church';
+      res.write(`event: result\ndata: ${JSON.stringify({ error: message })}\n\n`);
+      res.write(`event: done\ndata: {}\n\n`);
+    }
+  }
+
+  res.end();
+});
+
+/**
+ * POST /admin/scrapers/messes.info/scrape-church
+ * Scrape a single church from messes.info by URL.
+ * Body: { url: string, seed?: { name, address, latitude?, longitude? } }
+ */
+router.post('/messes.info/scrape-church', async (req: Request, res: Response) => {
+  try {
+    const { url, seed } = req.body || {};
+
+    if (!url || typeof url !== 'string') {
+      return res.status(400).json({ error: 'Missing required field: url (messes.info church URL)' });
+    }
+
+    if (!url.includes('messes.info')) {
+      return res.status(400).json({ error: 'URL must be a messes.info church page' });
+    }
+
+    const result = await scraperRunner.scrapeSingleChurch(url, seed);
+
+    if (!result.church) {
+      return res.status(404).json({ error: 'No data could be scraped from this URL' });
+    }
+
+    res.json({
+      message: result.saved ? 'Church scraped and saved' : 'Church scraped but not saved (missing coordinates)',
+      church: {
+        name: result.church.name,
+        address: result.church.address,
+        latitude: result.church.latitude,
+        longitude: result.church.longitude,
+        contact: result.church.contact,
+        massSchedules: result.church.massSchedules,
+        officeSchedules: result.church.officeSchedules,
+        rites: result.church.rites,
+        languages: result.church.languages,
+        sourceUrl: result.church.sourceUrl,
+      },
+      saved: result.saved,
+    });
+  } catch (error) {
+    const message = error instanceof Error ? error.message : 'Failed to scrape church';
+    console.error('Failed to scrape single church:', error);
+    res.status(500).json({ error: message });
+  }
+});
+
+/**
+ * POST /admin/scrapers/church-website/scrape-church
+ * Scrape a single church's parish website for schedules, confessions, events.
+ * Body: { churchId: string }
+ */
+router.post('/church-website/scrape-church', async (req: Request, res: Response) => {
+  try {
+    const { churchId } = req.body || {};
+
+    if (!churchId || typeof churchId !== 'string') {
+      return res.status(400).json({ error: 'Missing required field: churchId' });
+    }
+
+    const result = await scraperRunner.scrapeChurchWebsite(churchId);
+
+    if (!result) {
+      return res.status(404).json({ error: 'No schedule data could be extracted from the website' });
+    }
+
+    res.json({
+      message: 'Church website scraped and saved',
+      ...result,
+    });
+  } catch (error) {
+    const message = error instanceof Error ? error.message : 'Failed to scrape church website';
+    console.error('Failed to scrape church website:', error);
+    const status = message.includes('not found') ? 404 : message.includes('no website') ? 400 : 500;
+    res.status(status).json({ error: message });
+  }
+});
+
+/**
+ * GET /admin/scrapers/church-website/scrape-church/:churchId/stream
+ * SSE endpoint that scrapes a single church website and streams live browser frames.
+ * Sends `frame` events during scraping, then a `result` event with the outcome.
+ */
+router.get('/church-website/scrape-church/:churchId/stream', async (req: Request, res: Response) => {
+  const { churchId } = req.params;
+
+  // Set up SSE
+  res.writeHead(200, {
+    'Content-Type': 'text/event-stream',
+    'Cache-Control': 'no-cache',
+    Connection: 'keep-alive',
+    'X-Accel-Buffering': 'no',
+  });
+
+  let closed = false;
+  req.on('close', () => { closed = true; });
+
+  try {
+    const result = await scraperRunner.scrapeChurchWebsite(churchId, (frame) => {
+      if (!closed) {
+        res.write(`event: frame\ndata: ${JSON.stringify(frame)}\n\n`);
+      }
+    });
+
+    if (!closed) {
+      if (result) {
+        res.write(`event: result\ndata: ${JSON.stringify({ message: 'Church website scraped and saved', ...result })}\n\n`);
+      } else {
+        res.write(`event: result\ndata: ${JSON.stringify({ error: 'No schedule data could be extracted from the website' })}\n\n`);
+      }
+      res.write(`event: done\ndata: {}\n\n`);
+    }
+  } catch (error) {
+    if (!closed) {
+      const message = error instanceof Error ? error.message : 'Failed to scrape church website';
+      res.write(`event: result\ndata: ${JSON.stringify({ error: message })}\n\n`);
+      res.write(`event: done\ndata: {}\n\n`);
+    }
+  }
+
+  res.end();
 });
 
 /**
@@ -270,7 +462,7 @@ router.get('/runs/:id/results', async (req: Request, res: Response) => {
 router.post('/:name/trigger', async (req: Request, res: Response) => {
   try {
     const { name } = req.params;
-    const { departments = [] } = req.body || {};
+    const { departments = [], forceFullDiscovery = false, concurrency, onlyMissingData = false } = req.body || {};
 
     if (scraperRunner.isRunning(name)) {
       return res.status(409).json({
@@ -279,7 +471,8 @@ router.post('/:name/trigger', async (req: Request, res: Response) => {
       });
     }
 
-    const run = await scraperRunner.trigger(name, departments);
+    const validConcurrency = concurrency ? Math.min(Math.max(Math.round(Number(concurrency)), 1), 10) : undefined;
+    const run = await scraperRunner.trigger(name, departments, { forceFullDiscovery, concurrency: validConcurrency, onlyMissingData: !!onlyMissingData });
 
     res.status(202).json({
       message: `Scraper "${name}" started`,
@@ -365,6 +558,49 @@ router.get('/coverage/idf', async (_req: Request, res: Response) => {
   } catch (error) {
     console.error('Failed to fetch IDF coverage:', error);
     res.status(500).json({ error: 'Failed to fetch IDF coverage' });
+  }
+});
+
+/**
+ * POST /admin/scrapers/purge
+ * Purge church data and scraper history to allow a clean rescrape.
+ * Body: { confirm: true } — required safety flag
+ */
+router.post('/purge', async (req: Request, res: Response) => {
+  try {
+    const { confirm } = req.body || {};
+
+    if (confirm !== true) {
+      return res.status(400).json({ error: 'Must send { confirm: true } to purge data' });
+    }
+
+    // Check no scrapers are currently running
+    const registry = scraperRunner.getRegistry();
+    const running = registry.filter((s) => scraperRunner.isRunning(s.name));
+    if (running.length > 0) {
+      return res.status(409).json({
+        error: `Cannot purge while scrapers are running: ${running.map((s) => s.name).join(', ')}`,
+      });
+    }
+
+    const churchRepo = AppDataSource.getRepository(Church);
+    const runRepo = AppDataSource.getRepository(ScraperRun);
+
+    const churchCount = await churchRepo.count();
+    const runCount = await runRepo.count();
+
+    await runRepo.clear();
+    await churchRepo.clear();
+
+    console.log(`[PURGE] Deleted ${churchCount} churches and ${runCount} scraper runs`);
+
+    res.json({
+      message: 'Database purged successfully',
+      deleted: { churches: churchCount, scraperRuns: runCount },
+    });
+  } catch (error) {
+    console.error('Failed to purge data:', error);
+    res.status(500).json({ error: 'Failed to purge data' });
   }
 });
 

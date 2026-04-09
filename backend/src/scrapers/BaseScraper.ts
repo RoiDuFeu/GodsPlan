@@ -40,6 +40,13 @@ export interface ScrapedChurch {
     language?: string;
     notes?: string;
   }>;
+  officeSchedules?: Array<{
+    type: 'confession' | 'adoration' | 'vespers' | 'lauds' | 'other';
+    dayOfWeek: number;
+    startTime: string;
+    endTime?: string;
+    notes?: string;
+  }>;
   rites?: string[];
   languages?: string[];
   description?: string;
@@ -51,6 +58,18 @@ export interface ScrapedChurch {
   sourceUrl: string;
 }
 
+export interface ChurchUpdateData {
+  churchId: string;
+  churchName: string;
+  websiteUrl: string;
+  status: 'pending' | 'scraping' | 'success' | 'no_data' | 'error';
+  massSchedules?: number;
+  officeSchedules?: number;
+  events?: number;
+  confidence?: number;
+  errorMessage?: string;
+}
+
 export interface ScraperLogEntry {
   timestamp: string;
   level: 'info' | 'success' | 'warn' | 'error';
@@ -59,6 +78,7 @@ export interface ScraperLogEntry {
   churchName?: string;
   phase?: 'list' | 'detail';
   progress?: { current: number; total: number };
+  churchUpdate?: ChurchUpdateData;
 }
 
 export interface ScraperCallbacks {
@@ -66,7 +86,18 @@ export interface ScraperCallbacks {
   onChurchError?: (url: string, error: Error) => void;
   onProgress?: (current: number, total: number) => void;
   onLog?: (entry: ScraperLogEntry) => void;
+  onFrame?: (data: ScreencastFrame) => void;
   shouldCancel?: () => boolean;
+}
+
+export interface ScreencastFrame {
+  /** Base64-encoded JPEG frame from CDP screencast */
+  image: string;
+  /** URL the browser is currently showing */
+  pageUrl: string;
+  /** Worker/page index (for concurrent scrapers) */
+  workerIndex?: number;
+  timestamp: string;
 }
 
 export abstract class BaseScraper {
@@ -120,6 +151,10 @@ export abstract class BaseScraper {
   abstract scrapeChurchList(): Promise<string[]>;
   abstract scrapeChurchDetails(url: string): Promise<ScrapedChurch | null>;
 
+  protected getChurchDisplayName(url: string): string {
+    return url;
+  }
+
   protected emitLog(callbacks: ScraperCallbacks | undefined, entry: Omit<ScraperLogEntry, 'timestamp'>) {
     const full: ScraperLogEntry = { ...entry, timestamp: new Date().toISOString() };
     callbacks?.onLog?.(full);
@@ -138,6 +173,21 @@ export abstract class BaseScraper {
         message: `Found ${churchUrls.length} churches to scrape (${concurrency} workers)`,
         phase: 'detail',
       });
+
+      // Emit pending churchUpdate for all URLs
+      for (const url of churchUrls) {
+        this.emitLog(callbacks, {
+          level: 'info',
+          message: `Queued: ${this.getChurchDisplayName(url)}`,
+          phase: 'detail',
+          churchUpdate: {
+            churchId: url,
+            churchName: this.getChurchDisplayName(url),
+            websiteUrl: url,
+            status: 'pending',
+          },
+        });
+      }
 
       const churches: ScrapedChurch[] = [];
       let completed = 0;
@@ -160,6 +210,12 @@ export abstract class BaseScraper {
             url,
             phase: 'detail',
             progress: { current: completed, total: churchUrls.length },
+            churchUpdate: {
+              churchId: url,
+              churchName: this.getChurchDisplayName(url),
+              websiteUrl: url,
+              status: 'scraping',
+            },
           });
 
           try {
@@ -174,6 +230,27 @@ export abstract class BaseScraper {
                 churchName: church.name,
                 phase: 'detail',
                 progress: { current: completed, total: churchUrls.length },
+                churchUpdate: {
+                  churchId: url,
+                  churchName: church.name,
+                  websiteUrl: url,
+                  status: 'success',
+                  massSchedules: church.massSchedules?.length,
+                },
+              });
+            } else {
+              this.emitLog(callbacks, {
+                level: 'info',
+                message: `No data: ${this.getChurchDisplayName(url)}`,
+                url,
+                phase: 'detail',
+                progress: { current: completed, total: churchUrls.length },
+                churchUpdate: {
+                  churchId: url,
+                  churchName: this.getChurchDisplayName(url),
+                  websiteUrl: url,
+                  status: 'no_data',
+                },
               });
             }
           } catch (error) {
@@ -185,6 +262,13 @@ export abstract class BaseScraper {
               url,
               phase: 'detail',
               progress: { current: completed, total: churchUrls.length },
+              churchUpdate: {
+                churchId: url,
+                churchName: this.getChurchDisplayName(url),
+                websiteUrl: url,
+                status: 'error',
+                errorMessage: err.message,
+              },
             });
           }
         }
@@ -213,6 +297,12 @@ export abstract class BaseScraper {
               url,
               phase: 'detail',
               progress: { current, total: churchUrls.length },
+              churchUpdate: {
+                churchId: url,
+                churchName: this.getChurchDisplayName(url),
+                websiteUrl: url,
+                status: 'scraping',
+              },
             });
 
             try {
@@ -227,6 +317,27 @@ export abstract class BaseScraper {
                   churchName: church.name,
                   phase: 'detail',
                   progress: { current, total: churchUrls.length },
+                  churchUpdate: {
+                    churchId: url,
+                    churchName: church.name,
+                    websiteUrl: url,
+                    status: 'success',
+                    massSchedules: church.massSchedules?.length,
+                  },
+                });
+              } else {
+                this.emitLog(callbacks, {
+                  level: 'info',
+                  message: `No data: ${this.getChurchDisplayName(url)}`,
+                  url,
+                  phase: 'detail',
+                  progress: { current, total: churchUrls.length },
+                  churchUpdate: {
+                    churchId: url,
+                    churchName: this.getChurchDisplayName(url),
+                    websiteUrl: url,
+                    status: 'no_data',
+                  },
                 });
               }
             } catch (error) {
@@ -238,6 +349,13 @@ export abstract class BaseScraper {
                 url,
                 phase: 'detail',
                 progress: { current, total: churchUrls.length },
+                churchUpdate: {
+                  churchId: url,
+                  churchName: this.getChurchDisplayName(url),
+                  websiteUrl: url,
+                  status: 'error',
+                  errorMessage: err.message,
+                },
               });
             }
           }

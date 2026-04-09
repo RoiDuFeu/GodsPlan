@@ -1,5 +1,5 @@
-import { H as HYDRATION_ERROR, C as COMMENT_NODE, d as HYDRATION_END, f as HYDRATION_START, h as HYDRATION_START_ELSE, r as run_all, B as BOUNDARY_EFFECT, R as REACTION_RAN, E as ERROR_VALUE, i as EFFECT, j as CONNECTED, k as CLEAN, M as MAYBE_DIRTY, D as DIRTY, l as DERIVED, W as WAS_MARKED, I as INERT, m as BLOCK_EFFECT, U as UNINITIALIZED, o as DESTROYED, p as EAGER_EFFECT, A as ASYNC, q as deferred, t as RENDER_EFFECT, u as MANAGED_EFFECT, v as ROOT_EFFECT, w as BRANCH_EFFECT, x as includes, y as HYDRATION_START_FAILED, z as EFFECT_TRANSPARENT, F as EFFECT_PRESERVED, S as STALE_REACTION, n as noop, G as STATE_SYMBOL, J as object_prototype, K as array_prototype, L as get_descriptor, N as get_prototype_of, O as is_array, P as is_extensible, Q as HEAD_EFFECT, T as DESTROYING, V as USER_EFFECT, X as REACTION_IS_UPDATING, Y as index_of, Z as define_property, _ as array_from, $ as is_passive_event, a0 as LEGACY_PROPS, a1 as render, a2 as setContext, a3 as derived } from "./renderer.js";
-import { B as BROWSER } from "./false.js";
+import { H as HYDRATION_ERROR, C as COMMENT_NODE, f as HYDRATION_END, h as HYDRATION_START, i as HYDRATION_START_ELSE, r as run_all, B as BOUNDARY_EFFECT, R as REACTION_RAN, E as ERROR_VALUE, j as EFFECT, k as CONNECTED, l as CLEAN, M as MAYBE_DIRTY, D as DIRTY, m as DERIVED, W as WAS_MARKED, I as INERT, o as BLOCK_EFFECT, U as UNINITIALIZED, p as DESTROYED, q as EAGER_EFFECT, A as ASYNC, t as deferred, u as RENDER_EFFECT, v as MANAGED_EFFECT, w as ROOT_EFFECT, x as BRANCH_EFFECT, y as includes, z as HYDRATION_START_FAILED, F as EFFECT_TRANSPARENT, G as EFFECT_PRESERVED, S as STALE_REACTION, n as noop, J as STATE_SYMBOL, K as object_prototype, L as array_prototype, N as get_descriptor, O as get_prototype_of, P as is_array, Q as is_extensible, T as HEAD_EFFECT, V as DESTROYING, X as USER_EFFECT, Y as REACTION_IS_UPDATING, Z as index_of, _ as define_property, $ as array_from, a0 as is_passive_event, a1 as LEGACY_PROPS, a2 as render, a3 as setContext, d as derived } from "./renderer.js";
+import { D as DEV } from "./false.js";
 let tracing_mode_flag = false;
 function effect_update_depth_exceeded() {
   {
@@ -2231,7 +2231,7 @@ function update_effect(effect) {
     effect.teardown = typeof teardown === "function" ? teardown : null;
     effect.wv = write_version;
     var dep;
-    if (BROWSER && tracing_mode_flag && (effect.f & DIRTY) !== 0 && effect.deps !== null) ;
+    if (DEV && tracing_mode_flag && (effect.f & DIRTY) !== 0 && effect.deps !== null) ;
   } finally {
     is_updating_effect = was_updating_effect;
     active_effect = previous_effect;

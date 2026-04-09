@@ -31,7 +31,7 @@
   }
 </script>
 
-<div class="bg-surface-container rounded-xl border border-outline-variant p-5 flex flex-col gap-4 hover:border-outline transition-colors">
+<div class="card-hover p-5 flex flex-col gap-4">
   <div class="flex items-start justify-between gap-3">
     <div class="min-w-0">
       <h3 class="font-headline font-bold text-on-surface truncate">{scraper.name}</h3>
@@ -42,34 +42,31 @@
 
   <div class="grid grid-cols-2 gap-3 text-sm">
     <div>
-      <p class="text-on-surface-variant text-xs">Last run</p>
-      <p class="text-on-surface font-medium">{formatTime(scraper.lastRun?.startedAt ?? null)}</p>
+      <p class="text-on-surface-variant text-[11px] font-medium uppercase tracking-wider">Last run</p>
+      <p class="text-on-surface font-medium mt-0.5">{formatTime(scraper.lastRun?.startedAt ?? null)}</p>
     </div>
     <div>
-      <p class="text-on-surface-variant text-xs">Duration</p>
-      <p class="text-on-surface font-medium">{formatDuration(scraper.lastRun?.durationMs ?? null)}</p>
+      <p class="text-on-surface-variant text-[11px] font-medium uppercase tracking-wider">Duration</p>
+      <p class="text-on-surface font-medium mt-0.5 tabular-nums">{formatDuration(scraper.lastRun?.durationMs ?? null)}</p>
     </div>
     <div>
-      <p class="text-on-surface-variant text-xs">Churches</p>
-      <p class="text-on-surface font-medium">{scraper.lastRun?.churchesFound ?? '-'}</p>
+      <p class="text-on-surface-variant text-[11px] font-medium uppercase tracking-wider">Churches</p>
+      <p class="text-on-surface font-medium mt-0.5 tabular-nums">{scraper.lastRun?.churchesFound ?? '-'}</p>
     </div>
     <div>
-      <p class="text-on-surface-variant text-xs">Success rate</p>
-      <p class="text-on-surface font-medium">{scraper.successRate !== null ? `${scraper.successRate}%` : '-'}</p>
+      <p class="text-on-surface-variant text-[11px] font-medium uppercase tracking-wider">Success rate</p>
+      <p class="text-on-surface font-medium mt-0.5 tabular-nums">{scraper.successRate !== null ? `${scraper.successRate}%` : '-'}</p>
     </div>
   </div>
 
-  <div class="flex gap-2 mt-auto">
-    <a
-      href="/scrapers/{scraper.name}"
-      class="flex-1 text-center text-sm font-medium py-2.5 rounded-lg bg-surface-container-high text-on-surface hover:bg-surface-container-highest transition-colors"
-    >
+  <div class="flex gap-2.5 mt-auto pt-1">
+    <a href="/scrapers/{scraper.name}" class="btn-secondary flex-1 !py-2 !min-h-[38px] text-xs">
       Details
     </a>
     <button
       onclick={() => onTrigger(scraper.name)}
       disabled={scraper.isRunning}
-      class="flex-1 text-sm font-medium py-2.5 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+      class="btn-primary flex-1 !py-2 !min-h-[38px] text-xs"
     >
       {scraper.isRunning ? 'Running...' : 'Trigger'}
     </button>

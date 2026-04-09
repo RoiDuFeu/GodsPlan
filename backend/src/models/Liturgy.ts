@@ -2,7 +2,7 @@ import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateCol
 
 /**
  * Liturgy entity - stores daily Catholic mass readings
- * Scraped from AELF API
+ * Sources: AELF API (French) + catholic-readings-api/USCCB (English)
  */
 @Entity('liturgy')
 @Index(['date'], { unique: true })
@@ -14,11 +14,15 @@ export class Liturgy {
   date!: Date;
 
   @Column({ type: 'varchar', length: 255, nullable: true })
-  liturgicalDay?: string; // e.g., "2e dimanche de l'Avent"
+  liturgicalDay?: string; // English: e.g., "Holy Week"
+
+  @Column({ type: 'varchar', length: 255, nullable: true })
+  liturgicalDayFr?: string; // French: e.g., "Jeudi dans l'Octave de Pâques"
 
   @Column({ type: 'varchar', length: 50, nullable: true })
-  liturgicalColor?: string; // e.g., "violet", "blanc", "vert", "rouge"
+  liturgicalColor?: string; // e.g., "purple", "white", "green", "red"
 
+  // English readings (from USCCB)
   @Column({ type: 'jsonb' })
   readings!: {
     title: string;
@@ -28,6 +32,21 @@ export class Liturgy {
 
   @Column({ type: 'jsonb', nullable: true })
   psalm?: {
+    reference: string;
+    refrain: string;
+    text: string;
+  };
+
+  // French readings (from AELF)
+  @Column({ type: 'jsonb', nullable: true })
+  readingsFr?: {
+    title: string;
+    reference: string;
+    text: string;
+  }[];
+
+  @Column({ type: 'jsonb', nullable: true })
+  psalmFr?: {
     reference: string;
     refrain: string;
     text: string;

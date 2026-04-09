@@ -233,6 +233,7 @@ export class GoogleMapsScraper {
 
     this.page = await this.browser.newPage();
     this.page.setDefaultTimeout(this.timeoutMs);
+    await this.page.evaluateOnNewDocument('if(!window.__name)window.__name=function(fn){return fn}');
 
     // Set realistic user agent
     await this.page.setUserAgent(

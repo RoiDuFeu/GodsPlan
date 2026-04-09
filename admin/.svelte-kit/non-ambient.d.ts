@@ -29,18 +29,24 @@ declare module "$app/types" {
 	type MatcherParam<M> = M extends (param : string) => param is (infer U extends string) ? U : string;
 
 	export interface AppTypes {
-		RouteId(): "/" | "/coverage" | "/scrapers" | "/scrapers/[name]";
+		RouteId(): "/" | "/churches" | "/churches/[id]" | "/coverage" | "/liturgy" | "/liturgy/[date]" | "/scrapers" | "/scrapers/[name]";
 		RouteParams(): {
+			"/churches/[id]": { id: string };
+			"/liturgy/[date]": { date: string };
 			"/scrapers/[name]": { name: string }
 		};
 		LayoutParams(): {
-			"/": { name?: string };
+			"/": { id?: string; date?: string; name?: string };
+			"/churches": { id?: string };
+			"/churches/[id]": { id: string };
 			"/coverage": Record<string, never>;
+			"/liturgy": { date?: string };
+			"/liturgy/[date]": { date: string };
 			"/scrapers": { name?: string };
 			"/scrapers/[name]": { name: string }
 		};
-		Pathname(): "/" | "/coverage" | "/scrapers" | `/scrapers/${string}` & {};
+		Pathname(): "/" | "/churches" | `/churches/${string}` & {} | "/coverage" | "/liturgy" | `/liturgy/${string}` & {} | "/scrapers" | `/scrapers/${string}` & {};
 		ResolvedPathname(): `${"" | `/${string}`}${ReturnType<AppTypes['Pathname']>}`;
-		Asset(): string & {};
+		Asset(): "/favicon.svg" | string & {};
 	}
 }

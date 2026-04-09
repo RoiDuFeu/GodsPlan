@@ -22,7 +22,8 @@ router.get('/', async (req: Request, res: Response) => {
     const query = `
       SELECT 
         id, name, description, address, latitude, longitude,
-        contact, "massSchedules", rites, languages, accessibility,
+        contact, "massSchedules", "officeSchedules", "upcomingEvents",
+        rites, languages, accessibility,
         photos, "dataSources", "reliabilityScore", "isActive",
         "createdAt", "updatedAt", "lastVerified"
       FROM churches
@@ -80,7 +81,8 @@ router.get('/nearby', async (req: Request, res: Response) => {
     const query = `
       SELECT 
         id, name, description, address, latitude, longitude,
-        contact, "massSchedules", rites, languages, accessibility,
+        contact, "massSchedules", "officeSchedules", "upcomingEvents",
+        rites, languages, accessibility,
         photos, "dataSources", "reliabilityScore", "isActive",
         "createdAt", "updatedAt", "lastVerified",
         ST_Distance(
@@ -130,7 +132,8 @@ router.get('/:id', async (req: Request, res: Response) => {
     const query = `
       SELECT 
         id, name, description, address, latitude, longitude,
-        contact, "massSchedules", rites, languages, accessibility,
+        contact, "massSchedules", "officeSchedules", "upcomingEvents",
+        rites, languages, accessibility,
         photos, "dataSources", "reliabilityScore", "isActive",
         "createdAt", "updatedAt", "lastVerified"
       FROM churches
