@@ -16,6 +16,9 @@ function formatLiturgyResponse(liturgy: Liturgy, lang?: string) {
     id: liturgy.id,
     date: liturgy.date,
     liturgicalColor: liturgy.liturgicalColor,
+    saint: liturgy.saint || null,
+    feast: liturgy.feast || null,
+    season: liturgy.season || null,
     createdAt: liturgy.createdAt,
     updatedAt: liturgy.updatedAt,
   };
@@ -204,6 +207,9 @@ async function fetchAndStoreLiturgy(date: string): Promise<Liturgy | null> {
     if (data.readingsFr && data.readingsFr.length > 0) liturgy.readingsFr = data.readingsFr;
     if (data.psalmFr) liturgy.psalmFr = data.psalmFr;
     liturgy.usccbLink = data.usccbLink || liturgy.usccbLink;
+    liturgy.saint = data.saint || liturgy.saint;
+    liturgy.feast = data.fpieast || liturgy.feast;
+    liturgy.season = data.season || liturgy.season;
   } else {
     liturgy = liturgyRepository.create({
       date: date as any,
@@ -214,7 +220,10 @@ async function fetchAndStoreLiturgy(date: string): Promise<Liturgy | null> {
       psalm: data.psalm,
       readingsFr: data.readingsFr,
       psalmFr: data.psalmFr,
-      usccbLink: data.usccbLink
+      usccbLink: data.usccbLink,
+      saint: data.saint,
+      feast: data.fpieast,
+      season: data.season,
     });
   }
 

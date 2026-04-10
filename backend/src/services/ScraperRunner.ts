@@ -492,13 +492,169 @@ class ScraperRunner {
         }
 
         case 'google-maps': {
-          // Google Maps enrichment doesn't use BaseScraper.scrape() directly
-          // It enriches existing churches, so we track it differently
+          const churchRepo = AppDataSource.getRepository(Church);
+          const onlyMissingData = !!(run.metadata as Record<string, unknown>)?.onlyMissingData;
+
+          // Get active churches, prioritize those never enriched by Google Maps
+          const qb = churchRepo
+            .createQueryBuilder('church')
+            .where('church.isActive = true')
+            .orderBy('church.updatedAt', 'ASC');
+
+          // Filter by departments if provided
+          if (departments.length > 0) {
+            qb.andWhere(
+              "SUBSTRING(church.address->>'postalCode', 1, 2) IN (:...depts)",
+              { depts: departments },
+            );
+            this.pushLog(run.id, {
+              timestamp: new Date().toISOString(),
+              level: 'info',
+              message: `Filtering by departments: ${departments.join(', ')}`,
+            });
+          }
+
+          // Only churches missing Google Maps data
+          if (onlyMissingData) {
+            qb.andWhere(
+              `NOT EXISTS (SELECT 1 FROM jsonb_array_elements(church."dataSources") ds WHERE ds->>'name' = 'google-maps')`,
+            );
+            this.pushLog(run.id, {
+              timestamp: new Date().toISOString(),
+              level: 'info',
+              message: 'Enrichment mode: only churches without Google Maps data',
+            });
+          }
+
+          const maxChurches = Number(process.env.GOOGLE_MAPS_MAX_CHURCHES) || 0;
+          if (maxChurches > 0) {
+            qb.limit(maxChurches);
+          }
+
+          const churches = await qb.getMany();
+          churchesFound = churches.length;
+
+          this.pushLog(run.id, {
+            timestamp: new Date().toISOString(),
+            level: 'info',
+            message: `Found ${churches.length} churches to enrich with Google Maps`,
+          });
+
           const scraper = new GoogleMapsScraper({ useFixtures: false });
           if (!scraper.isEnabled()) {
             throw new Error('Google Maps scraper is not enabled (missing configuration)');
           }
-          await scraper.close();
+
+          let completedCount = 0;
+
+          try {
+            for (const church of churches) {
+              if (callbacks.shouldCancel?.()) break;
+
+              this.pushLog(run.id, {
+                timestamp: new Date().toISOString(),
+                level: 'info',
+                message: `Enriching ${church.name} (${completedCount + 1}/${churches.length})`,
+              });
+
+              try {
+                const result = await scraper.enrichChurch(church);
+
+                if (result) {
+                  // Merge photos (add new, keep existing, cap at 2)
+                  const existingPhotos = new Set(church.photos || []);
+                  const newPhotos = (result.photos || []).filter((p) => !existingPhotos.has(p));
+                  if (newPhotos.length > 0) {
+                    church.photos = [...(church.photos || []), ...newPhotos].slice(0, 2);
+                  }
+
+                  // Update contact info (fill gaps, don't overwrite)
+                  if (!church.contact) church.contact = {};
+                  if (!church.contact.phone && result.contact?.phone) {
+                    church.contact.phone = result.contact.phone;
+                  }
+                  if (!church.contact.website && result.contact?.website) {
+                    church.contact.website = result.contact.website;
+                  }
+
+                  // Update coordinates if missing
+                  if ((!church.latitude || !church.longitude) && result.latitude && result.longitude) {
+                    church.latitude = result.latitude;
+                    church.longitude = result.longitude;
+                    church.location = {
+                      type: 'Point',
+                      coordinates: [result.longitude, result.latitude],
+                    };
+                  }
+
+                  // Update data source
+                  if (!church.dataSources) church.dataSources = [];
+                  const sourceIdx = church.dataSources.findIndex((ds) => ds.name === 'google-maps');
+                  const sourceEntry: DataSource = {
+                    name: 'google-maps',
+                    url: result.googleMapsUrl,
+                    lastScraped: new Date(),
+                    reliability: result.rating ? Math.round(result.rating * 20) : 50,
+                    metadata: {
+                      placeId: result.placeId,
+                      rating: result.rating,
+                      userRatingsTotal: result.userRatingsTotal,
+                      photosFound: (result.photos || []).length,
+                      openingHours: result.openingHours,
+                    },
+                  };
+                  if (sourceIdx >= 0) {
+                    church.dataSources[sourceIdx] = sourceEntry;
+                  } else {
+                    church.dataSources.push(sourceEntry);
+                  }
+
+                  church.lastVerified = new Date();
+                  await churchRepo.save(church);
+
+                  completedCount++;
+                  callbacks.onProgress?.(completedCount, churches.length);
+
+                  callbacks.onChurchScraped?.({
+                    name: church.name,
+                    address: church.address,
+                    sourceUrl: result.googleMapsUrl || '',
+                    massSchedules: [],
+                    contact: church.contact,
+                  } as ScrapedChurch);
+
+                  this.pushLog(run.id, {
+                    timestamp: new Date().toISOString(),
+                    level: 'success',
+                    message: `${church.name}: ${(result.photos || []).length} photos, rating ${result.rating || 'N/A'}, ${result.userRatingsTotal || 0} reviews`,
+                  });
+                } else {
+                  completedCount++;
+                  callbacks.onProgress?.(completedCount, churches.length);
+
+                  this.pushLog(run.id, {
+                    timestamp: new Date().toISOString(),
+                    level: 'info',
+                    message: `${church.name}: no Google Maps data found`,
+                  });
+                }
+              } catch (churchError) {
+                completedCount++;
+                callbacks.onProgress?.(completedCount, churches.length);
+
+                const errMsg = churchError instanceof Error ? churchError.message : String(churchError);
+                callbacks.onChurchError?.(church.name, new Error(errMsg));
+
+                this.pushLog(run.id, {
+                  timestamp: new Date().toISOString(),
+                  level: 'error',
+                  message: `${church.name}: ${errMsg}`,
+                });
+              }
+            }
+          } finally {
+            await scraper.close();
+          }
           break;
         }
 

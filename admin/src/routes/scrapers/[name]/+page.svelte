@@ -243,11 +243,11 @@
     </FadeIn>
 
     <!-- Per-church progress grid -->
-    {#if (scraper.name === 'church-website' || scraper.name === 'messes.info') && sseLogs.length > 0}
+    {#if (scraper.name === 'church-website' || scraper.name === 'messes.info' || scraper.name === 'google-maps') && sseLogs.length > 0}
       <FadeIn>
         <WebsiteScraperGrid
           logs={sseLogs}
-          title={scraper.name === 'church-website' ? 'Website Analysis' : 'Church Scraping'}
+          title={scraper.name === 'church-website' ? 'Website Analysis' : scraper.name === 'google-maps' ? 'Google Maps Enrichment' : 'Church Scraping'}
         />
       </FadeIn>
     {/if}

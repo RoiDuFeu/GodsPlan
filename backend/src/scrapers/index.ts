@@ -217,7 +217,7 @@ async function saveChurches(scrapedChurches: ScrapedChurch[], sourceName: string
           scraped.languages || existingChurch.languages || ['French'];
 
         if (scraped.photos?.length) {
-          existingChurch.photos = [...new Set([...(existingChurch.photos || []), ...scraped.photos])];
+          existingChurch.photos = [...new Set([...(existingChurch.photos || []), ...scraped.photos])].slice(0, 2);
         }
 
         upsertDataSource(existingChurch, sourceEntry);
@@ -237,7 +237,7 @@ async function saveChurches(scrapedChurches: ScrapedChurch[], sourceName: string
           massSchedules: mapMassSchedules(scraped),
           rites: scraped.rites?.map(mapRite) || [ChurchRite.PAUL_VI],
           languages: scraped.languages || ['French'],
-          photos: scraped.photos || [],
+          photos: (scraped.photos || []).slice(0, 2),
           dataSources: [sourceEntry],
           reliabilityScore: sourceEntry.reliability,
           isActive: true,
@@ -319,7 +319,7 @@ function mergeGoogleData(church: Church, google: GoogleMapsScrapedChurch): void 
   }
 
   if (google.photos?.length) {
-    church.photos = [...new Set([...(church.photos || []), ...google.photos])].slice(0, 20);
+    church.photos = [...new Set([...(church.photos || []), ...google.photos])].slice(0, 2);
   }
 }
 

@@ -42,6 +42,9 @@ export interface DailyLiturgy {
     text: string;
   };
   usccbLink: string;        // Official USCCB verification link
+  saint?: string;            // Saint/feast of the day (from AELF "fete")
+  fpieast?: string;          // Feast rank/degree (e.g., "Solennité", "Fête", "Mémoire")
+  season?: string;           // Liturgical season (e.g., "pascal", "ordinaire", "avent")
 }
 
 export class LiturgyScraper {
@@ -299,6 +302,17 @@ export class LiturgyScraper {
       // Map AELF color to our color system (AELF uses French color names)
       if (info?.couleur && !liturgy.liturgicalColor) {
         liturgy.liturgicalColor = this.mapAelfColor(info.couleur);
+      }
+
+      // Extract saint/feast and season info
+      if (info?.fete) {
+        liturgy.saint = info.fete;
+      }
+      if (info?.degre) {
+        liturgy.fpieast = info.degre;
+      }
+      if (info?.temps_liturgique) {
+        liturgy.season = info.temps_liturgique;
       }
 
       const readingsFr: LiturgyReading[] = [];

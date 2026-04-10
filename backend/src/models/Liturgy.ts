@@ -55,6 +55,15 @@ export class Liturgy {
   @Column({ type: 'varchar', length: 500, nullable: true })
   usccbLink?: string;
 
+  @Column({ type: 'varchar', length: 500, nullable: true })
+  saint?: string; // Saint/feast of the day from AELF "fete" field
+
+  @Column({ type: 'varchar', length: 255, nullable: true })
+  feast?: string; // Feast rank/degree (e.g., "Solennité", "Fête", "Mémoire")
+
+  @Column({ type: 'varchar', length: 100, nullable: true })
+  season?: string; // Liturgical season (e.g., "pascal", "ordinaire", "avent")
+
   @CreateDateColumn()
   createdAt!: Date;
 

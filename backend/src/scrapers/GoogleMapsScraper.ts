@@ -124,7 +124,7 @@ export class GoogleMapsScraper {
     this.rateLimitMs = Number(options.rateLimitMs ?? process.env.GOOGLE_MAPS_RATE_LIMIT_MS ?? 2500);
     this.timeoutMs = Number(options.timeoutMs ?? process.env.SCRAPE_TIMEOUT_MS ?? 45000);
     this.headless = options.headless ?? true;
-    this.maxPhotos = Number(options.maxPhotos ?? process.env.GOOGLE_MAPS_MAX_PHOTOS ?? 8);
+    this.maxPhotos = Number(options.maxPhotos ?? process.env.GOOGLE_MAPS_MAX_PHOTOS ?? 2);
   }
 
   isEnabled(): boolean {

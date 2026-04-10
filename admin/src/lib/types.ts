@@ -145,6 +145,9 @@ export interface LiturgyEntry {
   liturgicalDay?: string;
   liturgicalDayFr?: string;
   liturgicalColor?: string;
+  saint?: string;
+  feast?: string;
+  season?: string;
   readings: LiturgyReading[];
   psalm?: LiturgyPsalm;
   readingsFr?: LiturgyReading[];

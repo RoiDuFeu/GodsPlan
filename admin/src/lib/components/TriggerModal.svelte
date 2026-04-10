@@ -29,7 +29,7 @@
   let submitting = $state(false);
   let errorMsg = $state<string | null>(null);
 
-  const supportsEnrichment = $derived(scraperName === 'church-website');
+  const supportsEnrichment = $derived(scraperName === 'church-website' || scraperName === 'google-maps');
 
   let resourceLevel = $derived(
     concurrency <= 3 ? 'low' : concurrency <= 6 ? 'moderate' : 'high'
@@ -130,7 +130,7 @@
         >
           <div class="flex flex-col items-start gap-0.5">
             <span class="font-semibold">Only missing data</span>
-            <span class="text-xs opacity-70">Skip churches that already have mass schedules</span>
+            <span class="text-xs opacity-70">{scraperName === 'google-maps' ? 'Skip churches already enriched by Google Maps' : 'Skip churches that already have mass schedules'}</span>
           </div>
           {#if onlyMissingData}
             <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>

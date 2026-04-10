@@ -218,7 +218,7 @@ export async function saveChurches(
         if (scraped.photos?.length) {
           existing.photos = [
             ...new Set([...(existing.photos || []), ...scraped.photos]),
-          ];
+          ].slice(0, 2);
         }
 
         upsertDataSource(existing, sourceEntry);
@@ -239,7 +239,7 @@ export async function saveChurches(
           officeSchedules: mapOfficeSchedules(scraped),
           rites: scraped.rites?.map(mapRite) || [ChurchRite.PAUL_VI],
           languages: scraped.languages || ['French'],
-          photos: scraped.photos || [],
+          photos: (scraped.photos || []).slice(0, 2),
           dataSources: [sourceEntry],
           reliabilityScore: sourceEntry.reliability,
           isActive: true,
