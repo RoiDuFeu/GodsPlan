@@ -10,7 +10,7 @@ return {
 	assets: new Set(["favicon.svg"]),
 	mimeTypes: {".svg":"image/svg+xml"},
 	_: {
-		client: {start:"_app/immutable/entry/start.CFy6b8Rh.js",app:"_app/immutable/entry/app.DS-5QI7x.js",imports:["_app/immutable/entry/start.CFy6b8Rh.js","_app/immutable/chunks/DcSCsmby.js","_app/immutable/chunks/C11SalFk.js","_app/immutable/entry/app.DS-5QI7x.js","_app/immutable/chunks/C11SalFk.js","_app/immutable/chunks/DHVTEc03.js","_app/immutable/chunks/B9qzE-_Q.js","_app/immutable/chunks/BNL8Lnw7.js"],stylesheets:[],fonts:[],uses_env_dynamic_public:false},
+		client: {start:"_app/immutable/entry/start.H24hnDbV.js",app:"_app/immutable/entry/app.Dfe7bVSC.js",imports:["_app/immutable/entry/start.H24hnDbV.js","_app/immutable/chunks/B_pdrQHw.js","_app/immutable/chunks/RSoVmAr_.js","_app/immutable/chunks/DnRJWtfC.js","_app/immutable/entry/app.Dfe7bVSC.js","_app/immutable/chunks/RSoVmAr_.js","_app/immutable/chunks/Dofk3-Hp.js","_app/immutable/chunks/DnRJWtfC.js","_app/immutable/chunks/BagSqEL6.js","_app/immutable/chunks/38mJ6c7q.js"],stylesheets:[],fonts:[],uses_env_dynamic_public:false},
 		nodes: [
 			__memo(() => import('./nodes/0.js')),
 			__memo(() => import('./nodes/1.js')),
@@ -19,7 +19,8 @@ return {
 			__memo(() => import('./nodes/4.js')),
 			__memo(() => import('./nodes/5.js')),
 			__memo(() => import('./nodes/6.js')),
-			__memo(() => import('./nodes/7.js'))
+			__memo(() => import('./nodes/7.js')),
+			__memo(() => import('./nodes/8.js'))
 		],
 		remotes: {
 			
@@ -47,24 +48,31 @@ return {
 				endpoint: null
 			},
 			{
-				id: "/coverage",
-				pattern: /^\/coverage\/?$/,
+				id: "/liturgy",
+				pattern: /^\/liturgy\/?$/,
 				params: [],
 				page: { layouts: [0,], errors: [1,], leaf: 5 },
+				endpoint: null
+			},
+			{
+				id: "/liturgy/[date]",
+				pattern: /^\/liturgy\/([^/]+?)\/?$/,
+				params: [{"name":"date","optional":false,"rest":false,"chained":false}],
+				page: { layouts: [0,], errors: [1,], leaf: 6 },
 				endpoint: null
 			},
 			{
 				id: "/scrapers",
 				pattern: /^\/scrapers\/?$/,
 				params: [],
-				page: { layouts: [0,], errors: [1,], leaf: 6 },
+				page: { layouts: [0,], errors: [1,], leaf: 7 },
 				endpoint: null
 			},
 			{
 				id: "/scrapers/[name]",
 				pattern: /^\/scrapers\/([^/]+?)\/?$/,
 				params: [{"name":"name","optional":false,"rest":false,"chained":false}],
-				page: { layouts: [0,], errors: [1,], leaf: 7 },
+				page: { layouts: [0,], errors: [1,], leaf: 8 },
 				endpoint: null
 			}
 		],

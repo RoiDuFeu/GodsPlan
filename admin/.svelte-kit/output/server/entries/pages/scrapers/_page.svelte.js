@@ -1,4 +1,5 @@
 import { e as ensure_array_like } from "../../../chunks/renderer.js";
+import "../../../chunks/TriggerModal.svelte_svelte_type_style_lang.js";
 import { F as FadeIn } from "../../../chunks/FadeIn.js";
 import { S as Skeleton } from "../../../chunks/Skeleton.js";
 function _page($$renderer, $$props) {
@@ -6,7 +7,7 @@ function _page($$renderer, $$props) {
     $$renderer2.push(`<div class="page-container space-y-8">`);
     FadeIn($$renderer2, {
       children: ($$renderer3) => {
-        $$renderer3.push(`<div class="page-header"><h1 class="page-title">Scrapers</h1> <p class="page-subtitle">Manage and monitor all data scrapers</p></div>`);
+        $$renderer3.push(`<div class="page-header"><div class="flex items-center justify-between"><div><h1 class="page-title">Scrapers</h1> <p class="page-subtitle">Manage and monitor all data scrapers</p></div> <button class="btn btn-danger">Purge Database</button></div></div>`);
       }
     });
     $$renderer2.push(`<!----> `);
@@ -21,6 +22,14 @@ function _page($$renderer, $$props) {
       $$renderer2.push(`<!--]--></div>`);
     }
     $$renderer2.push(`<!--]--></div> `);
+    {
+      $$renderer2.push("<!--[-1-->");
+    }
+    $$renderer2.push(`<!--]--> `);
+    {
+      $$renderer2.push("<!--[-1-->");
+    }
+    $$renderer2.push(`<!--]--> `);
     {
       $$renderer2.push("<!--[-1-->");
     }
