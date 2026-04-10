@@ -26,6 +26,7 @@ function mapMassSchedules(church: ScrapedChurch): Church['massSchedules'] {
   return (church.massSchedules || []).map((schedule) => ({
     dayOfWeek: schedule.dayOfWeek,
     time: schedule.time,
+    date: schedule.date,
     rite: mapRite(schedule.rite),
     language: schedule.language,
     notes: schedule.notes,
@@ -38,6 +39,7 @@ function mapOfficeSchedules(church: ScrapedChurch): OfficeSchedule[] {
     dayOfWeek: schedule.dayOfWeek,
     startTime: schedule.startTime,
     endTime: schedule.endTime,
+    date: schedule.date,
     notes: schedule.notes,
   }));
 }

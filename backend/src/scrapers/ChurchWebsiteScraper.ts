@@ -453,6 +453,7 @@ export class ChurchWebsiteScraper {
     return parsed.massSchedules.map((s) => ({
       dayOfWeek: s.dayOfWeek,
       time: s.time,
+      date: s.date,
       rite: this.mapRite(s.rite),
       language: s.language,
       notes: s.notes,
@@ -465,6 +466,7 @@ export class ChurchWebsiteScraper {
       dayOfWeek: s.dayOfWeek,
       startTime: s.startTime,
       endTime: s.endTime,
+      date: s.date,
       notes: s.notes,
     }));
   }

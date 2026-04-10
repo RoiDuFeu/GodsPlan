@@ -32,6 +32,7 @@ export interface ChurchContact {
 export interface MassSchedule {
   dayOfWeek: number; // 0 = Sunday, 1 = Monday, etc.
   time: string; // HH:MM format
+  date?: string; // ISO date string (YYYY-MM-DD) for specific-date masses
   rite: ChurchRite;
   language?: string;
   notes?: string;
@@ -71,6 +72,7 @@ export interface OfficeSchedule {
   dayOfWeek: number; // 0 = Sunday, 1 = Monday, etc.
   startTime: string; // HH:MM format
   endTime?: string; // HH:MM format (optional)
+  date?: string; // ISO date string (YYYY-MM-DD) for specific-date offices
   notes?: string;
 }
 

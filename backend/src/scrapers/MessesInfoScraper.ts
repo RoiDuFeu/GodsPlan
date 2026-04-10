@@ -23,6 +23,7 @@ type CelebrationCategory = 'mass' | 'confession' | 'adoration' | 'vespers' | 'la
 interface ExtractedSchedule {
   dayOfWeek: number;
   time: string;
+  date?: string; // ISO date string (YYYY-MM-DD)
   endTime?: string;
   title: string;
   notes?: string;
@@ -421,6 +422,7 @@ export class MessesInfoScraper extends BaseScraper {
 
         const schedules: Array<{
           dayOfWeek: number;
+          date?: string; // ISO date string (YYYY-MM-DD)
           time: string;
           endTime?: string;
           title: string;
@@ -429,9 +431,17 @@ export class MessesInfoScraper extends BaseScraper {
           category: string;
         }> = [];
 
+        // French month names → 0-indexed month number
+        const monthMap: Record<string, number> = {
+          janvier: 0, février: 1, fevrier: 1, mars: 2, avril: 3,
+          mai: 4, juin: 5, juillet: 6, août: 7, aout: 7,
+          septembre: 8, octobre: 9, novembre: 10, décembre: 11, decembre: 11,
+        };
+
         // Walk through top-level tree items to detect categories
         let currentCategory: string = 'mass'; // default to mass
         let currentDay: number | null = null;
+        let currentDate: string | undefined = undefined;
 
         // Flat approach: iterate ALL cellTreeItemValue > div nodes,
         // detecting category headers, day headers, and celebration entries
@@ -444,14 +454,27 @@ export class MessesInfoScraper extends BaseScraper {
         for (const node of nodes as any[]) {
           // Check if this is a day header
           if (node.classList?.contains('titre-date')) {
-            const token = (node.innerText || '')
-              .trim()
-              .toLowerCase()
-              .split(/\s+/u)[0]
-              ?.replace('.', '');
+            const headerText = (node.innerText || '').trim().toLowerCase();
+            const token = headerText.split(/\s+/u)[0]?.replace('.', '');
 
             if (token && dayMap[token] !== undefined) {
               currentDay = dayMap[token];
+            }
+
+            // Try to parse a full date from header like "samedi 12 avril" or "dimanche 13 avril 2025"
+            currentDate = undefined;
+            const dateMatch = headerText.match(/(\d{1,2})\s+([a-zéûô]+)(?:\s+(\d{4}))?/u);
+            if (dateMatch) {
+              const dayNum = parseInt(dateMatch[1], 10);
+              const monthName = dateMatch[2];
+              const yearStr = dateMatch[3];
+              const monthIdx = monthMap[monthName];
+              if (monthIdx !== undefined && dayNum >= 1 && dayNum <= 31) {
+                const year = yearStr ? parseInt(yearStr, 10) : new Date().getFullYear();
+                const mm = String(monthIdx + 1).padStart(2, '0');
+                const dd = String(dayNum).padStart(2, '0');
+                currentDate = `${year}-${mm}-${dd}`;
+              }
             }
             continue;
           }
@@ -499,6 +522,7 @@ export class MessesInfoScraper extends BaseScraper {
 
             schedules.push({
               dayOfWeek: currentDay,
+              date: currentDate,
               time: `${hh}:${mm}`,
               endTime,
               title,
@@ -515,8 +539,9 @@ export class MessesInfoScraper extends BaseScraper {
             const detected = detectCategory(nodeText);
             if (detected) {
               currentCategory = detected;
-              // Reset day when entering a new category section
+              // Reset day and date when entering a new category section
               currentDay = null;
+              currentDate = undefined;
             }
           }
         }
@@ -573,6 +598,7 @@ export class MessesInfoScraper extends BaseScraper {
           massSchedules.push({
             dayOfWeek: schedule.dayOfWeek,
             time: schedule.time,
+            date: schedule.date,
             rite,
             language,
             notes: schedule.notes,
@@ -584,6 +610,7 @@ export class MessesInfoScraper extends BaseScraper {
             dayOfWeek: schedule.dayOfWeek,
             startTime: schedule.time,
             endTime: schedule.endTime,
+            date: schedule.date,
             notes: schedule.notes,
           });
         }

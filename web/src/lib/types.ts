@@ -38,6 +38,7 @@ export interface Church {
 export interface MassSchedule {
   dayOfWeek: number; // 0=Sunday, 1=Monday, ..., 6=Saturday
   time: string;
+  date?: string; // ISO date string (YYYY-MM-DD) for specific-date masses
   rite?: string;
   language?: string;
   note?: string;

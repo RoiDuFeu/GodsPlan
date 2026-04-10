@@ -44,31 +44,44 @@
 
   const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
-  function byDayAndTime(a: { dayOfWeek: number; time?: string; startTime?: string }, b: { dayOfWeek: number; time?: string; startTime?: string }) {
-    if (a.dayOfWeek !== b.dayOfWeek) return a.dayOfWeek - b.dayOfWeek;
-    return (a.time || a.startTime || '').localeCompare(b.time || b.startTime || '');
-  }
-
   let sortedMassSchedules = $derived(
-    [...(church?.massSchedules || [])].sort(byDayAndTime)
+    [...(church?.massSchedules || [])].sort((a, b) => {
+      if (a.dayOfWeek !== b.dayOfWeek) return a.dayOfWeek - b.dayOfWeek;
+      const dateA = a.date || '';
+      const dateB = b.date || '';
+      if (dateA !== dateB) return dateA.localeCompare(dateB);
+      return (a.time || '').localeCompare(b.time || '');
+    })
   );
 
   let massByDay = $derived(
     sortedMassSchedules.reduce((acc, s) => {
-      const day = dayNames[s.dayOfWeek] || `Day ${s.dayOfWeek}`;
-      (acc[day] ??= []).push(s);
+      const dayName = dayNames[s.dayOfWeek] || `Day ${s.dayOfWeek}`;
+      const label = s.date
+        ? `${dayName} — ${new Date(s.date + 'T00:00:00').toLocaleDateString(undefined, { day: 'numeric', month: 'long' })}`
+        : dayName;
+      (acc[label] ??= []).push(s);
       return acc;
     }, {} as Record<string, typeof sortedMassSchedules>)
   );
 
   let sortedOfficeSchedules = $derived(
-    [...(church?.officeSchedules || [])].sort(byDayAndTime)
+    [...(church?.officeSchedules || [])].sort((a, b) => {
+      if (a.dayOfWeek !== b.dayOfWeek) return a.dayOfWeek - b.dayOfWeek;
+      const dateA = a.date || '';
+      const dateB = b.date || '';
+      if (dateA !== dateB) return dateA.localeCompare(dateB);
+      return (a.startTime || '').localeCompare(b.startTime || '');
+    })
   );
 
   let officeByDay = $derived(
     sortedOfficeSchedules.reduce((acc, s) => {
-      const day = dayNames[s.dayOfWeek] || `Day ${s.dayOfWeek}`;
-      (acc[day] ??= []).push(s);
+      const dayName = dayNames[s.dayOfWeek] || `Day ${s.dayOfWeek}`;
+      const label = s.date
+        ? `${dayName} — ${new Date(s.date + 'T00:00:00').toLocaleDateString(undefined, { day: 'numeric', month: 'long' })}`
+        : dayName;
+      (acc[label] ??= []).push(s);
       return acc;
     }, {} as Record<string, typeof sortedOfficeSchedules>)
   );

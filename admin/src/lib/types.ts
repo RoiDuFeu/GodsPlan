@@ -112,8 +112,8 @@ export interface ChurchAdmin {
   latitude: number;
   longitude: number;
   contact?: { phone?: string; email?: string; website?: string };
-  massSchedules: Array<{ dayOfWeek: number; time: string; rite: string; language?: string; notes?: string }>;
-  officeSchedules: Array<{ type: string; dayOfWeek: number; startTime: string; endTime?: string; notes?: string }>;
+  massSchedules: Array<{ dayOfWeek: number; time: string; date?: string; rite: string; language?: string; notes?: string }>;
+  officeSchedules: Array<{ type: string; dayOfWeek: number; startTime: string; endTime?: string; date?: string; notes?: string }>;
   rites: string[];
   languages: string[];
   accessibility?: { wheelchairAccessible: boolean; hearingLoop: boolean; parking: boolean; notes?: string };

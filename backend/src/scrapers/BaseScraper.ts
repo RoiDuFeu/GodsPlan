@@ -36,6 +36,7 @@ export interface ScrapedChurch {
   massSchedules?: Array<{
     dayOfWeek: number;
     time: string;
+    date?: string; // ISO date string (YYYY-MM-DD) for specific-date masses
     rite: string;
     language?: string;
     notes?: string;
@@ -45,6 +46,7 @@ export interface ScrapedChurch {
     dayOfWeek: number;
     startTime: string;
     endTime?: string;
+    date?: string; // ISO date string (YYYY-MM-DD) for specific-date offices
     notes?: string;
   }>;
   rites?: string[];

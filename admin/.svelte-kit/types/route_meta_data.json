@@ -2,6 +2,7 @@
 	"/": [],
 	"/churches": [],
 	"/churches/[id]": [],
+	"/coverage": [],
 	"/liturgy": [],
 	"/liturgy/[date]": [],
 	"/scrapers": [],

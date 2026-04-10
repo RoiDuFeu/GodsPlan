@@ -25,14 +25,31 @@ export function ChurchDetailPanel({ church, onBack }: ChurchDetailPanelProps) {
 
   const dayNames = DAY_KEYS.map(key => t(`days.${key}`));
 
-  const schedulesByDay = church.massSchedules.reduce((acc, schedule) => {
-    const day = dayNames[schedule.dayOfWeek];
-    if (!acc[day]) acc[day] = [];
-    acc[day].push(schedule);
-    return acc;
-  }, {} as Record<string, typeof church.massSchedules>);
+  // Group by day name + date (so two Saturdays with different dates stay separate)
+  const scheduleGroups: Array<{ label: string; dayOfWeek: number; schedules: typeof church.massSchedules }> = [];
+  const groupMap = new Map<string, typeof scheduleGroups[number]>();
 
-  const sortedDays = dayNames.filter(day => schedulesByDay[day]);
+  for (const schedule of church.massSchedules) {
+    const dayName = dayNames[schedule.dayOfWeek];
+    const key = schedule.date ? `${schedule.dayOfWeek}:${schedule.date}` : `${schedule.dayOfWeek}:`;
+    if (!groupMap.has(key)) {
+      const label = schedule.date
+        ? `${dayName} — ${new Date(schedule.date + 'T00:00:00').toLocaleDateString(undefined, { day: 'numeric', month: 'long' })}`
+        : dayName;
+      const group = { label, dayOfWeek: schedule.dayOfWeek, schedules: [] as typeof church.massSchedules };
+      groupMap.set(key, group);
+      scheduleGroups.push(group);
+    }
+    groupMap.get(key)!.schedules.push(schedule);
+  }
+
+  // Sort: by dayOfWeek first, then by date
+  scheduleGroups.sort((a, b) => {
+    if (a.dayOfWeek !== b.dayOfWeek) return a.dayOfWeek - b.dayOfWeek;
+    const dateA = a.schedules[0]?.date || '';
+    const dateB = b.schedules[0]?.date || '';
+    return dateA.localeCompare(dateB);
+  });
 
   return (
     <div className="flex h-full flex-col bg-background">
@@ -94,26 +111,25 @@ export function ChurchDetailPanel({ church, onBack }: ChurchDetailPanelProps) {
               <h3 className="font-headline font-bold text-sm">{t('churchDetail.massSchedule')}</h3>
             </div>
 
-            {sortedDays.length > 0 ? (
+            {scheduleGroups.length > 0 ? (
               <div className="rounded-lg border border-border overflow-hidden bg-surface-container">
-                {sortedDays.map((day, index) => {
-                  const daySchedules = schedulesByDay[day];
-                  const times = daySchedules.map(s => s.time).join(' \u2022 ');
-                  const rite = daySchedules[0]?.rite;
-                  const language = daySchedules[0]?.language;
+                {scheduleGroups.map((group, index) => {
+                  const times = group.schedules.map(s => s.time).join(' \u2022 ');
+                  const rite = group.schedules[0]?.rite;
+                  const language = group.schedules[0]?.language;
 
                   return (
                     <SwipeableMassRow
-                      key={day}
+                      key={`${group.dayOfWeek}-${group.schedules[0]?.date || ''}`}
                       churchId={church.id}
-                      dayOfWeek={daySchedules[0].dayOfWeek}
-                      className={index < sortedDays.length - 1 ? 'border-b border-border' : undefined}
+                      dayOfWeek={group.dayOfWeek}
+                      className={index < scheduleGroups.length - 1 ? 'border-b border-border' : undefined}
                     >
                       <div className="px-3 py-2.5">
                         <div className="flex justify-between items-center gap-2">
                           <div className="min-w-0">
                             <span className="font-label text-[9px] uppercase tracking-widest text-primary block">
-                              {day}
+                              {group.label}
                             </span>
                             <span className="font-headline font-bold text-[13px]">{times || t('churchDetail.noMass')}</span>
                           </div>

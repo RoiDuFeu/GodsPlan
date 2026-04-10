@@ -10,6 +10,7 @@
 export interface ParsedMassSchedule {
   dayOfWeek: number;
   time: string; // HH:MM
+  date?: string; // ISO date string (YYYY-MM-DD) for specific-date masses
   rite?: string;
   language?: string;
   notes?: string;
@@ -20,6 +21,7 @@ export interface ParsedOfficeSchedule {
   dayOfWeek: number;
   startTime: string; // HH:MM
   endTime?: string; // HH:MM
+  date?: string; // ISO date string (YYYY-MM-DD) for specific-date offices
   notes?: string;
 }
 
@@ -59,6 +61,14 @@ const DAY_GROUPS: Record<string, number[]> = {
   'tous les jours': [0, 1, 2, 3, 4, 5, 6],
   'chaque jour': [0, 1, 2, 3, 4, 5, 6],
 };
+
+const MONTH_MAP_GLOBAL: Record<string, number> = {
+  janvier: 0, février: 1, fevrier: 1, mars: 2, avril: 3,
+  mai: 4, juin: 5, juillet: 6, août: 7, aout: 7,
+  septembre: 8, octobre: 9, novembre: 10, décembre: 11, decembre: 11,
+};
+
+const DATE_REGEX = /(\d{1,2})\s+(janvier|février|fevrier|mars|avril|mai|juin|juillet|août|aout|septembre|octobre|novembre|décembre|decembre)(?:\s+(\d{4}))?/i;
 
 /** Regex matching French time patterns: 18h30, 9h, 18:30, 9 h 00, 09H30 */
 const TIME_REGEX = /(\d{1,2})\s*[hH:]\s*(\d{0,2})/g;
@@ -171,6 +181,20 @@ function extractDays(text: string): number[] {
   }
 
   return Array.from(days).sort((a, b) => a - b);
+}
+
+/**
+ * Extract an ISO date string from French text like "12 avril", "samedi 12 avril 2025".
+ * Returns undefined if no date found.
+ */
+function extractDate(text: string): string | undefined {
+  const match = DATE_REGEX.exec(text);
+  if (!match) return undefined;
+  const day = parseInt(match[1], 10);
+  const month = MONTH_MAP_GLOBAL[match[2].toLowerCase()];
+  const year = match[3] ? parseInt(match[3], 10) : new Date().getFullYear();
+  if (month === undefined || day < 1 || day > 31) return undefined;
+  return `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
 }
 
 function detectRite(text: string): string | undefined {
@@ -334,8 +358,9 @@ function parseMassLines(text: string): ParsedMassSchedule[] {
   const schedules: ParsedMassSchedule[] = [];
   const lines = text.split('\n');
 
-  // Track context: last seen day(s) carry forward across lines
+  // Track context: last seen day(s) and date carry forward across lines
   let contextDays: number[] = [];
+  let contextDate: string | undefined = undefined;
   const globalRite = detectRite(text);
   const globalLanguage = detectLanguage(text);
 
@@ -344,12 +369,19 @@ function parseMassLines(text: string): ParsedMassSchedule[] {
     if (!trimmed) continue;
 
     const lineDays = extractDays(trimmed);
+    const lineDate = extractDate(trimmed);
     const lineTimes = extractTimes(trimmed);
     const lineRite = detectRite(trimmed) || globalRite;
     const lineLanguage = detectLanguage(trimmed) || globalLanguage;
 
     if (lineDays.length > 0) {
       contextDays = lineDays;
+    }
+    if (lineDate) {
+      contextDate = lineDate;
+    } else if (lineDays.length > 0) {
+      // New day without specific date — reset date context
+      contextDate = undefined;
     }
 
     if (lineTimes.length > 0 && contextDays.length > 0) {
@@ -358,6 +390,7 @@ function parseMassLines(text: string): ParsedMassSchedule[] {
           schedules.push({
             dayOfWeek: day,
             time,
+            date: contextDate,
             rite: lineRite,
             language: lineLanguage,
           });
@@ -369,6 +402,7 @@ function parseMassLines(text: string): ParsedMassSchedule[] {
         schedules.push({
           dayOfWeek: -1, // unknown
           time,
+          date: contextDate,
           rite: lineRite,
           language: lineLanguage,
           notes: trimmed.length < 120 ? trimmed : undefined,
@@ -396,14 +430,21 @@ function parseOfficeLines(
   const lines = text.split('\n');
 
   let contextDays: number[] = [];
+  let contextDate: string | undefined = undefined;
 
   for (const line of lines) {
     const trimmed = line.trim();
     if (!trimmed) continue;
 
     const lineDays = extractDays(trimmed);
+    const lineDate = extractDate(trimmed);
     if (lineDays.length > 0) {
       contextDays = lineDays;
+    }
+    if (lineDate) {
+      contextDate = lineDate;
+    } else if (lineDays.length > 0) {
+      contextDate = undefined;
     }
 
     // Try time range first ("de 10h à 12h")
@@ -415,6 +456,7 @@ function parseOfficeLines(
           dayOfWeek: day,
           startTime: range.start,
           endTime: range.end,
+          date: contextDate,
         });
       }
       continue;
@@ -431,6 +473,7 @@ function parseOfficeLines(
             dayOfWeek: day,
             startTime: lineTimes[0],
             endTime: lineTimes[1],
+            date: contextDate,
           });
         } else {
           for (const time of lineTimes) {
@@ -438,6 +481,7 @@ function parseOfficeLines(
               type,
               dayOfWeek: day,
               startTime: time,
+              date: contextDate,
             });
           }
         }
@@ -512,7 +556,7 @@ function parseEventLines(text: string): ParsedEvent[] {
 function deduplicateMass(schedules: ParsedMassSchedule[]): ParsedMassSchedule[] {
   const seen = new Set<string>();
   return schedules.filter((s) => {
-    const key = `${s.dayOfWeek}:${s.time}`;
+    const key = `${s.dayOfWeek}:${s.time}:${s.date || ''}`;
     if (seen.has(key)) return false;
     seen.add(key);
     return true;
