@@ -304,258 +304,39 @@ export class MessesInfoScraper extends BaseScraper {
 
       await this.sleep(500 + Math.random() * 500);
 
-      const extracted = (await page.evaluate(() => {
-        const doc = (globalThis as any).document;
+      // Expand all collapsed GWT CellTree branches so every day/category is in the DOM
+      await this.expandAllTreeNodes(page);
 
-        const dayMap: Record<string, number> = {
-          dim: 0,
-          dimanche: 0,
-          lun: 1,
-          lundi: 1,
-          mar: 2,
-          mardi: 2,
-          mer: 3,
-          mercredi: 3,
-          jeu: 4,
-          jeudi: 4,
-          ven: 5,
-          vendredi: 5,
-          sam: 6,
-          samedi: 6,
-        };
-
-        // Map category header text to celebration types
-        const categoryMap: Record<string, string> = {
-          messe: 'mass',
-          messes: 'mass',
-          eucharistie: 'mass',
-          confession: 'confession',
-          confessions: 'confession',
-          réconciliation: 'confession',
-          reconciliation: 'confession',
-          pénitence: 'confession',
-          penitence: 'confession',
-          adoration: 'adoration',
-          adorations: 'adoration',
-          'saint sacrement': 'adoration',
-          'saint-sacrement': 'adoration',
-          vêpres: 'vespers',
-          vepres: 'vespers',
-          laudes: 'lauds',
-          permanence: 'permanence',
-          permanences: 'permanence',
-          accueil: 'permanence',
-          chapelet: 'other',
-          rosaire: 'other',
-          prière: 'other',
-          priere: 'other',
-          office: 'other',
-          complies: 'other',
-          tierce: 'other',
-          sexte: 'other',
-          none: 'other',
-        };
-
-        const detectCategory = (text: string): string | null => {
-          const lower = text.toLowerCase().trim();
-          for (const [keyword, category] of Object.entries(categoryMap)) {
-            if (lower.includes(keyword)) {
-              return category;
-            }
-          }
-          return null;
-        };
-
-        const rawName =
-          doc.querySelector('h1')?.textContent?.trim() || doc.title || '';
-        const name = rawName.replace(/\s+-\s+\d{5}.*$/u, '').trim();
-
-        const pageText = doc.body?.innerText || '';
-
-        const addressText =
-          doc.querySelector('a.infos-pratique-adresse')?.innerText?.trim() ||
-          undefined;
-
-        const phoneText =
-          pageText.match(/T[eé]l\.?\s*:?[\s\u00A0]*([+\d][\d\s().-]{7,})/iu)?.[1]?.trim() ||
-          undefined;
-
-        const email =
-          doc
-            .querySelector('a[href^="mailto:"]')
-            ?.getAttribute('href')
-            ?.replace('mailto:', '')
-            ?.trim() || undefined;
-
-        const websiteCandidates = Array.from(doc.querySelectorAll('a[href^="http"]') || []);
-        const EXCLUDED_DOMAINS = [
-          'messes.info',
-          'google.',
-          'wikipedia.org',
-          'eglise.catholique.fr',
-          'facebook.com',
-          'twitter.com',
-          'instagram.com',
-          'youtube.com',
-          'linkedin.com',
-          'tiktok.com',
-          'apple.com',
-          'play.google.com',
-          'apps.apple.com',
-        ];
-        const website =
-          websiteCandidates
-            .map((a: any) => a.getAttribute('href') || '')
-            .find((href: string) => {
-              const lower = href.toLowerCase();
-              return EXCLUDED_DOMAINS.every((domain) => !lower.includes(domain));
-            }) || undefined;
-
-        // ── Parse the GWT CellTree for ALL celebration types ──
-        // The tree structure has top-level items (categories) that contain
-        // day headers and celebration entries as children.
-        const treeItems = Array.from(
-          doc.querySelectorAll(
-            '.com-google-gwt-user-cellview-client-CellTree-Style-cellTreeItem'
-          ) || []
-        );
-
-        const schedules: Array<{
-          dayOfWeek: number;
-          date?: string; // ISO date string (YYYY-MM-DD)
-          time: string;
-          endTime?: string;
-          title: string;
-          notes?: string;
-          tags: string[];
-          category: string;
-        }> = [];
-
-        // French month names → 0-indexed month number
-        const monthMap: Record<string, number> = {
-          janvier: 0, février: 1, fevrier: 1, mars: 2, avril: 3,
-          mai: 4, juin: 5, juillet: 6, août: 7, aout: 7,
-          septembre: 8, octobre: 9, novembre: 10, décembre: 11, decembre: 11,
-        };
-
-        // Walk through top-level tree items to detect categories
-        let currentCategory: string = 'mass'; // default to mass
-        let currentDay: number | null = null;
-        let currentDate: string | undefined = undefined;
-
-        // Flat approach: iterate ALL cellTreeItemValue > div nodes,
-        // detecting category headers, day headers, and celebration entries
-        const nodes = Array.from(
-          doc.querySelectorAll(
-            '.com-google-gwt-user-cellview-client-CellTree-Style-cellTreeItemValue > div'
-          ) || []
-        );
-
-        for (const node of nodes as any[]) {
-          // Check if this is a day header
-          if (node.classList?.contains('titre-date')) {
-            const headerText = (node.innerText || '').trim().toLowerCase();
-            const token = headerText.split(/\s+/u)[0]?.replace('.', '');
-
-            if (token && dayMap[token] !== undefined) {
-              currentDay = dayMap[token];
-            }
-
-            // Try to parse a full date from header like "samedi 12 avril" or "dimanche 13 avril 2025"
-            currentDate = undefined;
-            const dateMatch = headerText.match(/(\d{1,2})\s+([a-zéûô]+)(?:\s+(\d{4}))?/u);
-            if (dateMatch) {
-              const dayNum = parseInt(dateMatch[1], 10);
-              const monthName = dateMatch[2];
-              const yearStr = dateMatch[3];
-              const monthIdx = monthMap[monthName];
-              if (monthIdx !== undefined && dayNum >= 1 && dayNum <= 31) {
-                const year = yearStr ? parseInt(yearStr, 10) : new Date().getFullYear();
-                const mm = String(monthIdx + 1).padStart(2, '0');
-                const dd = String(dayNum).padStart(2, '0');
-                currentDate = `${year}-${mm}-${dd}`;
-              }
-            }
-            continue;
-          }
-
-          // Check if this is a celebration time entry
-          if (node.classList?.contains('egliseinfo-celebrationtime')) {
-            const title =
-              node.querySelector('.egliseinfo-celebrationtime-title')?.innerText?.trim() || '';
-
-            // Parse single time (e.g., "09 h 30") or time range (e.g., "14 h 00 - 17 h 00")
-            const rangeMatch = title.match(
-              /(\d{1,2})\s*h\s*(\d{2})\s*[-–àa]\s*(\d{1,2})\s*h\s*(\d{2})/iu
-            );
-            const singleMatch = title.match(/(\d{1,2})\s*h\s*(\d{2})/iu);
-
-            if (!singleMatch || currentDay === null) {
-              continue;
-            }
-
-            const hh = singleMatch[1].padStart(2, '0');
-            const mm = singleMatch[2].padStart(2, '0');
-
-            let endTime: string | undefined;
-            if (rangeMatch) {
-              endTime = `${rangeMatch[3].padStart(2, '0')}:${rangeMatch[4].padStart(2, '0')}`;
-            }
-
-            const tags = Array.from(
-              node.querySelectorAll('.egliseinfo-celebrationtime-tags') || []
-            )
-              .map((el: any) => el.innerText?.trim())
-              .filter(Boolean) as string[];
-
-            const notes =
-              node
-                .querySelector(
-                  '.cef-kephas-client-resources-Resources-CSS-egliseInfoCellTreeBody'
-                )
-                ?.innerText
-                ?.trim() || undefined;
-
-            // Check if title/tags/notes hint at a different category
-            const combinedText = `${title} ${tags.join(' ')} ${notes || ''}`;
-            const inferredCategory = detectCategory(combinedText);
-
-            schedules.push({
-              dayOfWeek: currentDay,
-              date: currentDate,
-              time: `${hh}:${mm}`,
-              endTime,
-              title,
-              notes,
-              tags,
-              category: inferredCategory || currentCategory,
-            });
-            continue;
-          }
-
-          // Otherwise, this might be a category header (top-level tree node text)
-          const nodeText = (node.innerText || node.textContent || '').trim();
-          if (nodeText.length > 0 && nodeText.length < 100) {
-            const detected = detectCategory(nodeText);
-            if (detected) {
-              currentCategory = detected;
-              // Reset day and date when entering a new category section
-              currentDay = null;
-              currentDate = undefined;
-            }
-          }
+      // Collect schedules across all visible weeks — dedupe by day+date+time+category+title
+      const scheduleMap = new Map<string, ExtractedSchedule>();
+      let extracted = await this.extractPageData(page);
+      const mergeSchedules = (data: ExtractedPageData) => {
+        for (const s of data.schedules) {
+          const key = `${s.dayOfWeek}|${s.date || ''}|${s.time}|${s.category}|${s.title}`;
+          if (!scheduleMap.has(key)) scheduleMap.set(key, s);
         }
+      };
+      mergeSchedules(extracted);
 
-        return {
-          name,
-          pageText,
-          addressText,
-          phoneText,
-          email,
-          website,
-          schedules,
-        };
-      })) as ExtractedPageData;
+      // Paginate through additional weeks via "Suite" button if present
+      for (let i = 0; i < 8; i += 1) {
+        const suiteButton = await this.findSuiteButton(page);
+        if (!suiteButton) break;
+        try {
+          await page.evaluate((el) => (el as any).click(), suiteButton);
+        } catch {
+          break;
+        }
+        await this.sleep(1200);
+        await this.expandAllTreeNodes(page);
+        const next = await this.extractPageData(page);
+        const beforeCount = scheduleMap.size;
+        mergeSchedules(next);
+        if (scheduleMap.size === beforeCount) break; // no new data, stop
+        extracted = next; // keep metadata fresh (name/address/etc.)
+      }
+
+      extracted = { ...extracted, schedules: Array.from(scheduleMap.values()) };
 
       const name = extracted.name || seed?.name;
       if (!name) {
@@ -663,6 +444,292 @@ export class MessesInfoScraper extends BaseScraper {
     } finally {
       this.releasePage(page);
     }
+  }
+
+  /**
+   * Expands every collapsed branch in the GWT CellTree so all day headers and
+   * celebration entries are materialized in the DOM before extraction.
+   * The church detail page starts with most branches collapsed — without this
+   * step we only see the handful of entries auto-opened by the widget.
+   */
+  private async expandAllTreeNodes(page: Page): Promise<void> {
+    try {
+      await page.evaluate(async () => {
+        const doc = (globalThis as any).document;
+        const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+
+        // GWT CellTree marks collapsed branches with a class containing
+        // "cellTreeClosedItem" on the chevron image wrapper. We also check
+        // ARIA state as a fallback for any non-GWT widgets.
+        const findClosed = (): any[] => {
+          const selectors = [
+            '[class*="cellTreeClosedItem"]',
+            '[role="treeitem"][aria-expanded="false"]',
+          ];
+          const set = new Set<any>();
+          for (const sel of selectors) {
+            for (const el of Array.from(doc.querySelectorAll(sel) || [])) {
+              set.add(el);
+            }
+          }
+          return Array.from(set);
+        };
+
+        for (let i = 0; i < 25; i += 1) {
+          const closed = findClosed();
+          if (closed.length === 0) break;
+          for (const el of closed) {
+            try {
+              (el as any).click?.();
+            } catch {
+              // ignore — some nodes may detach mid-iteration
+            }
+          }
+          await sleep(250);
+        }
+      });
+    } catch {
+      // Expansion is best-effort; fall through to extraction with whatever is visible
+    }
+  }
+
+  /**
+   * Runs the DOM scraping logic and returns structured page data.
+   * Kept as a reusable helper so we can re-extract after expanding the tree
+   * and after paginating to additional weeks.
+   */
+  private async extractPageData(page: Page): Promise<ExtractedPageData> {
+    return (await page.evaluate(() => {
+      const doc = (globalThis as any).document;
+
+      const dayMap: Record<string, number> = {
+        dim: 0,
+        dimanche: 0,
+        lun: 1,
+        lundi: 1,
+        mar: 2,
+        mardi: 2,
+        mer: 3,
+        mercredi: 3,
+        jeu: 4,
+        jeudi: 4,
+        ven: 5,
+        vendredi: 5,
+        sam: 6,
+        samedi: 6,
+      };
+
+      const categoryMap: Record<string, string> = {
+        messe: 'mass',
+        messes: 'mass',
+        eucharistie: 'mass',
+        confession: 'confession',
+        confessions: 'confession',
+        réconciliation: 'confession',
+        reconciliation: 'confession',
+        pénitence: 'confession',
+        penitence: 'confession',
+        adoration: 'adoration',
+        adorations: 'adoration',
+        'saint sacrement': 'adoration',
+        'saint-sacrement': 'adoration',
+        vêpres: 'vespers',
+        vepres: 'vespers',
+        laudes: 'lauds',
+        permanence: 'permanence',
+        permanences: 'permanence',
+        accueil: 'permanence',
+        chapelet: 'other',
+        rosaire: 'other',
+        prière: 'other',
+        priere: 'other',
+        office: 'other',
+        complies: 'other',
+        tierce: 'other',
+        sexte: 'other',
+        none: 'other',
+      };
+
+      const detectCategory = (text: string): string | null => {
+        const lower = text.toLowerCase().trim();
+        for (const [keyword, category] of Object.entries(categoryMap)) {
+          if (lower.includes(keyword)) {
+            return category;
+          }
+        }
+        return null;
+      };
+
+      const rawName =
+        doc.querySelector('h1')?.textContent?.trim() || doc.title || '';
+      const name = rawName.replace(/\s+-\s+\d{5}.*$/u, '').trim();
+
+      const pageText = doc.body?.innerText || '';
+
+      const addressText =
+        doc.querySelector('a.infos-pratique-adresse')?.innerText?.trim() ||
+        undefined;
+
+      const phoneText =
+        pageText.match(/T[eé]l\.?\s*:?[\s\u00A0]*([+\d][\d\s().-]{7,})/iu)?.[1]?.trim() ||
+        undefined;
+
+      const email =
+        doc
+          .querySelector('a[href^="mailto:"]')
+          ?.getAttribute('href')
+          ?.replace('mailto:', '')
+          ?.trim() || undefined;
+
+      const websiteCandidates = Array.from(doc.querySelectorAll('a[href^="http"]') || []);
+      const EXCLUDED_DOMAINS = [
+        'messes.info',
+        'google.',
+        'wikipedia.org',
+        'eglise.catholique.fr',
+        'facebook.com',
+        'twitter.com',
+        'instagram.com',
+        'youtube.com',
+        'linkedin.com',
+        'tiktok.com',
+        'apple.com',
+        'play.google.com',
+        'apps.apple.com',
+      ];
+      const website =
+        websiteCandidates
+          .map((a: any) => a.getAttribute('href') || '')
+          .find((href: string) => {
+            const lower = href.toLowerCase();
+            return EXCLUDED_DOMAINS.every((domain) => !lower.includes(domain));
+          }) || undefined;
+
+      const schedules: Array<{
+        dayOfWeek: number;
+        date?: string;
+        time: string;
+        endTime?: string;
+        title: string;
+        notes?: string;
+        tags: string[];
+        category: string;
+      }> = [];
+
+      const monthMap: Record<string, number> = {
+        janvier: 0, février: 1, fevrier: 1, mars: 2, avril: 3,
+        mai: 4, juin: 5, juillet: 6, août: 7, aout: 7,
+        septembre: 8, octobre: 9, novembre: 10, décembre: 11, decembre: 11,
+      };
+
+      let currentCategory: string = 'mass';
+      let currentDay: number | null = null;
+      let currentDate: string | undefined = undefined;
+
+      const nodes = Array.from(
+        doc.querySelectorAll(
+          '.com-google-gwt-user-cellview-client-CellTree-Style-cellTreeItemValue > div'
+        ) || []
+      );
+
+      for (const node of nodes as any[]) {
+        if (node.classList?.contains('titre-date')) {
+          const headerText = (node.innerText || '').trim().toLowerCase();
+          const token = headerText.split(/\s+/u)[0]?.replace('.', '');
+
+          if (token && dayMap[token] !== undefined) {
+            currentDay = dayMap[token];
+          }
+
+          currentDate = undefined;
+          const dateMatch = headerText.match(/(\d{1,2})\s+([a-zéûô]+)(?:\s+(\d{4}))?/u);
+          if (dateMatch) {
+            const dayNum = parseInt(dateMatch[1], 10);
+            const monthName = dateMatch[2];
+            const yearStr = dateMatch[3];
+            const monthIdx = monthMap[monthName];
+            if (monthIdx !== undefined && dayNum >= 1 && dayNum <= 31) {
+              const year = yearStr ? parseInt(yearStr, 10) : new Date().getFullYear();
+              const mm = String(monthIdx + 1).padStart(2, '0');
+              const dd = String(dayNum).padStart(2, '0');
+              currentDate = `${year}-${mm}-${dd}`;
+            }
+          }
+          continue;
+        }
+
+        if (node.classList?.contains('egliseinfo-celebrationtime')) {
+          const title =
+            node.querySelector('.egliseinfo-celebrationtime-title')?.innerText?.trim() || '';
+
+          const rangeMatch = title.match(
+            /(\d{1,2})\s*h\s*(\d{2})\s*[-–àa]\s*(\d{1,2})\s*h\s*(\d{2})/iu
+          );
+          const singleMatch = title.match(/(\d{1,2})\s*h\s*(\d{2})/iu);
+
+          if (!singleMatch || currentDay === null) {
+            continue;
+          }
+
+          const hh = singleMatch[1].padStart(2, '0');
+          const mm = singleMatch[2].padStart(2, '0');
+
+          let endTime: string | undefined;
+          if (rangeMatch) {
+            endTime = `${rangeMatch[3].padStart(2, '0')}:${rangeMatch[4].padStart(2, '0')}`;
+          }
+
+          const tags = Array.from(
+            node.querySelectorAll('.egliseinfo-celebrationtime-tags') || []
+          )
+            .map((el: any) => el.innerText?.trim())
+            .filter(Boolean) as string[];
+
+          const notes =
+            node
+              .querySelector(
+                '.cef-kephas-client-resources-Resources-CSS-egliseInfoCellTreeBody'
+              )
+              ?.innerText
+              ?.trim() || undefined;
+
+          const combinedText = `${title} ${tags.join(' ')} ${notes || ''}`;
+          const inferredCategory = detectCategory(combinedText);
+
+          schedules.push({
+            dayOfWeek: currentDay,
+            date: currentDate,
+            time: `${hh}:${mm}`,
+            endTime,
+            title,
+            notes,
+            tags,
+            category: inferredCategory || currentCategory,
+          });
+          continue;
+        }
+
+        const nodeText = (node.innerText || node.textContent || '').trim();
+        if (nodeText.length > 0 && nodeText.length < 100) {
+          const detected = detectCategory(nodeText);
+          if (detected) {
+            currentCategory = detected;
+            currentDay = null;
+            currentDate = undefined;
+          }
+        }
+      }
+
+      return {
+        name,
+        pageText,
+        addressText,
+        phoneText,
+        email,
+        website,
+        schedules,
+      };
+    })) as ExtractedPageData;
   }
 
   private extractAnnuairePayloads(body: string): AnnuaireChurchPayload[] {
