@@ -69,6 +69,7 @@ final class ChurchStore {
     func selectChurch(id: String) async {
         selectedChurchId = id
         selectedChurch = nil
+        error = nil
         isLoadingDetail = true
         do {
             selectedChurch = try await APIService.shared.fetchChurch(id: id)

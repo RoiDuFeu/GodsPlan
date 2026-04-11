@@ -25,6 +25,8 @@ struct ChurchDetailSheet: View {
                     loadingView
                 } else if let church {
                     detailContent(church)
+                } else if store.error != nil {
+                    errorView
                 } else {
                     initialView
                 }
@@ -53,7 +55,10 @@ struct ChurchDetailSheet: View {
                         saveAnimating = true
                         toggleSave()
                     }
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) { saveAnimating = false }
+                    Task { @MainActor in
+                        try? await Task.sleep(for: .milliseconds(400))
+                        saveAnimating = false
+                    }
                 } else {
                     showSignInPrompt = true
                 }
@@ -77,6 +82,11 @@ struct ChurchDetailSheet: View {
                 heroMap(church)
             }
 
+            // ── Photo gallery ──
+            if !church.photos.isEmpty {
+                photoGallery(church.photos)
+            }
+
             // ── Identity block ──
             VStack(alignment: .leading, spacing: 12) {
                 VStack(alignment: .leading, spacing: 6) {
@@ -94,7 +104,7 @@ struct ChurchDetailSheet: View {
                     }
                 }
 
-                ReliabilityBadge(score: church.reliabilityScore)
+                ReliabilityBadge(score: church.reliabilityScore, style: .prominent)
 
                 // ── Quick actions ──
                 quickActions(church)
@@ -115,6 +125,11 @@ struct ChurchDetailSheet: View {
                     scheduleSection(church)
                 }
 
+                // Office schedules (confession, adoration, vespers, lauds)
+                if let offices = church.officeSchedules, !offices.isEmpty {
+                    officeSchedulesSection(offices)
+                }
+
                 // Contact
                 if let contact = church.contact,
                    contact.phone != nil || contact.website != nil || contact.email != nil {
@@ -124,6 +139,11 @@ struct ChurchDetailSheet: View {
                 // Rites & languages
                 if !church.rites.isEmpty || !church.languages.isEmpty {
                     ritesSection(church)
+                }
+
+                // Data sources
+                if !church.dataSources.isEmpty {
+                    dataSourcesSection(church.dataSources)
                 }
             }
             .padding(.bottom, 48)
@@ -143,6 +163,8 @@ struct ChurchDetailSheet: View {
                         .tint(Color("Gold"))
                 }
                 .allowsHitTesting(false)
+            } else {
+                Color(.secondarySystemBackground)
             }
 
             // Gradient fade at bottom
@@ -155,7 +177,13 @@ struct ChurchDetailSheet: View {
             .frame(maxWidth: .infinity, alignment: .bottom)
         }
         .frame(height: 220)
-        .onAppear { DispatchQueue.main.async { mapReady = true } }
+        .clipped()
+        .task {
+            // Wait for layout to complete before showing the Map,
+            // preventing CAMetalLayer from initializing with zero size
+            try? await Task.sleep(for: .milliseconds(100))
+            mapReady = true
+        }
     }
 
     // MARK: - Quick actions
@@ -178,7 +206,9 @@ struct ChurchDetailSheet: View {
 
             if let phone = church.contact?.phone {
                 quickActionButton(label: "Appeler", icon: "phone.fill", tint: .green) {
-                    if let url = URL(string: "tel:\(phone.filter { $0.isNumber || $0 == "+" })") {
+                    let cleaned = Self.cleanPhoneNumber(phone)
+                    if let url = URL(string: "tel:\(cleaned)"),
+                       UIApplication.shared.canOpenURL(url) {
                         UIApplication.shared.open(url)
                     }
                 }
@@ -214,33 +244,68 @@ struct ChurchDetailSheet: View {
 
     private func scheduleSection(_ church: Church) -> some View {
         sectionCard(title: "Horaires des messes", icon: "calendar") {
-            let grouped = Dictionary(grouping: church.massSchedules, by: { $0.dayOfWeek })
-            let activeDays = (0..<7).filter { grouped[$0] != nil }
+            // Group by dayOfWeek + date to keep date-specific masses separate
+            let groups = buildScheduleGroups(church.massSchedules)
             VStack(alignment: .leading, spacing: 0) {
-                ForEach(Array(activeDays.enumerated()), id: \.element) { idx, day in
-                    if let schedules = grouped[day] {
-                        VStack(alignment: .leading, spacing: 0) {
-                            Text(schedules[0].dayName.uppercased())
-                                .font(.caption2.weight(.bold))
-                                .foregroundStyle(Color("Gold"))
-                                .padding(.bottom, 8)
+                ForEach(Array(groups.enumerated()), id: \.offset) { idx, group in
+                    VStack(alignment: .leading, spacing: 0) {
+                        Text(group.label.uppercased())
+                            .font(.caption2.weight(.bold))
+                            .foregroundStyle(Color("Gold"))
+                            .padding(.bottom, 8)
 
-                            VStack(spacing: 0) {
-                                ForEach(Array(schedules.enumerated()), id: \.offset) { i, schedule in
-                                    MassScheduleRow(schedule: schedule)
-                                    if i < schedules.count - 1 {
-                                        Divider().padding(.leading, 56)
-                                    }
+                        VStack(spacing: 0) {
+                            ForEach(Array(group.schedules.enumerated()), id: \.offset) { i, schedule in
+                                MassScheduleRow(schedule: schedule)
+                                if i < group.schedules.count - 1 {
+                                    Divider().padding(.leading, 56)
                                 }
                             }
                         }
-                        if idx < activeDays.count - 1 {
-                            Divider().padding(.vertical, 10)
-                        }
+                    }
+                    if idx < groups.count - 1 {
+                        Divider().padding(.vertical, 10)
                     }
                 }
             }
         }
+    }
+
+    private struct ScheduleGroup {
+        let label: String
+        let dayOfWeek: Int
+        let date: String?
+        let schedules: [MassSchedule]
+    }
+
+    private func buildScheduleGroups(_ schedules: [MassSchedule]) -> [ScheduleGroup] {
+        var map: [(key: String, label: String, dayOfWeek: Int, date: String?, schedules: [MassSchedule])] = []
+        var keyOrder: [String] = []
+
+        for schedule in schedules {
+            let key = schedule.date != nil ? "\(schedule.dayOfWeek):\(schedule.date!)" : "\(schedule.dayOfWeek):"
+            if let idx = map.firstIndex(where: { $0.key == key }) {
+                map[idx].schedules.append(schedule)
+            } else {
+                let dayName = schedule.dayName
+                let label: String
+                if let formatted = schedule.dateFormatted {
+                    label = "\(dayName) — \(formatted)"
+                } else {
+                    label = "\(dayName) \(Self.nextDateString(forDayOfWeek: schedule.dayOfWeek))"
+                }
+                keyOrder.append(key)
+                map.append((key: key, label: label, dayOfWeek: schedule.dayOfWeek, date: schedule.date, schedules: [schedule]))
+            }
+        }
+
+        // Sort by dayOfWeek, then by date
+        let sorted = map.sorted { a, b in
+            if a.dayOfWeek != b.dayOfWeek { return a.dayOfWeek < b.dayOfWeek }
+            return (a.date ?? "") < (b.date ?? "")
+        }
+
+        return sorted.map { ScheduleGroup(label: $0.label, dayOfWeek: $0.dayOfWeek, date: $0.date, schedules: $0.schedules) }
     }
 
     // MARK: - Contact section
@@ -250,7 +315,9 @@ struct ChurchDetailSheet: View {
             VStack(spacing: 0) {
                 if let phone = contact.phone {
                     contactRow(icon: "phone.fill", iconBg: .green, label: phone, detail: "Appeler") {
-                        if let url = URL(string: "tel:\(phone.filter { $0.isNumber || $0 == "+" })") {
+                        let cleaned = Self.cleanPhoneNumber(phone)
+                        if let url = URL(string: "tel:\(cleaned)"),
+                           UIApplication.shared.canOpenURL(url) {
                             UIApplication.shared.open(url)
                         }
                     }
@@ -283,7 +350,7 @@ struct ChurchDetailSheet: View {
                 if !church.rites.isEmpty {
                     tagRow(
                         label: "Rites",
-                        tags: church.rites.map { MassSchedule(dayOfWeek: 0, time: "", rite: $0, language: nil, notes: nil).riteFormatted }
+                        tags: church.rites.map { MassSchedule(dayOfWeek: 0, time: "", date: nil, rite: $0, language: nil, notes: nil).riteFormatted }
                     )
                 }
                 if !church.languages.isEmpty {
@@ -368,6 +435,217 @@ struct ChurchDetailSheet: View {
         }
     }
 
+    // MARK: - Photo gallery
+
+    private func photoGallery(_ photos: [String]) -> some View {
+        ScrollView(.horizontal, showsIndicators: false) {
+            LazyHStack(spacing: 10) {
+                ForEach(Array(photos.enumerated()), id: \.offset) { _, urlString in
+                    if let url = URL(string: urlString) {
+                        AsyncImage(url: url) { phase in
+                            switch phase {
+                            case .success(let image):
+                                image
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fill)
+                                    .frame(width: 280, height: 180)
+                                    .clipShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
+                            case .failure:
+                                EmptyView()
+                            default:
+                                RoundedRectangle(cornerRadius: 14, style: .continuous)
+                                    .fill(.quaternary)
+                                    .frame(width: 280, height: 180)
+                                    .overlay {
+                                        ProgressView()
+                                    }
+                            }
+                        }
+                    }
+                }
+            }
+            .padding(.horizontal, 20)
+            .scrollTargetLayout()
+        }
+        .scrollTargetBehavior(.viewAligned)
+        .frame(height: 190)
+        .padding(.top, 8)
+    }
+
+    // MARK: - Office schedules section
+
+    private func officeSchedulesSection(_ offices: [OfficeSchedule]) -> some View {
+        let typeOrder = ["confession", "adoration", "vespers", "lauds", "other"]
+        let grouped = Dictionary(grouping: offices, by: { $0.type })
+        let activeTypes = typeOrder.filter { grouped[$0] != nil }
+
+        return ForEach(activeTypes, id: \.self) { type in
+            if let schedules = grouped[type] {
+                let sample = schedules[0]
+                sectionCard(title: sample.typeName, icon: sample.typeIcon) {
+                    officeTypeContent(schedules)
+                }
+            }
+        }
+    }
+
+    private func officeTypeContent(_ schedules: [OfficeSchedule]) -> some View {
+        // Group by dayOfWeek + date
+        var groups: [(key: String, label: String, dayOfWeek: Int, date: String?, schedules: [OfficeSchedule])] = []
+
+        for schedule in schedules {
+            let key = schedule.date != nil ? "\(schedule.dayOfWeek):\(schedule.date!)" : "\(schedule.dayOfWeek):"
+            if let idx = groups.firstIndex(where: { $0.key == key }) {
+                groups[idx].schedules.append(schedule)
+            } else {
+                let label: String
+                if let formatted = schedule.dateFormatted {
+                    label = "\(schedule.dayName) — \(formatted)"
+                } else {
+                    label = "\(schedule.dayName) \(Self.nextDateString(forDayOfWeek: schedule.dayOfWeek))"
+                }
+                groups.append((key: key, label: label, dayOfWeek: schedule.dayOfWeek, date: schedule.date, schedules: [schedule]))
+            }
+        }
+
+        let sorted = groups.sorted { a, b in
+            if a.dayOfWeek != b.dayOfWeek { return a.dayOfWeek < b.dayOfWeek }
+            return (a.date ?? "") < (b.date ?? "")
+        }
+
+        return VStack(alignment: .leading, spacing: 0) {
+            ForEach(Array(sorted.enumerated()), id: \.offset) { idx, group in
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(group.label.uppercased())
+                        .font(.caption2.weight(.bold))
+                        .foregroundStyle(Color("Gold"))
+
+                    ForEach(Array(group.schedules.enumerated()), id: \.offset) { _, schedule in
+                        HStack(spacing: 14) {
+                            Text(schedule.timeFormatted)
+                                .font(.system(size: 15, weight: .bold, design: .monospaced))
+                                .foregroundStyle(Color("Gold"))
+                                .frame(width: 100, alignment: .leading)
+
+                            if let notes = schedule.notes, !notes.isEmpty {
+                                Text(notes)
+                                    .font(.caption)
+                                    .foregroundStyle(.secondary)
+                                    .lineLimit(2)
+                            }
+
+                            Spacer()
+                        }
+                        .padding(.vertical, 4)
+                    }
+                }
+                .padding(.vertical, 6)
+                if idx < sorted.count - 1 {
+                    Divider()
+                }
+            }
+        }
+    }
+
+    // MARK: - Data sources section
+
+    private func dataSourcesSection(_ sources: [DataSource]) -> some View {
+        sectionCard(title: "Sources", icon: "doc.text.magnifyingglass") {
+            VStack(spacing: 0) {
+                ForEach(Array(sources.enumerated()), id: \.offset) { idx, source in
+                    HStack(spacing: 10) {
+                        // Reliability dot
+                        Circle()
+                            .fill(sourceColor(source.reliability ?? 0))
+                            .frame(width: 6, height: 6)
+
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text(source.name)
+                                .font(.subheadline.weight(.medium))
+                            if let lastScraped = source.lastScraped {
+                                Text(formatSourceDate(lastScraped))
+                                    .font(.caption2)
+                                    .foregroundStyle(.secondary)
+                            }
+                        }
+
+                        Spacer()
+
+                        if let urlString = source.url, let url = URL(string: urlString) {
+                            Link(destination: url) {
+                                Image(systemName: "arrow.up.right.square")
+                                    .font(.caption)
+                                    .foregroundStyle(Color("Gold"))
+                            }
+                        }
+                    }
+                    .padding(.vertical, 6)
+                    if idx < sources.count - 1 {
+                        Divider().padding(.leading, 20)
+                    }
+                }
+            }
+        }
+    }
+
+    private func sourceColor(_ reliability: Int) -> Color {
+        switch reliability {
+        case 70...: return .green
+        case 40..<70: return .orange
+        default: return .red
+        }
+    }
+
+    private func formatSourceDate(_ dateString: String) -> String {
+        let isoFormatter = ISO8601DateFormatter()
+        isoFormatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
+        if let date = isoFormatter.date(from: dateString) {
+            let formatter = DateFormatter()
+            formatter.dateStyle = .medium
+            formatter.locale = Locale(identifier: "fr_FR")
+            return formatter.string(from: date)
+        }
+        // Fallback: try without fractional seconds
+        isoFormatter.formatOptions = [.withInternetDateTime]
+        if let date = isoFormatter.date(from: dateString) {
+            let formatter = DateFormatter()
+            formatter.dateStyle = .medium
+            formatter.locale = Locale(identifier: "fr_FR")
+            return formatter.string(from: date)
+        }
+        return dateString
+    }
+
+    // MARK: - Date helper
+
+    /// Returns the formatted date string (e.g. "14 avril") for the next occurrence of a given day of week.
+    /// `dayOfWeek`: 0 = Sunday … 6 = Saturday
+    private static func nextDateString(forDayOfWeek dayOfWeek: Int) -> String {
+        let calendar = Calendar(identifier: .gregorian)
+        let today = Date()
+        // Calendar weekday: 1 = Sunday … 7 = Saturday
+        let targetWeekday = dayOfWeek + 1
+        let todayWeekday = calendar.component(.weekday, from: today)
+        var daysAhead = targetWeekday - todayWeekday
+        if daysAhead < 0 { daysAhead += 7 }
+        let nextDate = calendar.date(byAdding: .day, value: daysAhead, to: today)!
+        let formatter = DateFormatter()
+        formatter.dateFormat = "d MMMM"
+        formatter.locale = Locale(identifier: "fr_FR")
+        return formatter.string(from: nextDate)
+    }
+
+    // MARK: - Phone number helper
+
+    private static func cleanPhoneNumber(_ phone: String) -> String {
+        var cleaned = phone.filter { $0.isNumber || $0 == "+" }
+        // Convert French local numbers (0X...) to international format
+        if cleaned.hasPrefix("0"), cleaned.count == 10 {
+            cleaned = "+33" + cleaned.dropFirst()
+        }
+        return cleaned
+    }
+
     // MARK: - Toggle save
 
     private func toggleSave() {
@@ -390,6 +668,31 @@ struct ChurchDetailSheet: View {
         }
         .frame(maxWidth: .infinity)
         .padding(.top, 80)
+    }
+
+    private var errorView: some View {
+        VStack(spacing: 16) {
+            Image(systemName: "exclamationmark.triangle")
+                .font(.system(size: 32))
+                .foregroundStyle(.secondary)
+            Text(churchName)
+                .font(.headline)
+            Text("Impossible de charger les détails de cette église.")
+                .font(.subheadline)
+                .foregroundStyle(.secondary)
+                .multilineTextAlignment(.center)
+            Button {
+                Task { await store.selectChurch(id: churchId) }
+            } label: {
+                Label("Réessayer", systemImage: "arrow.clockwise")
+                    .font(.subheadline.weight(.medium))
+            }
+            .buttonStyle(.bordered)
+            .tint(Color("Gold"))
+        }
+        .frame(maxWidth: .infinity)
+        .padding(.top, 60)
+        .padding(.horizontal, 32)
     }
 
     private var loadingView: some View {
@@ -425,4 +728,11 @@ struct ChurchDetailSheet: View {
         }
         .redacted(reason: .placeholder)
     }
+}
+
+#Preview {
+    ChurchDetailSheet(churchId: "preview-id", churchName: "Notre-Dame de Paris")
+        .environment(ChurchStore())
+        .environment(AuthStore())
+        .modelContainer(for: SavedChurch.self, inMemory: true)
 }

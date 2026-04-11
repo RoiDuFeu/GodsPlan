@@ -8,8 +8,6 @@ private struct CrossShape: Shape {
         let h = rect.height
         var path = Path()
 
-        // Normalized coordinates for the cross outline (clockwise from top-left)
-        // Derived from the logo SVG viewBox 1773x1773, cross bounds x:650..1126 y:464..1119
         path.move(to: CGPoint(x: 0.422 * w, y: 0.000 * h))
         path.addLine(to: CGPoint(x: 0.574 * w, y: 0.000 * h))
         path.addLine(to: CGPoint(x: 0.574 * w, y: 0.302 * h))
@@ -29,79 +27,120 @@ private struct CrossShape: Shape {
     }
 }
 
+// MARK: - Shimmer Modifier
+
+private struct ShimmerModifier: ViewModifier {
+    let active: Bool
+    @State private var phase: CGFloat = -1
+
+    func body(content: Content) -> some View {
+        content
+            .overlay {
+                if active {
+                    GeometryReader { geo in
+                        LinearGradient(
+                            colors: [.clear, .white.opacity(0.35), .clear],
+                            startPoint: .leading,
+                            endPoint: .trailing
+                        )
+                        .frame(width: geo.size.width * 0.6)
+                        .offset(x: phase * geo.size.width * 1.3)
+                        .mask(content)
+                    }
+                }
+            }
+            .onAppear {
+                guard active else { return }
+                withAnimation(.easeInOut(duration: 0.8).delay(0.05)) {
+                    phase = 1
+                }
+            }
+    }
+}
+
 // MARK: - Splash View
 
 struct SplashView: View {
+    /// Driven by parent — when true, the splash plays its exit transition
+    var dismissing: Bool = false
+
     // Cross drawing
     @State private var crossTrim: CGFloat = 0
     @State private var crossFill: Double = 0
 
     // Glow
+    @State private var glowScale: CGFloat = 0.6
     @State private var glowOpacity: Double = 0
 
     // Full logo reveal
     @State private var logoOpacity: Double = 0
 
     // Overall scale (bounce)
-    @State private var overallScale: CGFloat = 1.08
+    @State private var overallScale: CGFloat = 1.06
 
     // Tagline
     @State private var taglineOpacity: Double = 0
-    @State private var taglineOffset: CGFloat = 10
+    @State private var taglineOffset: CGFloat = 8
     @State private var lineWidth: CGFloat = 0
+
+    // Shimmer
+    @State private var shimmerActive = false
+
+    // Exit animation
+    @State private var exitScale: CGFloat = 1.0
+    @State private var exitBlur: CGFloat = 0
+    @State private var exitOpacity: Double = 1
 
     private let goldColor = Color(red: 0.757, green: 0.596, blue: 0.318)
 
-    // Cross dimensions matched to logo frame
-    // SVG viewBox: 1773x1773, cross bounds: x=650..1126 y=464..1119
-    // At 300pt logo: scale = 300/1773
     private let logoSize: CGFloat = 300
-    private var crossWidth: CGFloat { 476.0 / 1773.0 * logoSize }   // ~80.5
-    private var crossHeight: CGFloat { 655.0 / 1773.0 * logoSize }  // ~110.8
-    private var crossOffsetY: CGFloat { (791.5 - 886.5) / 1773.0 * logoSize } // ~-16.1
+    private var crossWidth: CGFloat { 476.0 / 1773.0 * logoSize }
+    private var crossHeight: CGFloat { 655.0 / 1773.0 * logoSize }
+    private var crossOffsetY: CGFloat { (791.5 - 886.5) / 1773.0 * logoSize }
 
     var body: some View {
         ZStack {
             Color("BrandCream")
                 .ignoresSafeArea()
 
-            VStack(spacing: 24) {
+            VStack(spacing: 20) {
                 Spacer()
 
                 ZStack {
-                    // Layer 1: Cross outline (draws with trim animation)
+                    // Layer 1: Cross outline draws
                     CrossShape()
                         .trim(from: 0, to: crossTrim)
                         .stroke(
                             goldColor,
-                            style: StrokeStyle(lineWidth: 3, lineCap: .round, lineJoin: .round)
+                            style: StrokeStyle(lineWidth: 2.5, lineCap: .round, lineJoin: .round)
                         )
                         .frame(width: crossWidth, height: crossHeight)
                         .offset(y: crossOffsetY)
-                        .shadow(color: goldColor.opacity(0.3), radius: 4)
 
-                    // Layer 2: Cross fill (fades in after outline completes)
+                    // Layer 2: Cross fill
                     CrossShape()
                         .fill(goldColor)
                         .frame(width: crossWidth, height: crossHeight)
                         .offset(y: crossOffsetY)
                         .opacity(crossFill)
+                        .modifier(ShimmerModifier(active: shimmerActive))
 
-                    // Layer 3: Glow pulse when cross completes
+                    // Layer 3: Radial glow pulse
                     Circle()
                         .fill(
                             RadialGradient(
-                                colors: [goldColor.opacity(0.35), .clear],
+                                colors: [goldColor.opacity(0.4), goldColor.opacity(0.08), .clear],
                                 center: .center,
-                                startRadius: 15,
-                                endRadius: 130
+                                startRadius: 5,
+                                endRadius: 140
                             )
                         )
-                        .frame(width: 260, height: 260)
+                        .frame(width: 280, height: 280)
                         .offset(y: crossOffsetY)
+                        .scaleEffect(glowScale)
                         .opacity(glowOpacity)
 
-                    // Layer 4: Full logo (materializes on top, blends into cream background)
+                    // Layer 4: Full logo
                     Image("SplashLogo")
                         .resizable()
                         .scaledToFit()
@@ -113,14 +152,14 @@ struct SplashView: View {
 
                 // Decorative line
                 Rectangle()
-                    .fill(Color("Gold").opacity(0.4))
-                    .frame(width: lineWidth, height: 1.5)
+                    .fill(goldColor.opacity(0.35))
+                    .frame(width: lineWidth, height: 1)
 
                 // Tagline
-                Text("Trouvez votre église")
-                    .font(.system(size: 13, weight: .medium))
-                    .foregroundStyle(Color("BrandNavy").opacity(0.5))
-                    .kerning(2)
+                Text("Trouvez votre eglise")
+                    .font(.system(size: 12, weight: .medium, design: .default))
+                    .foregroundStyle(Color("BrandNavy").opacity(0.45))
+                    .kerning(2.5)
                     .textCase(.uppercase)
                     .opacity(taglineOpacity)
                     .offset(y: taglineOffset)
@@ -129,47 +168,71 @@ struct SplashView: View {
                 Spacer()
             }
         }
+        // Exit transition layers
+        .scaleEffect(exitScale)
+        .blur(radius: exitBlur)
+        .opacity(exitOpacity)
+        .onChange(of: dismissing) { _, isDismissing in
+            guard isDismissing else { return }
+            playExit()
+        }
         .onAppear { runAnimation() }
     }
 
+    // MARK: - Intro Animation (~1.8s)
+
     private func runAnimation() {
-        // Phase 1: Cross outline draws (0.0–0.9s)
-        withAnimation(.easeInOut(duration: 0.9)) {
+        // Phase 1: Cross outline draws (0.0–0.65s)
+        withAnimation(.easeInOut(duration: 0.65)) {
             crossTrim = 1
         }
 
-        // Phase 2: Cross fills + glow (0.7–1.1s)
-        withAnimation(.easeIn(duration: 0.25).delay(0.7)) {
+        // Phase 2: Cross fills + shimmer + glow (0.5–0.85s)
+        withAnimation(.easeIn(duration: 0.2).delay(0.5)) {
             crossFill = 1
         }
-        withAnimation(.easeOut(duration: 0.3).delay(0.8)) {
-            glowOpacity = 1
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.55) {
+            shimmerActive = true
         }
-        withAnimation(.easeIn(duration: 0.3).delay(1.1)) {
+        withAnimation(.easeOut(duration: 0.35).delay(0.55)) {
+            glowOpacity = 0.9
+            glowScale = 1.0
+        }
+        withAnimation(.easeIn(duration: 0.35).delay(0.9)) {
             glowOpacity = 0
         }
 
-        // Phase 3: Logo materializes + scale settles (1.0–1.4s)
-        withAnimation(.spring(duration: 0.5, bounce: 0.15).delay(1.0)) {
+        // Phase 3: Logo materializes + scale settles (0.7–1.1s)
+        withAnimation(.spring(duration: 0.45, bounce: 0.12).delay(0.7)) {
             logoOpacity = 1
             overallScale = 1.0
         }
 
-        // Phase 4: Bounce (1.35–1.6s)
-        withAnimation(.spring(duration: 0.3, bounce: 0.5).delay(1.35)) {
-            overallScale = 1.05
+        // Phase 4: Subtle bounce (1.05–1.3s)
+        withAnimation(.spring(duration: 0.25, bounce: 0.4).delay(1.05)) {
+            overallScale = 1.03
         }
-        withAnimation(.spring(duration: 0.3).delay(1.55)) {
+        withAnimation(.spring(duration: 0.25).delay(1.25)) {
             overallScale = 1.0
         }
 
-        // Phase 5: Tagline + decorative line (1.5–1.8s)
-        withAnimation(.easeOut(duration: 0.4).delay(1.5)) {
+        // Phase 5: Tagline + line (1.2–1.6s)
+        withAnimation(.easeOut(duration: 0.35).delay(1.2)) {
             taglineOpacity = 1
             taglineOffset = 0
         }
-        withAnimation(.easeInOut(duration: 0.4).delay(1.65)) {
-            lineWidth = 40
+        withAnimation(.easeInOut(duration: 0.35).delay(1.3)) {
+            lineWidth = 36
+        }
+    }
+
+    // MARK: - Exit Animation
+
+    private func playExit() {
+        withAnimation(.spring(duration: 0.55, bounce: 0.0)) {
+            exitScale = 1.08
+            exitBlur = 12
+            exitOpacity = 0
         }
     }
 }

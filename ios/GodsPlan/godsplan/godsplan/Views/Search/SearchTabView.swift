@@ -1,4 +1,5 @@
 import SwiftUI
+import SwiftData
 
 struct SearchTabView: View {
     @Environment(ChurchStore.self) private var store
@@ -255,4 +256,11 @@ private struct FilterChip: View {
             .shadow(color: isActive ? Color("Gold").opacity(0.3) : .clear, radius: 4, y: 2)
         }
     }
+}
+
+#Preview {
+    SearchTabView()
+        .environment(ChurchStore())
+        .environment(AuthStore())
+        .modelContainer(for: SavedChurch.self, inMemory: true)
 }

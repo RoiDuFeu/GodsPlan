@@ -666,3 +666,7 @@ struct LectureTextSheet: View {
         return blocks
     }
 }
+
+#Preview {
+    LecturesTabView()
+}
