@@ -312,3 +312,9 @@ struct ProfileTabView: View {
         }
     }
 }
+
+#Preview {
+    ProfileTabView()
+        .environment(AuthStore())
+        .modelContainer(for: SavedChurch.self, inMemory: true)
+}

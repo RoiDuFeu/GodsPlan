@@ -1,4 +1,5 @@
 import SwiftUI
+import SwiftData
 
 struct ListTabView: View {
     @Environment(ChurchStore.self) private var store
@@ -92,4 +93,11 @@ struct ListTabView: View {
     private var emptyState: some View {
         ContentUnavailableView("Aucune église", systemImage: "building.columns", description: Text("Les données sont en cours de chargement."))
     }
+}
+
+#Preview {
+    ListTabView()
+        .environment(ChurchStore())
+        .environment(AuthStore())
+        .modelContainer(for: SavedChurch.self, inMemory: true)
 }

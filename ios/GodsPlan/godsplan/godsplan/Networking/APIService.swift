@@ -36,6 +36,13 @@ actor APIService {
 
     private let base = "https://godsplan-api.montparnas.fr/api/v1"
 
+    private let session: URLSession = {
+        let config = URLSessionConfiguration.default
+        config.waitsForConnectivity = true
+        config.timeoutIntervalForResource = 30
+        return URLSession(configuration: config)
+    }()
+
     private let decoder: JSONDecoder = {
         let d = JSONDecoder()
         d.keyDecodingStrategy = .convertFromSnakeCase
@@ -99,7 +106,7 @@ actor APIService {
 
     private func rawData(for url: URL) async throws -> Data {
         do {
-            let (data, response) = try await URLSession.shared.data(from: url)
+            let (data, response) = try await session.data(from: url)
             guard let http = response as? HTTPURLResponse else {
                 throw APIError.invalidResponse(0)
             }

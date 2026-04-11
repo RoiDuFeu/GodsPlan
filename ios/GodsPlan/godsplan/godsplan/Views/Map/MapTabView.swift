@@ -1,230 +1,239 @@
 import SwiftUI
 import MapKit
+import SwiftData
 
 struct MapTabView: View {
     @Environment(ChurchStore.self) private var store
-    @State private var position: MapCameraPosition = .region(
-        MKCoordinateRegion(
-            center: CLLocationCoordinate2D(latitude: 48.8566, longitude: 2.3522),
-            span: MKCoordinateSpan(latitudeDelta: 0.07, longitudeDelta: 0.07)
-        )
-    )
-    @State private var selectedItem: ChurchListItem?
-    @State private var mapStyle: MapStyle = .standard(elevation: .realistic, pointsOfInterest: .excludingAll)
+    @State private var selectedChurchID: String?
+    @State private var selectedChurchName: String?
+    @State private var showDetail = false
     @State private var styleIndex = 0
     @State private var locationManager = CLLocationManager()
-    @State private var clusters: [ChurchCluster] = []
-    @State private var currentSpan = MKCoordinateSpan(latitudeDelta: 0.07, longitudeDelta: 0.07)
-    @State private var lastClusterCellSize: Double = 0
-    @State private var mapReady = false
+    @State private var centerOnUser = false
+    @State private var pendingRegion: MKCoordinateRegion?
+    @State private var pendingCamera: MKMapCamera?
+    @State private var currentRegion = MKCoordinateRegion(
+        center: CLLocationCoordinate2D(latitude: 48.8566, longitude: 2.3522),
+        span: MKCoordinateSpan(latitudeDelta: 0.07, longitudeDelta: 0.07)
+    )
+
+    // Zoom slider state
+    @State private var sliderActive = false
+    @State private var mapParallaxX: CGFloat = 0
+    @State private var sliderRegion: MKCoordinateRegion?
 
     // City selector state
     @State private var currentCity = "Paris"
     @State private var showCityPicker = false
-    @State private var isAutoUpdatingCity = true
     @State private var geocodeTask: Task<Void, Never>?
+    @State private var lastGeocodedCenter: CLLocationCoordinate2D?
+    @State private var lastGeocodeTime: Date = .distantPast
 
-    private let styles: [(String, String, MapStyle)] = [
-        ("Standard",  "map",       .standard(elevation: .realistic, pointsOfInterest: .excludingAll)),
-        ("Satellite", "globe",     .imagery(elevation: .realistic)),
-        ("Hybride",   "map.fill",  .hybrid(elevation: .realistic, pointsOfInterest: .excludingAll))
+    private let styles: [(String, String, MapStyleType)] = [
+        ("Standard",  "map",       .standard),
+        ("Satellite", "globe",     .satellite),
+        ("Hybride",   "map.fill",  .hybrid)
     ]
 
     var body: some View {
-        NavigationStack {
-            ZStack(alignment: .top) {
-                if mapReady {
-                    Map(position: $position, selection: $selectedItem) {
-                    ForEach(clusters) { cluster in
-                        if cluster.isSingle, let church = cluster.church {
-                            Annotation("", coordinate: CLLocationCoordinate2D(latitude: church.lat, longitude: church.lng), anchor: .bottom) {
-                                ChurchAnnotationView(isSelected: selectedItem?.id == church.id)
-                                    .onTapGesture { selectedItem = church }
-                            }
-                            .tag(church)
-                        } else {
-                            Annotation("", coordinate: cluster.coordinate, anchor: .center) {
-                                ClusterAnnotationView(count: cluster.count)
-                                    .onTapGesture { zoomIntoCluster(cluster) }
-                            }
-                        }
+        ZStack(alignment: .top) {
+            // UIKit MKMapView with bump-style decluttering
+            ChurchMapViewRepresentable(
+                churches: store.churches,
+                onChurchSelected: { id, name, coordinate in
+                    // Ignore taps while zoom slider is active
+                    guard !sliderActive else { return }
+                    selectedChurchID = id
+                    selectedChurchName = name
+                    showDetail = true
+                    // Zoom to the selected church with tilt, offset south so pin appears in upper third
+                    let offsetCenter = CLLocationCoordinate2D(
+                        latitude: coordinate.latitude - 0.002,
+                        longitude: coordinate.longitude
+                    )
+                    pendingCamera = MKMapCamera(
+                        lookingAtCenter: offsetCenter,
+                        fromDistance: 1500,
+                        pitch: 45,
+                        heading: 0
+                    )
+                    Task { @MainActor in
+                        try? await Task.sleep(for: .milliseconds(500))
+                        pendingCamera = nil
                     }
-                    UserAnnotation()
-                }
-                .mapStyle(mapStyle)
-                .mapControls { }
-                .ignoresSafeArea(edges: .bottom)
-                .onMapCameraChange(frequency: .onEnd) { context in
-                    reverseGeocode(context.camera.centerCoordinate)
-                    currentSpan = context.region.span
-                    updateClusters()
-                }
+                    Task { await store.selectChurch(id: id) }
+                },
+                onRegionChanged: { region in
+                    currentRegion = region
+                    reverseGeocode(region.center)
+                },
+                regionToSet: sliderRegion ?? pendingRegion,
+                animateRegion: sliderRegion == nil,
+                cameraToSet: pendingCamera,
+                mapStyle: styles[styleIndex].2,
+                centerOnUser: centerOnUser
+            )
+            .ignoresSafeArea(edges: .all)
+            .offset(x: mapParallaxX)
+
+            // Bump-style zoom notch — curved cutout on left edge
+            Color.clear
+                .allowsHitTesting(false)
+                .overlay(alignment: .leading) {
+                    EdgeZoomSlider(
+                        regionToSet: $sliderRegion,
+                        isActive: $sliderActive,
+                        currentSpan: currentRegion.span,
+                        mapCenter: currentRegion.center,
+                        parallaxOffset: $mapParallaxX
+                    )
                 }
 
-                // City selector pill
-                citySelectorPill
-                    .padding(.top, 8)
-            }
-            .navigationTitle("")
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbarBackground(.regularMaterial, for: .navigationBar)
-            .toolbarColorScheme(.light, for: .navigationBar)
-            .toolbar(content: mapToolbar)
+            // City search bar
+            citySearchBar
+                .padding(.horizontal, 16)
+                .padding(.top, 8)
+
+            // Floating map controls — bottom right
+            floatingMapControls
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomTrailing)
+                .padding(.trailing, 16)
+                .padding(.bottom, 100)
         }
-        .sheet(item: $selectedItem, onDismiss: { store.clearSelection() }) { church in
-            ChurchDetailSheet(churchId: church.id, churchName: church.name)
-                .presentationDetents([.medium, .large])
-                .presentationDragIndicator(.visible)
-                .presentationCornerRadius(28)
-                .presentationBackground(.regularMaterial)
+        .sheet(isPresented: $showDetail, onDismiss: {
+            store.clearSelection()
+            selectedChurchID = nil
+            selectedChurchName = nil
+        }) {
+            if let id = selectedChurchID, let name = selectedChurchName {
+                ChurchDetailSheet(churchId: id, churchName: name)
+                    .presentationDetents([.medium, .large])
+                    .presentationDragIndicator(.visible)
+                    .presentationCornerRadius(28)
+                    .presentationBackground(.regularMaterial)
+            }
         }
         .sheet(isPresented: $showCityPicker) {
             CityPickerSheet { coordinate, city in
                 currentCity = city
-                isAutoUpdatingCity = true
-                withAnimation(.easeInOut(duration: 0.7)) {
-                    position = .region(MKCoordinateRegion(
-                        center: coordinate,
-                        span: MKCoordinateSpan(latitudeDelta: 0.07, longitudeDelta: 0.07)
-                    ))
+                lastGeocodedCenter = coordinate
+                pendingRegion = MKCoordinateRegion(
+                    center: coordinate,
+                    span: MKCoordinateSpan(latitudeDelta: 0.07, longitudeDelta: 0.07)
+                )
+                // Clear pending after a frame to avoid re-setting
+                Task { @MainActor in
+                    try? await Task.sleep(for: .milliseconds(500))
+                    pendingRegion = nil
                 }
             }
             .presentationDetents([.medium])
             .presentationDragIndicator(.visible)
             .presentationCornerRadius(24)
         }
-        .onChange(of: selectedItem) { _, newValue in
-            guard let church = newValue else { return }
-            Task { await store.selectChurch(id: church.id) }
-            let coord = CLLocationCoordinate2D(latitude: church.lat, longitude: church.lng)
-            withAnimation(.easeInOut(duration: 0.7)) {
-                position = .camera(MapCamera(
-                    centerCoordinate: coord,
-                    distance: 1200,
-                    heading: 0,
-                    pitch: 45
-                ))
-            }
+        .onChange(of: sliderActive) { _, active in
+            if !active { sliderRegion = nil }
         }
         .onAppear {
             locationManager.requestWhenInUseAuthorization()
-            updateClusters(force: true)
-            DispatchQueue.main.async { mapReady = true }
-        }
-        .onChange(of: store.churches) { _, _ in
-            updateClusters(force: true)
         }
     }
 
-    // MARK: - City selector pill
+    // MARK: - City search bar
 
-    private var citySelectorPill: some View {
+    private var citySearchBar: some View {
         Button { showCityPicker = true } label: {
-            HStack(spacing: 6) {
-                Image(systemName: "mappin.circle.fill")
-                    .foregroundStyle(Color("Gold"))
+            HStack(spacing: 10) {
+                Image(systemName: "magnifyingglass")
+                    .font(.subheadline.weight(.medium))
+                    .foregroundStyle(.secondary)
+
                 Text(currentCity)
                     .font(.subheadline.weight(.semibold))
                     .foregroundStyle(.primary)
-                Image(systemName: "chevron.down")
-                    .font(.caption2.weight(.bold))
-                    .foregroundStyle(.tertiary)
+
+                Spacer()
+
+                let cityCount = store.churches.filter { church in
+                    guard let city = church.address.city else { return false }
+                    return city.localizedCaseInsensitiveContains(currentCity)
+                }.count
+                Text("\(cityCount) église\(cityCount == 1 ? "" : "s")")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
             }
-            .padding(.horizontal, 14)
-            .padding(.vertical, 8)
-            .background(.regularMaterial, in: Capsule())
-            .shadow(color: .black.opacity(0.10), radius: 6, y: 2)
+            .padding(.horizontal, 16)
+            .padding(.vertical, 12)
+            .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 14, style: .continuous))
+            .shadow(color: .black.opacity(0.12), radius: 8, y: 3)
         }
         .buttonStyle(.plain)
     }
 
-    // MARK: - Reverse geocode on pan
+    // MARK: - Floating map controls
+
+    private var floatingMapControls: some View {
+        VStack(spacing: 12) {
+            // Map style button
+            Button {
+                styleIndex = (styleIndex + 1) % styles.count
+            } label: {
+                Image(systemName: styles[styleIndex].1)
+                    .font(.body.weight(.semibold))
+                    .foregroundStyle(.primary)
+                    .frame(width: 44, height: 44)
+                    .background(.ultraThinMaterial, in: Circle())
+                    .shadow(color: .black.opacity(0.12), radius: 6, y: 2)
+            }
+            .buttonStyle(.plain)
+
+            // Locate me button
+            Button {
+                centerOnUser = true
+                Task { @MainActor in
+                    try? await Task.sleep(for: .milliseconds(500))
+                    centerOnUser = false
+                }
+            } label: {
+                Image(systemName: "location.fill")
+                    .font(.body.weight(.semibold))
+                    .foregroundStyle(Color("Gold"))
+                    .frame(width: 44, height: 44)
+                    .background(.ultraThinMaterial, in: Circle())
+                    .shadow(color: .black.opacity(0.12), radius: 6, y: 2)
+            }
+            .buttonStyle(.plain)
+        }
+    }
+
+    // MARK: - Reverse geocode (distance-debounced)
 
     private func reverseGeocode(_ coordinate: CLLocationCoordinate2D) {
+        // Time-based throttle: minimum 3 seconds between geocoding requests
+        guard Date().timeIntervalSince(lastGeocodeTime) > 3 else { return }
+
+        // Distance-based throttle: skip if within 2km of last geocoded point
+        if let last = lastGeocodedCenter {
+            let dist = CLLocation(latitude: last.latitude, longitude: last.longitude)
+                .distance(from: CLLocation(latitude: coordinate.latitude, longitude: coordinate.longitude))
+            if dist < 2000 { return }
+        }
+
         geocodeTask?.cancel()
         geocodeTask = Task {
+            try? await Task.sleep(for: .milliseconds(800))
+            guard !Task.isCancelled else { return }
             let location = CLLocation(latitude: coordinate.latitude, longitude: coordinate.longitude)
             guard let request = MKReverseGeocodingRequest(location: location) else { return }
             do {
                 let mapItems = try await request.mapItems
                 if !Task.isCancelled,
                    let city = mapItems.first?.addressRepresentations?.cityName {
+                    lastGeocodedCenter = coordinate
+                    lastGeocodeTime = Date()
                     currentCity = city
                 }
             } catch {}
-        }
-    }
-
-    // MARK: - Clustering
-
-    private func updateClusters(force: Bool = false) {
-        let cellSize = MapClusterManager.cellSize(for: currentSpan)
-        // Only recluster when zoom level changes enough (>20% difference)
-        let ratio = lastClusterCellSize > 0 ? cellSize / lastClusterCellSize : 0
-        guard force || ratio < 0.8 || ratio > 1.2 else { return }
-        lastClusterCellSize = cellSize
-        withAnimation(.easeInOut(duration: 0.25)) {
-            clusters = MapClusterManager.cluster(store.churches, cellSize: cellSize)
-        }
-    }
-
-    private func zoomIntoCluster(_ cluster: ChurchCluster) {
-        let span = currentSpan
-        withAnimation(.easeInOut(duration: 0.5)) {
-            position = .region(MKCoordinateRegion(
-                center: cluster.coordinate,
-                span: MKCoordinateSpan(
-                    latitudeDelta: span.latitudeDelta / 3,
-                    longitudeDelta: span.longitudeDelta / 3
-                )
-            ))
-        }
-    }
-
-    // MARK: - Toolbar
-
-    @ToolbarContentBuilder
-    private func mapToolbar() -> some ToolbarContent {
-        ToolbarItem(placement: .principal) {
-            VStack(spacing: 2) {
-                Text("Carte")
-                    .font(.headline)
-                Text("\(store.churches.count) église\(store.churches.count == 1 ? "" : "s")")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-            }
-        }
-
-        ToolbarItem(placement: .topBarTrailing) {
-            Button {
-                styleIndex = (styleIndex + 1) % styles.count
-                withAnimation(.easeInOut(duration: 0.3)) {
-                    mapStyle = styles[styleIndex].2
-                }
-            } label: {
-                Label(styles[styleIndex].0, systemImage: styles[styleIndex].1)
-                    .font(.caption.weight(.semibold))
-                    .labelStyle(.titleAndIcon)
-            }
-            .buttonStyle(.bordered)
-            .buttonBorderShape(.capsule)
-            .controlSize(.small)
-            .tint(.primary)
-        }
-
-        ToolbarItem(placement: .topBarTrailing) {
-            Button {
-                withAnimation(.spring(response: 0.6, dampingFraction: 0.8)) {
-                    position = .userLocation(fallback: position)
-                }
-            } label: {
-                Image(systemName: "location.fill")
-                    .foregroundStyle(Color("Gold"))
-            }
-            .buttonStyle(.bordered)
-            .buttonBorderShape(.circle)
-            .controlSize(.small)
-            .tint(Color("Gold"))
         }
     }
 }
@@ -262,10 +271,11 @@ private struct CityPickerSheet: View {
                     }
                 }
             }
-            .listStyle(.plain)
+            .listStyle(.insetGrouped)
             .searchable(text: $query, placement: .navigationBarDrawer(displayMode: .always), prompt: "Rechercher une ville…")
             .navigationTitle("Choisir une ville")
             .navigationBarTitleDisplayMode(.inline)
+            .toolbarBackground(.visible, for: .navigationBar)
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
                     Button("Fermer") { dismiss() }
@@ -350,4 +360,11 @@ private class CitySearchCompleter: NSObject, MKLocalSearchCompleterDelegate {
     func completer(_ completer: MKLocalSearchCompleter, didFailWithError error: Error) {
         handler?([])
     }
+}
+
+#Preview {
+    MapTabView()
+        .environment(ChurchStore())
+        .environment(AuthStore())
+        .modelContainer(for: SavedChurch.self, inMemory: true)
 }

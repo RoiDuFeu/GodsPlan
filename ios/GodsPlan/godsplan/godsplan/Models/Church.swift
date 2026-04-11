@@ -54,6 +54,7 @@ struct Church: Codable, Identifiable, Hashable, Sendable {
     let languages: [String]
     let accessibility: Accessibility?
     let photos: [String]
+    let officeSchedules: [OfficeSchedule]?
     let dataSources: [DataSource]
     let reliabilityScore: Int
     let isActive: Bool?
