@@ -449,45 +449,48 @@ export class MessesInfoScraper extends BaseScraper {
   /**
    * Expands every collapsed branch in the GWT CellTree so all day headers and
    * celebration entries are materialized in the DOM before extraction.
-   * The church detail page starts with most branches collapsed — without this
-   * step we only see the handful of entries auto-opened by the widget.
+   *
+   * GWT CellTree listens for real DOM mouse events (not synthetic ones), so
+   * `el.click()` / `dispatchEvent` inside page.evaluate() is a no-op. We have
+   * to drive CDP-level mouse clicks via Puppeteer's ElementHandle.click().
+   *
+   * Collapsed branches are identified by `[role="treeitem"][aria-expanded="false"]`
+   * and the clickable chevron is the descendant with class `cellTreeItemImage`.
    */
   private async expandAllTreeNodes(page: Page): Promise<void> {
     try {
-      await page.evaluate(async () => {
-        const doc = (globalThis as any).document;
-        const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+      for (let iter = 0; iter < 15; iter += 1) {
+        const handles = await page.$$(
+          '[role="treeitem"][aria-expanded="false"] [class*="cellTreeItemImage"]'
+        );
+        if (handles.length === 0) break;
 
-        // GWT CellTree marks collapsed branches with a class containing
-        // "cellTreeClosedItem" on the chevron image wrapper. We also check
-        // ARIA state as a fallback for any non-GWT widgets.
-        const findClosed = (): any[] => {
-          const selectors = [
-            '[class*="cellTreeClosedItem"]',
-            '[role="treeitem"][aria-expanded="false"]',
-          ];
-          const set = new Set<any>();
-          for (const sel of selectors) {
-            for (const el of Array.from(doc.querySelectorAll(sel) || [])) {
-              set.add(el);
-            }
+        for (const handle of handles) {
+          try {
+            await handle.click({ delay: 10 });
+          } catch {
+            // Some handles may become stale after a sibling expansion — ignore.
           }
-          return Array.from(set);
-        };
-
-        for (let i = 0; i < 25; i += 1) {
-          const closed = findClosed();
-          if (closed.length === 0) break;
-          for (const el of closed) {
-            try {
-              (el as any).click?.();
-            } catch {
-              // ignore — some nodes may detach mid-iteration
-            }
-          }
-          await sleep(250);
         }
-      });
+
+        await this.sleep(350);
+      }
+
+      // Also try to click "Afficher plus de lignes" buttons to load extra rows
+      const showMore = await page.$$('[class*="cellTreeShowMoreButton"]');
+      for (const handle of showMore) {
+        try {
+          const visible = await handle.evaluate(
+            (el: any) => el.offsetParent !== null && el.style.display !== 'none'
+          );
+          if (visible) {
+            await handle.click({ delay: 10 });
+            await this.sleep(300);
+          }
+        } catch {
+          // best-effort
+        }
+      }
     } catch {
       // Expansion is best-effort; fall through to extraction with whatever is visible
     }
@@ -617,9 +620,12 @@ export class MessesInfoScraper extends BaseScraper {
       }> = [];
 
       const monthMap: Record<string, number> = {
+        // Full names
         janvier: 0, février: 1, fevrier: 1, mars: 2, avril: 3,
         mai: 4, juin: 5, juillet: 6, août: 7, aout: 7,
         septembre: 8, octobre: 9, novembre: 10, décembre: 11, decembre: 11,
+        // Abbreviations used in messes.info headers ("mar. 14 avr. 2026")
+        janv: 0, févr: 1, fevr: 1, avr: 3, juil: 6, sept: 8, oct: 9, nov: 10, déc: 11, dec: 11,
       };
 
       let currentCategory: string = 'mass';
