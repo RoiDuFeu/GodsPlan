@@ -50,6 +50,10 @@
 		<dict/>
 	</dict>
 
+	<!-- Encryption - app only uses HTTPS (exempt) -->
+	<key>ITSAppUsesNonExemptEncryption</key>
+	<false/>
+
 	<!-- UI -->
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>

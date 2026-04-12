@@ -3,11 +3,12 @@ import MapKit
 import SwiftData
 
 struct MapTabView: View {
+    var splashDone: Bool = false
+
     @Environment(ChurchStore.self) private var store
     @State private var selectedChurchID: String?
     @State private var selectedChurchName: String?
     @State private var showDetail = false
-    @State private var styleIndex = 0
     @State private var locationManager = CLLocationManager()
     @State private var centerOnUser = false
     @State private var pendingRegion: MKCoordinateRegion?
@@ -19,7 +20,6 @@ struct MapTabView: View {
 
     // Zoom slider state
     @State private var sliderActive = false
-    @State private var mapParallaxX: CGFloat = 0
     @State private var sliderRegion: MKCoordinateRegion?
 
     // City selector state
@@ -29,81 +29,91 @@ struct MapTabView: View {
     @State private var lastGeocodedCenter: CLLocationCoordinate2D?
     @State private var lastGeocodeTime: Date = .distantPast
 
-    private let styles: [(String, String, MapStyleType)] = [
-        ("Standard",  "map",       .standard),
-        ("Satellite", "globe",     .satellite),
-        ("Hybride",   "map.fill",  .hybrid)
-    ]
+    // Entrance animation
+    @State private var showUI = false
+
+    // Nearest churches state
+    @State private var showingNearestChurches = false
 
     var body: some View {
         ZStack(alignment: .top) {
             // UIKit MKMapView with bump-style decluttering
-            ChurchMapViewRepresentable(
-                churches: store.churches,
-                onChurchSelected: { id, name, coordinate in
-                    // Ignore taps while zoom slider is active
-                    guard !sliderActive else { return }
-                    selectedChurchID = id
-                    selectedChurchName = name
-                    showDetail = true
-                    // Zoom to the selected church with tilt, offset south so pin appears in upper third
-                    let offsetCenter = CLLocationCoordinate2D(
-                        latitude: coordinate.latitude - 0.002,
-                        longitude: coordinate.longitude
-                    )
-                    pendingCamera = MKMapCamera(
-                        lookingAtCenter: offsetCenter,
-                        fromDistance: 1500,
-                        pitch: 45,
-                        heading: 0
-                    )
-                    Task { @MainActor in
-                        try? await Task.sleep(for: .milliseconds(500))
-                        pendingCamera = nil
-                    }
-                    Task { await store.selectChurch(id: id) }
-                },
-                onRegionChanged: { region in
-                    currentRegion = region
-                    reverseGeocode(region.center)
-                },
-                regionToSet: sliderRegion ?? pendingRegion,
-                animateRegion: sliderRegion == nil,
-                cameraToSet: pendingCamera,
-                mapStyle: styles[styleIndex].2,
-                centerOnUser: centerOnUser
-            )
-            .ignoresSafeArea(edges: .all)
-            .offset(x: mapParallaxX)
+            // Ensure the black slider overlays above the map without resizing/shifting the map itself
+            ZStack {
+                ChurchMapViewRepresentable(
+                    churches: store.churches,
+                    splashDone: splashDone,
+                    onChurchSelected: { id, name, coordinate in
+                        // Ignore taps while zoom slider is active
+                        guard !sliderActive else { return }
+                        selectedChurchID = id
+                        selectedChurchName = name
+                        showDetail = true
+                        // Zoom to the selected church with tilt, offset south so pin appears in upper third
+                        let offsetCenter = CLLocationCoordinate2D(
+                            latitude: coordinate.latitude - 0.002,
+                            longitude: coordinate.longitude
+                        )
+                        pendingCamera = MKMapCamera(
+                            lookingAtCenter: offsetCenter,
+                            fromDistance: 1500,
+                            pitch: 45,
+                            heading: 0
+                        )
+                        Task { @MainActor in
+                            try? await Task.sleep(for: .milliseconds(500))
+                            pendingCamera = nil
+                        }
+                        Task { await store.selectChurch(id: id) }
+                    },
+                    onRegionChanged: { region in
+                        currentRegion = region
+                        reverseGeocode(region.center)
+                    },
+                    regionToSet: sliderRegion ?? pendingRegion,
+                    animateRegion: sliderRegion == nil,
+                    cameraToSet: pendingCamera,
+                    mapStyle: .standard,
+                    centerOnUser: centerOnUser
+                )
+                .ignoresSafeArea(edges: .all)
 
-            // Bump-style zoom notch — curved cutout on left edge
-            Color.clear
-                .allowsHitTesting(false)
-                .overlay(alignment: .leading) {
-                    EdgeZoomSlider(
-                        regionToSet: $sliderRegion,
-                        isActive: $sliderActive,
-                        currentSpan: currentRegion.span,
-                        mapCenter: currentRegion.center,
-                        parallaxOffset: $mapParallaxX
-                    )
-                }
+                // Slider is strictly an overlay—never shifts or resizes the map. Only triggers zoom when moved.
+                EdgeZoomSlider(
+                    regionToSet: $sliderRegion,
+                    isActive: $sliderActive,
+                    currentSpan: currentRegion.span,
+                    mapCenter: currentRegion.center
+                )
+                .allowsHitTesting(showUI)
+                .offset(x: showUI ? 0 : -30, y: 0)
+                .opacity(showUI ? 1 : 0)
+                .position(x: 22, y: UIScreen.main.bounds.height / 2)
+            }
 
             // City search bar
             citySearchBar
                 .padding(.horizontal, 16)
                 .padding(.top, 8)
+                .offset(y: showUI ? 0 : -60)
+                .opacity(showUI ? 1 : 0)
 
             // Floating map controls — bottom right
             floatingMapControls
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomTrailing)
                 .padding(.trailing, 16)
                 .padding(.bottom, 100)
+                .offset(x: showUI ? 0 : 60)
+                .opacity(showUI ? 1 : 0)
         }
         .sheet(isPresented: $showDetail, onDismiss: {
+            // Make sure to unselect the map annotation when closing details.
             store.clearSelection()
             selectedChurchID = nil
             selectedChurchName = nil
+            pendingCamera = nil
+            pendingRegion = nil
+            // If there was a method to explicitly unselect annotation on the map, it would be called here.
         }) {
             if let id = selectedChurchID, let name = selectedChurchName {
                 ChurchDetailSheet(churchId: id, churchName: name)
@@ -131,11 +141,47 @@ struct MapTabView: View {
             .presentationDragIndicator(.visible)
             .presentationCornerRadius(24)
         }
+        .sheet(isPresented: $showingNearestChurches) {
+            NearestChurchesSheet(
+                churches: nearestChurchesList,
+                distanceToUser: distanceToUser
+            ) { church in
+                showingNearestChurches = false
+                selectedChurchID = church.id
+                selectedChurchName = church.name
+                showDetail = true
+                let offsetCenter = CLLocationCoordinate2D(
+                    latitude: church.lat - 0.002,
+                    longitude: church.lng
+                )
+                pendingCamera = MKMapCamera(
+                    lookingAtCenter: offsetCenter,
+                    fromDistance: 1500,
+                    pitch: 45,
+                    heading: 0
+                )
+                Task { @MainActor in
+                    try? await Task.sleep(for: .milliseconds(500))
+                    pendingCamera = nil
+                }
+                Task { await store.selectChurch(id: church.id) }
+            }
+            .presentationDetents([.medium])
+            .presentationDragIndicator(.visible)
+            .presentationCornerRadius(24)
+        }
         .onChange(of: sliderActive) { _, active in
             if !active { sliderRegion = nil }
         }
         .onAppear {
             locationManager.requestWhenInUseAuthorization()
+        }
+        .onChange(of: splashDone) { _, done in
+            guard done else { return }
+            // Delay UI overlays until after pin pop-in wave finishes (~0.8s)
+            withAnimation(.spring(response: 0.6, dampingFraction: 0.75).delay(0.8)) {
+                showUI = true
+            }
         }
     }
 
@@ -174,11 +220,11 @@ struct MapTabView: View {
 
     private var floatingMapControls: some View {
         VStack(spacing: 12) {
-            // Map style button
+            // Find nearest churches button
             Button {
-                styleIndex = (styleIndex + 1) % styles.count
+                findNearestChurches()
             } label: {
-                Image(systemName: styles[styleIndex].1)
+                Image(systemName: "cross.fill")
                     .font(.body.weight(.semibold))
                     .foregroundStyle(.primary)
                     .frame(width: 44, height: 44)
@@ -204,6 +250,82 @@ struct MapTabView: View {
             }
             .buttonStyle(.plain)
         }
+    }
+
+    // MARK: - Find nearest churches
+
+    private func findNearestChurches() {
+        guard let userLocation = locationManager.location?.coordinate else {
+            // Center on user first, then retry
+            centerOnUser = true
+            Task { @MainActor in
+                try? await Task.sleep(for: .milliseconds(600))
+                centerOnUser = false
+            }
+            return
+        }
+
+        let userCL = CLLocation(latitude: userLocation.latitude, longitude: userLocation.longitude)
+        let nearest = store.churches
+            .map { church -> (ChurchListItem, Double) in
+                let loc = CLLocation(latitude: church.lat, longitude: church.lng)
+                return (church, userCL.distance(from: loc))
+            }
+            .sorted { $0.1 < $1.1 }
+            .prefix(3)
+
+        guard !nearest.isEmpty else { return }
+
+        // Compute region that fits all 3 + user location
+        var minLat = userLocation.latitude
+        var maxLat = userLocation.latitude
+        var minLng = userLocation.longitude
+        var maxLng = userLocation.longitude
+        for (church, _) in nearest {
+            minLat = min(minLat, church.lat)
+            maxLat = max(maxLat, church.lat)
+            minLng = min(minLng, church.lng)
+            maxLng = max(maxLng, church.lng)
+        }
+        let centerLat = (minLat + maxLat) / 2
+        let centerLng = (minLng + maxLng) / 2
+        let spanLat = (maxLat - minLat) * 1.5 + 0.005
+        let spanLng = (maxLng - minLng) * 1.5 + 0.005
+
+        pendingRegion = MKCoordinateRegion(
+            center: CLLocationCoordinate2D(latitude: centerLat, longitude: centerLng),
+            span: MKCoordinateSpan(latitudeDelta: spanLat, longitudeDelta: spanLng)
+        )
+        Task { @MainActor in
+            try? await Task.sleep(for: .milliseconds(500))
+            pendingRegion = nil
+        }
+
+        // Show the nearest churches in a sheet
+        showingNearestChurches = true
+    }
+
+    private var nearestChurchesList: [ChurchListItem] {
+        guard let userLocation = locationManager.location?.coordinate else { return [] }
+        let userCL = CLLocation(latitude: userLocation.latitude, longitude: userLocation.longitude)
+        return store.churches
+            .sorted { a, b in
+                let distA = CLLocation(latitude: a.lat, longitude: a.lng).distance(from: userCL)
+                let distB = CLLocation(latitude: b.lat, longitude: b.lng).distance(from: userCL)
+                return distA < distB
+            }
+            .prefix(3)
+            .map { $0 }
+    }
+
+    private func distanceToUser(_ church: ChurchListItem) -> String {
+        guard let userLocation = locationManager.location?.coordinate else { return "" }
+        let userCL = CLLocation(latitude: userLocation.latitude, longitude: userLocation.longitude)
+        let dist = CLLocation(latitude: church.lat, longitude: church.lng).distance(from: userCL)
+        if dist < 1000 {
+            return String(format: "%.0f m", dist)
+        }
+        return String(format: "%.1f km", dist / 1000)
     }
 
     // MARK: - Reverse geocode (distance-debounced)
@@ -362,8 +484,68 @@ private class CitySearchCompleter: NSObject, MKLocalSearchCompleterDelegate {
     }
 }
 
+// MARK: - Nearest churches sheet
+
+private struct NearestChurchesSheet: View {
+    let churches: [ChurchListItem]
+    let distanceToUser: (ChurchListItem) -> String
+    let onSelect: (ChurchListItem) -> Void
+    @Environment(\.dismiss) private var dismiss
+
+    var body: some View {
+        NavigationStack {
+            List {
+                ForEach(Array(churches.enumerated()), id: \.element.id) { index, church in
+                    Button {
+                        onSelect(church)
+                    } label: {
+                        HStack(spacing: 14) {
+                            ZStack {
+                                Circle()
+                                    .fill(Color("Gold").opacity(0.15))
+                                    .frame(width: 40, height: 40)
+                                Text("\(index + 1)")
+                                    .font(.headline.weight(.bold))
+                                    .foregroundStyle(Color("Gold"))
+                            }
+
+                            VStack(alignment: .leading, spacing: 3) {
+                                Text(church.name)
+                                    .font(.body.weight(.semibold))
+                                    .foregroundStyle(.primary)
+                                    .lineLimit(2)
+
+                                if let city = church.address.city {
+                                    Text(city)
+                                        .font(.caption)
+                                        .foregroundStyle(.secondary)
+                                }
+                            }
+
+                            Spacer()
+
+                            Text(distanceToUser(church))
+                                .font(.subheadline.weight(.medium))
+                                .foregroundStyle(.secondary)
+                        }
+                        .padding(.vertical, 4)
+                    }
+                }
+            }
+            .listStyle(.insetGrouped)
+            .navigationTitle("Eglises les plus proches")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .topBarLeading) {
+                    Button("Fermer") { dismiss() }
+                }
+            }
+        }
+    }
+}
+
 #Preview {
-    MapTabView()
+    MapTabView(splashDone: true)
         .environment(ChurchStore())
         .environment(AuthStore())
         .modelContainer(for: SavedChurch.self, inMemory: true)

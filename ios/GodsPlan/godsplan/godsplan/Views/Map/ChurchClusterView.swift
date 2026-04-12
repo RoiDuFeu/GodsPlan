@@ -129,8 +129,13 @@ final class ChurchClusterView: MKAnnotationView {
         badgeLayer.shadowOffset = CGSize(width: 0, height: 3)
         badgeLayer.shadowRadius = 6
 
-        // Appear animation
-        animateAppear()
+        // Appear animation (suppress during initial entrance wait)
+        if ChurchAnnotationView.waitingForEntrance {
+            transform = CGAffineTransform(scaleX: 0.01, y: 0.01)
+            alpha = 0
+        } else {
+            animateAppear()
+        }
     }
 
     // MARK: - CoreGraphics badge rendering

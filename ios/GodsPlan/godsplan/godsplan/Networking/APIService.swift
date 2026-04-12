@@ -1,5 +1,19 @@
 import Foundation
 
+// MARK: - Auth response models
+
+struct AuthUser: Decodable {
+    let id: String
+    let name: String?
+    let email: String?
+    let provider: String
+}
+
+struct AuthResponse: Decodable {
+    let token: String
+    let user: AuthUser
+}
+
 // MARK: - Response wrappers
 
 private struct ListResponse<T: Decodable>: Decodable {
@@ -93,7 +107,74 @@ actor APIService {
         return try await get(url, as: LiturgyResponse.self)
     }
 
+    // MARK: Auth
+
+    func authenticateApple(identityToken: String, name: String?, email: String?) async throws -> AuthResponse {
+        let url = URL(string: "\(base)/auth/apple")!
+        var body: [String: Any] = ["identityToken": identityToken]
+        if let name, !name.isEmpty { body["name"] = name }
+        if let email, !email.isEmpty { body["email"] = email }
+        return try await post(url, body: body, as: AuthResponse.self)
+    }
+
+    func authenticateGoogle(idToken: String) async throws -> AuthResponse {
+        let url = URL(string: "\(base)/auth/google")!
+        let body: [String: Any] = ["idToken": idToken]
+        return try await post(url, body: body, as: AuthResponse.self)
+    }
+
+    // MARK: Device Token
+
+    func registerDeviceToken(_ token: String, jwt: String) async throws {
+        let url = URL(string: "\(base)/notifications/device-token")!
+        let body: [String: Any] = ["token": token, "platform": "ios"]
+        try await authenticatedPost(url, body: body, jwt: jwt)
+    }
+
+    func unregisterDeviceToken(_ token: String, jwt: String) async throws {
+        let url = URL(string: "\(base)/notifications/device-token")!
+        let body: [String: Any] = ["token": token]
+        try await authenticatedDelete(url, body: body, jwt: jwt)
+    }
+
+    // MARK: Preferences
+
+    func getPreferences(jwt: String) async throws -> UserPreferencesResponse {
+        let url = URL(string: "\(base)/preferences")!
+        return try await authenticatedGet(url, as: UserPreferencesResponse.self, jwt: jwt)
+    }
+
+    func updatePreferences(_ prefs: UserPreferencesPayload, jwt: String) async throws -> UserPreferencesResponse {
+        let url = URL(string: "\(base)/preferences")!
+        let body = prefs.toDict()
+        return try await authenticatedPut(url, body: body, as: UserPreferencesResponse.self, jwt: jwt)
+    }
+
     // MARK: Private helpers
+
+    private func post<T: Decodable>(_ url: URL, body: [String: Any], as type: T.Type) async throws -> T {
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.httpBody = try JSONSerialization.data(withJSONObject: body)
+
+        do {
+            let (data, response) = try await session.data(for: request)
+            guard let http = response as? HTTPURLResponse else {
+                throw APIError.invalidResponse(0)
+            }
+            guard (200...299).contains(http.statusCode) else {
+                throw APIError.invalidResponse(http.statusCode)
+            }
+            return try decoder.decode(type, from: data)
+        } catch let error as APIError {
+            throw error
+        } catch let error as DecodingError {
+            throw APIError.decodingError(error)
+        } catch {
+            throw APIError.networkError(error)
+        }
+    }
 
     private func get<T: Decodable>(_ url: URL, as type: T.Type) async throws -> T {
         let data = try await rawData(for: url)
@@ -119,5 +200,113 @@ actor APIService {
         } catch {
             throw APIError.networkError(error)
         }
+    }
+
+    // MARK: Authenticated helpers
+
+    private func authenticatedGet<T: Decodable>(_ url: URL, as type: T.Type, jwt: String) async throws -> T {
+        var request = URLRequest(url: url)
+        request.setValue("Bearer \(jwt)", forHTTPHeaderField: "Authorization")
+        do {
+            let (data, response) = try await session.data(for: request)
+            guard let http = response as? HTTPURLResponse,
+                  (200...299).contains(http.statusCode) else {
+                let code = (response as? HTTPURLResponse)?.statusCode ?? 0
+                throw APIError.invalidResponse(code)
+            }
+            return try decoder.decode(type, from: data)
+        } catch let error as APIError {
+            throw error
+        } catch let error as DecodingError {
+            throw APIError.decodingError(error)
+        } catch {
+            throw APIError.networkError(error)
+        }
+    }
+
+    @discardableResult
+    private func authenticatedPost(_ url: URL, body: [String: Any], jwt: String) async throws -> Data {
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.setValue("Bearer \(jwt)", forHTTPHeaderField: "Authorization")
+        request.httpBody = try JSONSerialization.data(withJSONObject: body)
+
+        let (data, response) = try await session.data(for: request)
+        guard let http = response as? HTTPURLResponse,
+              (200...299).contains(http.statusCode) else {
+            let code = (response as? HTTPURLResponse)?.statusCode ?? 0
+            throw APIError.invalidResponse(code)
+        }
+        return data
+    }
+
+    private func authenticatedPut<T: Decodable>(_ url: URL, body: [String: Any], as type: T.Type, jwt: String) async throws -> T {
+        var request = URLRequest(url: url)
+        request.httpMethod = "PUT"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.setValue("Bearer \(jwt)", forHTTPHeaderField: "Authorization")
+        request.httpBody = try JSONSerialization.data(withJSONObject: body)
+
+        do {
+            let (data, response) = try await session.data(for: request)
+            guard let http = response as? HTTPURLResponse,
+                  (200...299).contains(http.statusCode) else {
+                let code = (response as? HTTPURLResponse)?.statusCode ?? 0
+                throw APIError.invalidResponse(code)
+            }
+            return try decoder.decode(type, from: data)
+        } catch let error as APIError {
+            throw error
+        } catch let error as DecodingError {
+            throw APIError.decodingError(error)
+        } catch {
+            throw APIError.networkError(error)
+        }
+    }
+
+    @discardableResult
+    private func authenticatedDelete(_ url: URL, body: [String: Any], jwt: String) async throws -> Data {
+        var request = URLRequest(url: url)
+        request.httpMethod = "DELETE"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.setValue("Bearer \(jwt)", forHTTPHeaderField: "Authorization")
+        request.httpBody = try JSONSerialization.data(withJSONObject: body)
+
+        let (data, response) = try await session.data(for: request)
+        guard let http = response as? HTTPURLResponse,
+              (200...299).contains(http.statusCode) else {
+            let code = (response as? HTTPURLResponse)?.statusCode ?? 0
+            throw APIError.invalidResponse(code)
+        }
+        return data
+    }
+}
+
+// MARK: - Preference Models
+
+struct UserPreferencesResponse: Decodable {
+    let subscribedChurches: [String]
+    let language: String
+    let theme: String
+    let reminderEnabled: Bool
+    let reminderTime: String
+}
+
+struct UserPreferencesPayload {
+    var subscribedChurches: [String]?
+    var language: String?
+    var theme: String?
+    var reminderEnabled: Bool?
+    var reminderTime: String?
+
+    func toDict() -> [String: Any] {
+        var dict: [String: Any] = [:]
+        if let v = subscribedChurches { dict["subscribedChurches"] = v }
+        if let v = language { dict["language"] = v }
+        if let v = theme { dict["theme"] = v }
+        if let v = reminderEnabled { dict["reminderEnabled"] = v }
+        if let v = reminderTime { dict["reminderTime"] = v }
+        return dict
     }
 }

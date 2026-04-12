@@ -2,7 +2,7 @@ import UIKit
 import MapKit
 import SwiftUI
 
-// MARK: - ChurchMapViewController (UIKit MKMapView with bump-style decluttering)
+// MARK: - ChurchMapViewController (UIKit MKMapView with MapKit clustering)
 
 final class ChurchMapViewController: UIViewController {
 
@@ -18,9 +18,16 @@ final class ChurchMapViewController: UIViewController {
     /// Current annotations tracked for efficient diffing.
     private var annotationsByID: [String: ChurchAnnotation] = [:]
 
+    /// Tracks whether clustering is currently enabled to avoid redundant remove/add cycles.
+    private var clusteringEnabled: Bool = true
+
     /// Queued state for before map is ready
     private var pendingChurches: [ChurchListItem]?
     private var pendingStyle: MapStyleType?
+    private var currentStyle: MapStyleType?
+
+    /// Whether the initial pop-in animation has been played
+    private var hasPlayedEntrance = false
 
     // MARK: - Lifecycle
 
@@ -42,6 +49,11 @@ final class ChurchMapViewController: UIViewController {
         // to prevent CAMetalLayer zero-drawable warnings
         if let map = mapView {
             map.isHidden = view.bounds.width < 1 || view.bounds.height < 1
+            // Keep map frame in sync — autoresizingMask can lag behind
+            // on the first layout passes when SwiftUI is still negotiating size
+            if map.frame != view.bounds {
+                map.frame = view.bounds
+            }
         }
 
         if mapView == nil, view.bounds.width >= 44, view.bounds.height >= 44 {
@@ -66,6 +78,10 @@ final class ChurchMapViewController: UIViewController {
                 span: MKCoordinateSpan(latitudeDelta: 0.07, longitudeDelta: 0.07)
             )
 
+            // Register annotation views and cluster views for MapKit clustering
+            map.register(ChurchAnnotationView.self, forAnnotationViewWithReuseIdentifier: ChurchAnnotationView.reuseID)
+            map.register(ChurchClusterView.self, forAnnotationViewWithReuseIdentifier: ChurchClusterView.reuseID)
+
             view.addSubview(map)
             mapView = map
 
@@ -75,6 +91,11 @@ final class ChurchMapViewController: UIViewController {
             }
             coordinator.onRegionChanged = { [weak self] region in
                 self?.onRegionChanged?(region)
+                // Calculate zoom level and update clustering accordingly
+                if let mapView = self?.mapView {
+                    let zoomLevel = Self.zoomLevel(for: mapView)
+                    self?.updateClustering(for: zoomLevel)
+                }
             }
 
             // Apply any queued annotations/style
@@ -99,8 +120,8 @@ final class ChurchMapViewController: UIViewController {
         mapView?.isHidden = true
     }
 
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         if let map = mapView, view.bounds.width >= 1, view.bounds.height >= 1 {
             map.isHidden = false
         }
@@ -108,6 +129,8 @@ final class ChurchMapViewController: UIViewController {
 
     // MARK: - Annotation management (efficient diff-based)
 
+    /// Set annotations from the provided church list.
+    /// Annotations are assigned a clusteringIdentifier "church" so MapKit handles clustering.
     func setAnnotations(from churches: [ChurchListItem]) {
         guard let mapView else {
             pendingChurches = churches
@@ -132,30 +155,54 @@ final class ChurchMapViewController: UIViewController {
             for id in toAdd {
                 guard let item = churchMap[id] else { continue }
                 let annotation = ChurchAnnotation.from(item)
+                annotation.clusteringIdentifier = clusteringEnabled ? "church" : nil
                 annotationsByID[id] = annotation
                 newAnnotations.append(annotation)
             }
             mapView.addAnnotations(newAnnotations)
         }
 
-        // Run initial declutter after annotations are added
-        if !toAdd.isEmpty || !toRemove.isEmpty {
-            coordinator.resetLayout(mapView: mapView)
-            // Delay slightly to let MapKit create annotation views
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [weak self] in
-                guard let self, let mapView = self.mapView else { return }
-                self.coordinator.runDeclutterPipeline(mapView: mapView, animated: true)
-            }
-        }
+        // Clustering now handled by MapKit; no manual declutter needed
     }
 
     /// Removes all annotations.
     func clearAnnotations() {
         guard let mapView else { return }
-        coordinator.resetLayout(mapView: mapView)
+        // Clustering handled by MapKit, simply remove all annotations
         let all = Array(annotationsByID.values)
         mapView.removeAnnotations(all)
         annotationsByID.removeAll()
+    }
+
+    /// Plays a staggered pop-in animation on all visible annotation views. Called once after splash dismissal.
+    func animateAnnotationsIfNeeded() {
+        guard !hasPlayedEntrance, let mapView else { return }
+        hasPlayedEntrance = true
+
+        // Flip the shared flag so any future views appear normally
+        ChurchAnnotationView.waitingForEntrance = false
+
+        // Collect ALL annotation views currently on the map (church pins + clusters)
+        let views: [MKAnnotationView] = mapView.annotations.compactMap { annotation in
+            if annotation is MKUserLocation { return nil }
+            return mapView.view(for: annotation)
+        }
+
+        // Views are already at scale 0.01 + alpha 0 from prepareForDisplay/configure.
+        // Stagger the pop-in animation.
+        for (index, v) in views.enumerated() {
+            let delay = Double(index) * 0.025
+            UIView.animate(
+                withDuration: 0.45,
+                delay: delay,
+                usingSpringWithDamping: 0.65,
+                initialSpringVelocity: 0.8,
+                options: [.allowUserInteraction]
+            ) {
+                v.transform = .identity
+                v.alpha = 1
+            }
+        }
     }
 
     // MARK: - Camera control
@@ -206,6 +253,9 @@ final class ChurchMapViewController: UIViewController {
             pendingStyle = style
             return
         }
+        // Skip if style hasn't changed (avoids redundant config on tab return)
+        guard currentStyle != style else { return }
+        currentStyle = style
         let poiFilter = MKPointOfInterestFilter.excludingAll
         switch style {
         case .standard:
@@ -223,11 +273,48 @@ final class ChurchMapViewController: UIViewController {
         }
     }
 
+
+    // MARK: - Zoom and clustering control
+
+    /// Update clustering of annotations depending on zoom level.
+    /// When zoomed in close (zoomLevel >= 14), clustering is disabled so all individual churches are visible.
+    /// When zoomed out (zoomLevel < 14), clusteringIdentifier is set to "church" so MapKit clusters annotations.
+    func updateClustering(for zoomLevel: Double) {
+        guard let mapView else { return }
+        let shouldCluster = zoomLevel < 14
+
+        // Skip if clustering state hasn't changed
+        guard shouldCluster != clusteringEnabled else { return }
+        clusteringEnabled = shouldCluster
+
+        let desiredClusterID: String? = shouldCluster ? "church" : nil
+        let allAnnotations = Array(annotationsByID.values)
+        for annotation in allAnnotations {
+            annotation.clusteringIdentifier = desiredClusterID
+        }
+        // Remove and re-add to force MapKit to refresh clustering
+        mapView.removeAnnotations(allAnnotations)
+        mapView.addAnnotations(allAnnotations)
+    }
+
+    /// Calculate approximate zoom level from the mapView's camera centerCoordinateDistance.
+    /// This uses a simplified formula to convert camera distance to zoomLevel similar to web Mercator zoom.
+    private static func zoomLevel(for mapView: MKMapView) -> Double {
+        let distance = mapView.camera.centerCoordinateDistance
+        // Approximate conversion based on empirical mapping:
+        // Zoom level 20 ~ 1128 meters per pixel at equator
+        // Rough formula: zoomLevel = 20 - log2(distance / 1128)
+        // Clamp zoom level between 0 and 20
+        let metersPerPixelAtZoom20 = 1128.497220
+        let zoom = 20 - log2(distance / metersPerPixelAtZoom20)
+        return max(0, min(20, zoom))
+    }
+
 }
 
 // MARK: - Map style enum
 
-enum MapStyleType {
+enum MapStyleType: Equatable {
     case standard
     case satellite
     case hybrid
@@ -238,6 +325,7 @@ enum MapStyleType {
 struct ChurchMapViewRepresentable: UIViewControllerRepresentable {
 
     let churches: [ChurchListItem]
+    var splashDone: Bool = false
     let onChurchSelected: (String, String, CLLocationCoordinate2D) -> Void
     let onRegionChanged: (MKCoordinateRegion) -> Void
 
@@ -258,6 +346,10 @@ struct ChurchMapViewRepresentable: UIViewControllerRepresentable {
     func updateUIViewController(_ vc: ChurchMapViewController, context: Context) {
         vc.setAnnotations(from: churches)
         vc.setMapStyle(mapStyle)
+
+        if splashDone {
+            vc.animateAnnotationsIfNeeded()
+        }
 
         if let camera = cameraToSet {
             vc.setCamera(camera, animated: true)

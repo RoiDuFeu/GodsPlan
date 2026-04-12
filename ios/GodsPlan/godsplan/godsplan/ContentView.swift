@@ -16,13 +16,14 @@ struct ContentView: View {
     @State private var contentOpacity: Double = 0
     @State private var contentScale: CGFloat = 0.97
     @State private var tabBarOffset: CGFloat = 60
+    @State private var splashDone = false
 
     var body: some View {
         ZStack {
             // Main content (always in the tree so it starts loading immediately)
             TabView {
                 Tab("Carte", systemImage: "mappin.circle.fill") {
-                    MapTabView()
+                    MapTabView(splashDone: splashDone)
                 }
 
                 Tab("Eglises", systemImage: "building.columns.fill") {
@@ -90,6 +91,7 @@ struct ContentView: View {
         Task { @MainActor in
             try? await Task.sleep(for: .milliseconds(650))
             showSplash = false
+            splashDone = true
         }
     }
 }

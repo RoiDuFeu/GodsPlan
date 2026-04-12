@@ -55,6 +55,9 @@ final class ChurchAnnotation: MKPointAnnotation {
     /// Current scale set by zoom-adaptive scaling.
     var targetScale: CGFloat = 1.0
 
+    // For MapKit clustering support
+    public var clusteringIdentifier: String?
+
     init(
         id: String,
         coordinate: CLLocationCoordinate2D,

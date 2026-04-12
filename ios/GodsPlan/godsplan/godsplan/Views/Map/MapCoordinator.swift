@@ -25,16 +25,27 @@ final class MapCoordinator: NSObject, MKMapViewDelegate {
 
     // MARK: - MKMapViewDelegate
 
+    /// Support both standard church pins and clusters using MapKit's clustering mechanism with custom views.
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
         if annotation is MKUserLocation { return nil }
 
+        if let cluster = annotation as? MKClusterAnnotation {
+            // Dequeue and return custom cluster view
+            let view = mapView.dequeueReusableAnnotationView(withIdentifier: ChurchClusterView.reuseID)
+                as? ChurchClusterView
+                ?? ChurchClusterView(annotation: cluster, reuseIdentifier: ChurchClusterView.reuseID)
+            view.annotation = cluster
+            return view
+        }
+
         if let church = annotation as? ChurchAnnotation {
+            // Dequeue and return custom church annotation view
             let view = mapView.dequeueReusableAnnotationView(withIdentifier: ChurchAnnotationView.reuseID)
                 as? ChurchAnnotationView
                 ?? ChurchAnnotationView(annotation: church, reuseIdentifier: ChurchAnnotationView.reuseID)
             view.annotation = church
             view.displayPriority = church.churchType.displayPriority
-            view.clusteringIdentifier = nil
+            // No manual clusteringIdentifier setting here; use MapKit clustering defaults.
             return view
         }
 

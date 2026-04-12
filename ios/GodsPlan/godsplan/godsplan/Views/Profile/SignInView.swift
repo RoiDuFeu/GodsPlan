@@ -95,7 +95,6 @@ struct SignInView: View {
                     request.requestedScopes = [.fullName, .email]
                 } onCompletion: { result in
                     authStore.handleAuthorization(result)
-                    if authStore.isSignedIn { dismiss() }
                 }
                 .signInWithAppleButtonStyle(colorScheme == .dark ? .white : .black)
                 .frame(height: 52)
@@ -118,6 +117,9 @@ struct SignInView: View {
             .animation(.easeOut(duration: 0.4).delay(0.5), value: appeared)
         }
         .onAppear { appeared = true }
+        .onChange(of: authStore.isSignedIn) { _, newValue in
+            if newValue { dismiss() }
+        }
     }
 
     // MARK: - Google button
@@ -167,7 +169,6 @@ struct SignInView: View {
         GIDSignIn.sharedInstance.signIn(withPresenting: rootVC) { result, error in
             guard let user = result?.user, error == nil else { return }
             authStore.handleGoogleSignIn(user)
-            if authStore.isSignedIn { dismiss() }
         }
     }
 }

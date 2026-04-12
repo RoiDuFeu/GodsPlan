@@ -14,6 +14,8 @@ struct ChurchDetailSheet: View {
     @State private var showSignInPrompt = false
     @State private var saveAnimating = false
     @State private var mapReady = false
+    @State private var showAllMasses = false
+    @State private var showAllOfficeTypes: Set<String> = []
 
     private var church: Church? { store.selectedChurch }
     private var isSaved: Bool { savedChurches.contains { $0.churchId == churchId } }
@@ -244,10 +246,10 @@ struct ChurchDetailSheet: View {
 
     private func scheduleSection(_ church: Church) -> some View {
         sectionCard(title: "Horaires des messes", icon: "calendar") {
-            // Group by dayOfWeek + date to keep date-specific masses separate
             let groups = buildScheduleGroups(church.massSchedules)
+            let visibleGroups = showAllMasses ? groups : Array(groups.prefix(3))
             VStack(alignment: .leading, spacing: 0) {
-                ForEach(Array(groups.enumerated()), id: \.offset) { idx, group in
+                ForEach(Array(visibleGroups.enumerated()), id: \.offset) { idx, group in
                     VStack(alignment: .leading, spacing: 0) {
                         Text(group.label.uppercased())
                             .font(.caption2.weight(.bold))
@@ -263,8 +265,16 @@ struct ChurchDetailSheet: View {
                             }
                         }
                     }
-                    if idx < groups.count - 1 {
+                    if idx < visibleGroups.count - 1 {
                         Divider().padding(.vertical, 10)
+                    }
+                }
+
+                if groups.count > 3 {
+                    showMoreButton(expanded: showAllMasses) {
+                        withAnimation(.easeInOut(duration: 0.25)) {
+                            showAllMasses.toggle()
+                        }
                     }
                 }
             }
@@ -299,9 +309,12 @@ struct ChurchDetailSheet: View {
             }
         }
 
-        // Sort by dayOfWeek, then by date
+        // Sort starting from today's day of week
+        let todayDow = Self.todayDayOfWeek()
         let sorted = map.sorted { a, b in
-            if a.dayOfWeek != b.dayOfWeek { return a.dayOfWeek < b.dayOfWeek }
+            let offsetA = (a.dayOfWeek - todayDow + 7) % 7
+            let offsetB = (b.dayOfWeek - todayDow + 7) % 7
+            if offsetA != offsetB { return offsetA < offsetB }
             return (a.date ?? "") < (b.date ?? "")
         }
 
@@ -377,6 +390,22 @@ struct ChurchDetailSheet: View {
         .overlay(RoundedRectangle(cornerRadius: 16, style: .continuous).stroke(Color.primary.opacity(0.06), lineWidth: 1))
         .shadow(color: .black.opacity(0.04), radius: 6, y: 2)
         .padding(.horizontal, 20)
+    }
+
+    // MARK: - Show more button
+
+    private func showMoreButton(expanded: Bool, action: @escaping () -> Void) -> some View {
+        Button(action: action) {
+            HStack(spacing: 4) {
+                Text(expanded ? "Voir moins" : "Voir plus")
+                    .font(.caption.weight(.semibold))
+                Image(systemName: expanded ? "chevron.up" : "chevron.down")
+                    .font(.caption2.weight(.bold))
+            }
+            .foregroundStyle(Color("Gold"))
+            .frame(maxWidth: .infinity)
+            .padding(.top, 12)
+        }
     }
 
     // MARK: - Contact row
@@ -490,13 +519,61 @@ struct ChurchDetailSheet: View {
     }
 
     private func officeTypeContent(_ schedules: [OfficeSchedule]) -> some View {
-        // Group by dayOfWeek + date
-        var groups: [(key: String, label: String, dayOfWeek: Int, date: String?, schedules: [OfficeSchedule])] = []
+        let groups = buildOfficeGroups(schedules)
+        let type = schedules.first?.type ?? ""
+        let expanded = showAllOfficeTypes.contains(type)
+        let visibleGroups = expanded ? groups : Array(groups.prefix(3))
+
+        return VStack(alignment: .leading, spacing: 0) {
+            ForEach(Array(visibleGroups.enumerated()), id: \.offset) { idx, group in
+                VStack(alignment: .leading, spacing: 0) {
+                    Text(group.label.uppercased())
+                        .font(.caption2.weight(.bold))
+                        .foregroundStyle(Color("Gold"))
+                        .padding(.bottom, 8)
+
+                    VStack(spacing: 0) {
+                        ForEach(Array(group.schedules.enumerated()), id: \.offset) { i, schedule in
+                            officeScheduleRow(schedule)
+                            if i < group.schedules.count - 1 {
+                                Divider().padding(.leading, 56)
+                            }
+                        }
+                    }
+                }
+                if idx < visibleGroups.count - 1 {
+                    Divider().padding(.vertical, 10)
+                }
+            }
+
+            if groups.count > 3 {
+                showMoreButton(expanded: expanded) {
+                    withAnimation(.easeInOut(duration: 0.25)) {
+                        if expanded {
+                            showAllOfficeTypes.remove(type)
+                        } else {
+                            showAllOfficeTypes.insert(type)
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private struct OfficeGroup {
+        let label: String
+        let dayOfWeek: Int
+        let date: String?
+        let schedules: [OfficeSchedule]
+    }
+
+    private func buildOfficeGroups(_ schedules: [OfficeSchedule]) -> [OfficeGroup] {
+        var map: [(key: String, label: String, dayOfWeek: Int, date: String?, schedules: [OfficeSchedule])] = []
 
         for schedule in schedules {
             let key = schedule.date != nil ? "\(schedule.dayOfWeek):\(schedule.date!)" : "\(schedule.dayOfWeek):"
-            if let idx = groups.firstIndex(where: { $0.key == key }) {
-                groups[idx].schedules.append(schedule)
+            if let idx = map.firstIndex(where: { $0.key == key }) {
+                map[idx].schedules.append(schedule)
             } else {
                 let label: String
                 if let formatted = schedule.dateFormatted {
@@ -504,47 +581,46 @@ struct ChurchDetailSheet: View {
                 } else {
                     label = "\(schedule.dayName) \(Self.nextDateString(forDayOfWeek: schedule.dayOfWeek))"
                 }
-                groups.append((key: key, label: label, dayOfWeek: schedule.dayOfWeek, date: schedule.date, schedules: [schedule]))
+                map.append((key: key, label: label, dayOfWeek: schedule.dayOfWeek, date: schedule.date, schedules: [schedule]))
             }
         }
 
-        let sorted = groups.sorted { a, b in
-            if a.dayOfWeek != b.dayOfWeek { return a.dayOfWeek < b.dayOfWeek }
+        let todayDow = Self.todayDayOfWeek()
+        let sorted = map.sorted { a, b in
+            let offsetA = (a.dayOfWeek - todayDow + 7) % 7
+            let offsetB = (b.dayOfWeek - todayDow + 7) % 7
+            if offsetA != offsetB { return offsetA < offsetB }
             return (a.date ?? "") < (b.date ?? "")
         }
 
-        return VStack(alignment: .leading, spacing: 0) {
-            ForEach(Array(sorted.enumerated()), id: \.offset) { idx, group in
-                VStack(alignment: .leading, spacing: 4) {
-                    Text(group.label.uppercased())
-                        .font(.caption2.weight(.bold))
-                        .foregroundStyle(Color("Gold"))
+        return sorted.map { OfficeGroup(label: $0.label, dayOfWeek: $0.dayOfWeek, date: $0.date, schedules: $0.schedules) }
+    }
 
-                    ForEach(Array(group.schedules.enumerated()), id: \.offset) { _, schedule in
-                        HStack(spacing: 14) {
-                            Text(schedule.timeFormatted)
-                                .font(.system(size: 15, weight: .bold, design: .monospaced))
-                                .foregroundStyle(Color("Gold"))
-                                .frame(width: 100, alignment: .leading)
+    @ViewBuilder
+    private func officeScheduleRow(_ schedule: OfficeSchedule) -> some View {
+        HStack(spacing: 14) {
+            Text(schedule.timeFormatted)
+                .font(.system(size: 15, weight: .bold, design: .monospaced))
+                .foregroundStyle(Color("Gold"))
+                .lineLimit(1)
+                .fixedSize()
+                .frame(minWidth: 48, alignment: .leading)
 
-                            if let notes = schedule.notes, !notes.isEmpty {
-                                Text(notes)
-                                    .font(.caption)
-                                    .foregroundStyle(.secondary)
-                                    .lineLimit(2)
-                            }
+            Rectangle()
+                .fill(Color("Gold").opacity(0.25))
+                .frame(width: 1)
+                .frame(minHeight: 28, maxHeight: 36)
 
-                            Spacer()
-                        }
-                        .padding(.vertical, 4)
-                    }
-                }
-                .padding(.vertical, 6)
-                if idx < sorted.count - 1 {
-                    Divider()
-                }
+            if let notes = schedule.notes, !notes.isEmpty {
+                Text(notes)
+                    .font(.subheadline.weight(.medium))
+                    .foregroundStyle(.primary)
+                    .lineLimit(2)
             }
+
+            Spacer()
         }
+        .padding(.vertical, 9)
     }
 
     // MARK: - Data sources section
@@ -616,7 +692,13 @@ struct ChurchDetailSheet: View {
         return dateString
     }
 
-    // MARK: - Date helper
+    // MARK: - Date helpers
+
+    /// Returns today's dayOfWeek (0 = Sunday … 6 = Saturday)
+    private static func todayDayOfWeek() -> Int {
+        let calendar = Calendar(identifier: .gregorian)
+        return calendar.component(.weekday, from: Date()) - 1
+    }
 
     /// Returns the formatted date string (e.g. "14 avril") for the next occurrence of a given day of week.
     /// `dayOfWeek`: 0 = Sunday … 6 = Saturday

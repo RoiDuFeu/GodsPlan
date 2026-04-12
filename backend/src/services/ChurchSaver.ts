@@ -90,6 +90,7 @@ export interface SaveResult {
   saved: number;
   skipped: number;
   errors: number;
+  changedChurchIds: string[];
 }
 
 export type SaveProgressCallback = (current: number, total: number, churchName: string) => void;
@@ -100,7 +101,7 @@ export async function saveChurches(
   onProgress?: SaveProgressCallback,
 ): Promise<SaveResult> {
   const churchRepository = AppDataSource.getRepository(Church);
-  const result: SaveResult = { saved: 0, skipped: 0, errors: 0 };
+  const result: SaveResult = { saved: 0, skipped: 0, errors: 0, changedChurchIds: [] };
 
   // Phase 1: Bulk-fetch existing churches to avoid N+1 queries
   const existingMap = new Map<string, Church>();
@@ -205,7 +206,20 @@ export async function saveChurches(
         };
 
         if (scraped.massSchedules?.length) {
-          existing.massSchedules = mapMassSchedules(scraped);
+          const newSchedules = mapMassSchedules(scraped);
+          // Detect schedule changes by comparing sorted JSON
+          const sortKey = (a: { dayOfWeek: number; time: string }) =>
+            `${a.dayOfWeek}:${a.time}`;
+          const oldJson = JSON.stringify(
+            [...(existing.massSchedules || [])].sort((a, b) => sortKey(a).localeCompare(sortKey(b)))
+          );
+          const newJson = JSON.stringify(
+            [...newSchedules].sort((a, b) => sortKey(a).localeCompare(sortKey(b)))
+          );
+          if (oldJson !== newJson && existing.id) {
+            result.changedChurchIds.push(existing.id);
+          }
+          existing.massSchedules = newSchedules;
         }
 
         if (scraped.officeSchedules?.length) {

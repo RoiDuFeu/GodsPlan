@@ -13,7 +13,6 @@ struct EdgeZoomSlider: View {
     var maxZoom: Double = 80.0
     var initialZoom: Double? = nil
     var onZoomChange: ((Double) -> Void)? = nil
-    @Binding var parallaxOffset: CGFloat
 
     // MARK: - Internal state
 
@@ -21,6 +20,7 @@ struct EdgeZoomSlider: View {
     @State private var progressAtDragStart: CGFloat?
     @State private var dragStartCenter: CLLocationCoordinate2D?
     @State private var lastNotchValue: Int = 5
+    @State private var readyForZoom = false
     @State private var hideTimer: Task<Void, Never>?
 
     // Dual-state for elastic follow: handle moves instantly, notch follows with spring
@@ -117,6 +117,11 @@ struct EdgeZoomSlider: View {
                     dragStartCenter = mapCenter
                     progressAtDragStart = sliderProgress
                     UIImpactFeedbackGenerator(style: .soft).impactOccurred()
+                    // Only allow zoom changes after the notch is fully visible
+                    Task { @MainActor in
+                        try? await Task.sleep(for: .milliseconds(200))
+                        readyForZoom = true
+                    }
                 }
                 cancelHideTimer()
 
@@ -130,8 +135,10 @@ struct EdgeZoomSlider: View {
                 }
                 sliderProgress = max(0, min(1, base + dragDelta))
 
-                applyZoom()
-                tickHapticIfNeeded()
+                if readyForZoom, abs(value.translation.height) > 2 {
+                    applyZoom()
+                    tickHapticIfNeeded()
+                }
 
                 // Notch follows finger position with elastic lag, clamped to 5% screen edges
                 let fingerY = touchStartY + value.translation.height
@@ -141,23 +148,15 @@ struct EdgeZoomSlider: View {
                     notchCenterY = max(minY, min(maxY, fingerY))
                 }
 
-                // Parallax
-                withAnimation(.interpolatingSpring(mass: 0.6, stiffness: 180, damping: 18)) {
-                    parallaxOffset = (sliderProgress - 0.5) * 12
-                }
             }
             .onEnded { _ in
+                readyForZoom = false
                 progressAtDragStart = nil
 
                 // Spring notch back to resting depth
                 withAnimation(.interpolatingSpring(mass: 0.6, stiffness: 180, damping: 18)) {
                     notchDepth = depthResting
                     isActive = false
-                }
-
-                // Reset parallax
-                withAnimation(.interpolatingSpring(mass: 0.6, stiffness: 180, damping: 18)) {
-                    parallaxOffset = 0
                 }
 
                 scheduleHide()

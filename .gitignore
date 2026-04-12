@@ -8,6 +8,9 @@ node_modules/
 .env.local
 .env.*.local
 
+# APNs private keys
+*.p8
+
 # Build outputs
 dist/
 build/

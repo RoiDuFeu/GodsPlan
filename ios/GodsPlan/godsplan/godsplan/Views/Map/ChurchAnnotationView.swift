@@ -25,6 +25,10 @@ final class ChurchAnnotationView: MKAnnotationView {
     // State
     private var currentChurchType: ChurchType = .parish
 
+    /// Shared flag: when true, annotation views start hidden (scale 0 + alpha 0)
+    /// and wait for the controller to trigger the entrance animation after splash.
+    static var waitingForEntrance = true
+
     override init(annotation: MKAnnotation?, reuseIdentifier: String?) {
         super.init(annotation: annotation, reuseIdentifier: reuseIdentifier)
         collisionMode = .circle
@@ -82,8 +86,10 @@ final class ChurchAnnotationView: MKAnnotationView {
         pulseLayer.removeAllAnimations()
         pulseLayer.opacity = 0
         openDotLayer.opacity = 0
-        transform = .identity
-        alpha = 1
+        if !Self.waitingForEntrance {
+            transform = .identity
+            alpha = 1
+        }
         renderNormal()
     }
 
@@ -106,6 +112,12 @@ final class ChurchAnnotationView: MKAnnotationView {
             startPulse()
         } else {
             renderNormal()
+        }
+
+        // Keep hidden until entrance animation is triggered
+        if Self.waitingForEntrance {
+            transform = CGAffineTransform(scaleX: 0.01, y: 0.01)
+            alpha = 0
         }
     }
 

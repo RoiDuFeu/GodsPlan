@@ -2,7 +2,6 @@ import Foundation
 import AuthenticationServices
 import GoogleSignIn
 import Observation
-import Security
 
 enum AuthProvider: String {
     case apple, google
@@ -16,6 +15,10 @@ final class AuthStore {
     var userID: String?
     var authProvider: AuthProvider?
 
+    var jwt: String? {
+        KeychainHelper.read(key: "backendJWT")
+    }
+
     init() {
         restoreSession()
     }
@@ -25,22 +28,28 @@ final class AuthStore {
     func handleAuthorization(_ result: Result<ASAuthorization, Error>) {
         switch result {
         case .success(let auth):
-            guard let credential = auth.credential as? ASAuthorizationAppleIDCredential else { return }
-            let id = credential.user
+            guard let credential = auth.credential as? ASAuthorizationAppleIDCredential,
+                  let tokenData = credential.identityToken,
+                  let identityToken = String(data: tokenData, encoding: .utf8) else { return }
+
             let name = [credential.fullName?.givenName, credential.fullName?.familyName]
                 .compactMap { $0 }.joined(separator: " ")
             let email = credential.email
 
-            saveToKeychain(key: "appleUserID", value: id)
-            saveToKeychain(key: "authProvider", value: AuthProvider.apple.rawValue)
-            if !name.isEmpty { saveToKeychain(key: "appleUserName", value: name) }
-            if let email { saveToKeychain(key: "appleUserEmail", value: email) }
-
-            userID = id
-            authProvider = .apple
-            if !name.isEmpty { userName = name }
-            if let email { userEmail = email }
-            isSignedIn = true
+            Task {
+                do {
+                    let response = try await APIService.shared.authenticateApple(
+                        identityToken: identityToken,
+                        name: name.isEmpty ? nil : name,
+                        email: email
+                    )
+                    await MainActor.run {
+                        self.saveSession(jwt: response.token, user: response.user, provider: .apple)
+                    }
+                } catch {
+                    print("Apple auth backend error: \(error)")
+                }
+            }
 
         case .failure:
             break
@@ -50,35 +59,37 @@ final class AuthStore {
     // MARK: - Sign In with Google
 
     func handleGoogleSignIn(_ user: GIDGoogleUser) {
-        let id = user.userID ?? ""
-        let name = user.profile?.name ?? ""
-        let email = user.profile?.email ?? ""
+        guard let idToken = user.idToken?.tokenString else { return }
 
-        saveToKeychain(key: "googleUserID", value: id)
-        saveToKeychain(key: "googleUserName", value: name)
-        saveToKeychain(key: "googleUserEmail", value: email)
-        saveToKeychain(key: "authProvider", value: AuthProvider.google.rawValue)
-
-        userID = id
-        userName = name.isEmpty ? nil : name
-        userEmail = email.isEmpty ? nil : email
-        authProvider = .google
-        isSignedIn = true
+        Task {
+            do {
+                let response = try await APIService.shared.authenticateGoogle(idToken: idToken)
+                await MainActor.run {
+                    self.saveSession(jwt: response.token, user: response.user, provider: .google)
+                }
+            } catch {
+                print("Google auth backend error: \(error)")
+            }
+        }
     }
 
     // MARK: - Sign Out
 
     func signOut() {
+        // Unregister push token before clearing JWT
+        NotificationManager.shared.unregister(jwt: jwt)
+
         // Clear Apple keys
-        deleteFromKeychain(key: "appleUserID")
-        deleteFromKeychain(key: "appleUserName")
-        deleteFromKeychain(key: "appleUserEmail")
+        KeychainHelper.delete(key: "appleUserID")
+        KeychainHelper.delete(key: "appleUserName")
+        KeychainHelper.delete(key: "appleUserEmail")
         // Clear Google keys
-        deleteFromKeychain(key: "googleUserID")
-        deleteFromKeychain(key: "googleUserName")
-        deleteFromKeychain(key: "googleUserEmail")
+        KeychainHelper.delete(key: "googleUserID")
+        KeychainHelper.delete(key: "googleUserName")
+        KeychainHelper.delete(key: "googleUserEmail")
         // Clear shared keys
-        deleteFromKeychain(key: "authProvider")
+        KeychainHelper.delete(key: "authProvider")
+        KeychainHelper.delete(key: "backendJWT")
 
         if authProvider == .google {
             GIDSignIn.sharedInstance.signOut()
@@ -91,71 +102,42 @@ final class AuthStore {
         isSignedIn = false
     }
 
-    // MARK: - Restore session on launch
+    // MARK: - Save session from backend response
 
-    private func restoreSession() {
-        guard let providerRaw = readFromKeychain(key: "authProvider"),
-              let provider = AuthProvider(rawValue: providerRaw) else { return }
+    private func saveSession(jwt: String, user: AuthUser, provider: AuthProvider) {
+        KeychainHelper.save(key: "backendJWT", value: jwt)
+        KeychainHelper.save(key: "authProvider", value: provider.rawValue)
 
-        switch provider {
-        case .google:
-            GIDSignIn.sharedInstance.restorePreviousSignIn { [weak self] user, error in
-                DispatchQueue.main.async {
-                    if let user, error == nil {
-                        self?.handleGoogleSignIn(user)
-                    }
-                }
-            }
+        let prefix = provider == .apple ? "apple" : "google"
+        KeychainHelper.save(key: "\(prefix)UserID", value: user.id)
+        if let name = user.name { KeychainHelper.save(key: "\(prefix)UserName", value: name) }
+        if let email = user.email { KeychainHelper.save(key: "\(prefix)UserEmail", value: email) }
 
-        case .apple:
-            guard let id = readFromKeychain(key: "appleUserID") else { return }
-            userID = id
-            userName = readFromKeychain(key: "appleUserName")
-            userEmail = readFromKeychain(key: "appleUserEmail")
-            authProvider = .apple
+        userID = user.id
+        userName = user.name
+        userEmail = user.email
+        authProvider = provider
+        isSignedIn = true
 
-            let appleProvider = ASAuthorizationAppleIDProvider()
-            appleProvider.getCredentialState(forUserID: id) { [weak self] state, _ in
-                DispatchQueue.main.async {
-                    self?.isSignedIn = (state == .authorized)
-                    if state != .authorized { self?.signOut() }
-                }
-            }
+        // Request push notification permission after sign-in
+        Task {
+            await NotificationManager.shared.requestPermission()
         }
     }
 
-    // MARK: - Keychain helpers
+    // MARK: - Restore session on launch
 
-    private func saveToKeychain(key: String, value: String) {
-        guard let data = value.data(using: .utf8) else { return }
-        let query: [CFString: Any] = [
-            kSecClass: kSecClassGenericPassword,
-            kSecAttrAccount: key,
-            kSecValueData: data,
-            kSecAttrAccessible: kSecAttrAccessibleAfterFirstUnlock
-        ]
-        SecItemDelete(query as CFDictionary)
-        SecItemAdd(query as CFDictionary, nil)
+    private func restoreSession() {
+        guard let _ = KeychainHelper.read(key: "backendJWT"),
+              let providerRaw = KeychainHelper.read(key: "authProvider"),
+              let provider = AuthProvider(rawValue: providerRaw) else { return }
+
+        let prefix = provider == .apple ? "apple" : "google"
+        userID = KeychainHelper.read(key: "\(prefix)UserID")
+        userName = KeychainHelper.read(key: "\(prefix)UserName")
+        userEmail = KeychainHelper.read(key: "\(prefix)UserEmail")
+        authProvider = provider
+        isSignedIn = true
     }
 
-    private func readFromKeychain(key: String) -> String? {
-        let query: [CFString: Any] = [
-            kSecClass: kSecClassGenericPassword,
-            kSecAttrAccount: key,
-            kSecReturnData: true,
-            kSecMatchLimit: kSecMatchLimitOne
-        ]
-        var result: AnyObject?
-        guard SecItemCopyMatching(query as CFDictionary, &result) == errSecSuccess,
-              let data = result as? Data else { return nil }
-        return String(data: data, encoding: .utf8)
-    }
-
-    private func deleteFromKeychain(key: String) {
-        let query: [CFString: Any] = [
-            kSecClass: kSecClassGenericPassword,
-            kSecAttrAccount: key
-        ]
-        SecItemDelete(query as CFDictionary)
-    }
 }

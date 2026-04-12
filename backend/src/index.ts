@@ -9,7 +9,11 @@ import churchSimpleRoutes from './routes/churches-simple';
 import adminStatsRoutes from './routes/admin-stats';
 import adminScrapersRoutes from './routes/admin-scrapers';
 import liturgyRoutes from './routes/liturgy';
+import authRoutes from './routes/auth';
+import notificationRoutes from './routes/notifications';
+import preferencesRoutes from './routes/preferences';
 import { liturgySyncJob } from './jobs/liturgySync';
+import { reminderJob } from './jobs/reminderJob';
 
 dotenv.config();
 
@@ -51,6 +55,9 @@ app.use(`${API_PREFIX}/churches-simple`, churchSimpleRoutes);
 app.use(`${API_PREFIX}/admin`, adminStatsRoutes);
 app.use(`${API_PREFIX}/admin/scrapers`, adminScrapersRoutes);
 app.use(`${API_PREFIX}/liturgy`, liturgyRoutes);
+app.use(`${API_PREFIX}/auth`, authRoutes);
+app.use(`${API_PREFIX}/notifications`, notificationRoutes);
+app.use(`${API_PREFIX}/preferences`, preferencesRoutes);
 
 // Serve static frontend (production)
 const publicPath = path.join(__dirname, '../public');
@@ -84,8 +91,9 @@ const startServer = async () => {
   try {
     await initializeDatabase();
     
-    // Start liturgy sync job
+    // Start background jobs
     liturgySyncJob.scheduleDailySync();
+    reminderJob.start();
     
     const server = app.listen(PORT, () => {
       console.log(`🚀 God's Plan API running on http://localhost:${PORT}`);

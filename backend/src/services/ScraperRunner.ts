@@ -7,6 +7,7 @@ import { LiturgyScraper } from '../scrapers/LiturgyScraper';
 import { ChurchWebsiteScraper } from '../scrapers/ChurchWebsiteScraper';
 import { ScraperCallbacks, ScraperLogEntry, ScrapedChurch, ScreencastFrame } from '../scrapers/BaseScraper';
 import { saveChurches } from './ChurchSaver';
+import { APNsService } from './APNsService';
 
 interface ScraperRegistryEntry {
   name: string;
@@ -450,6 +451,40 @@ class ScraperRunner {
               level: 'success',
               message: `Database save complete: ${saveResult.saved} saved, ${saveResult.skipped} skipped (no coords), ${saveResult.errors} errors`,
             });
+
+            // Send push notifications for changed schedules
+            if (saveResult.changedChurchIds.length > 0) {
+              this.pushLog(run.id, {
+                timestamp: new Date().toISOString(),
+                level: 'info',
+                message: `${saveResult.changedChurchIds.length} church(es) with schedule changes — notifying subscribers`,
+              });
+
+              const apns = APNsService.getInstance();
+              const churchRepo = AppDataSource.getRepository(Church);
+              let notifSent = 0;
+              for (const churchId of saveResult.changedChurchIds) {
+                try {
+                  const church = await churchRepo.findOneBy({ id: churchId });
+                  if (church) {
+                    const sent = await apns.sendToSubscribers(
+                      churchId,
+                      `${church.name}`,
+                      'Les horaires de messe ont été mis à jour.',
+                      { churchId },
+                    );
+                    notifSent += sent;
+                  }
+                } catch (notifErr) {
+                  console.error(`Failed to notify for church ${churchId}:`, notifErr);
+                }
+              }
+              this.pushLog(run.id, {
+                timestamp: new Date().toISOString(),
+                level: 'info',
+                message: `Push notifications sent: ${notifSent}`,
+              });
+            }
           }
 
           // Handle stale URLs — mark them in DB so next run re-discovers

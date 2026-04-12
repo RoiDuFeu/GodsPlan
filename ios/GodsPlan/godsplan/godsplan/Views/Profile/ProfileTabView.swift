@@ -11,6 +11,8 @@ struct ProfileTabView: View {
 
     @AppStorage("darkModeEnabled") private var darkModeEnabled = false
     @State private var preferredRite = "Roman"
+    @State private var subscribedChurchIds: Set<String> = []
+    @State private var isSyncingPreferences = false
 
     private let rites = ["Roman", "Tridentin", "Byzantin"]
 
@@ -219,6 +221,10 @@ struct ProfileTabView: View {
             }
         }
         .listStyle(.insetGrouped)
+        .task { await fetchPreferences() }
+        .onChange(of: darkModeEnabled) { _, newValue in
+            syncThemePreference(dark: newValue)
+        }
     }
 
     // MARK: - Provider badge
@@ -273,16 +279,18 @@ struct ProfileTabView: View {
 
             VStack(alignment: .trailing, spacing: 4) {
                 Toggle("", isOn: Binding(
-                    get: { saved.notificationsEnabled },
-                    set: { saved.notificationsEnabled = $0 }
+                    get: { subscribedChurchIds.contains(saved.churchId) },
+                    set: { enabled in
+                        toggleSubscription(for: saved, enabled: enabled)
+                    }
                 ))
                 .labelsHidden()
                 .tint(Color("Gold"))
                 .scaleEffect(0.85, anchor: .trailing)
 
-                Text(saved.notificationsEnabled ? "Notifs activées" : "Notifs off")
+                Text(subscribedChurchIds.contains(saved.churchId) ? "Notifs activées" : "Notifs off")
                     .font(.system(size: 9, weight: .medium))
-                    .foregroundStyle(saved.notificationsEnabled ? Color("Gold") : .secondary)
+                    .foregroundStyle(subscribedChurchIds.contains(saved.churchId) ? Color("Gold") : .secondary)
             }
         }
         .padding(.vertical, 4)
@@ -297,6 +305,68 @@ struct ProfileTabView: View {
         let letters = name.split(separator: " ").prefix(2).compactMap { $0.first }
         let result = String(letters).uppercased()
         return result.isEmpty ? "U" : result
+    }
+
+    // MARK: - Preference sync
+
+    private func fetchPreferences() async {
+        guard let jwt = authStore.jwt else { return }
+        do {
+            let prefs = try await APIService.shared.getPreferences(jwt: jwt)
+            await MainActor.run {
+                subscribedChurchIds = Set(prefs.subscribedChurches)
+                // Sync local toggles from backend
+                for saved in savedChurches {
+                    saved.notificationsEnabled = subscribedChurchIds.contains(saved.churchId)
+                }
+            }
+        } catch {
+            print("Failed to fetch preferences: \(error)")
+        }
+    }
+
+    private func toggleSubscription(for saved: SavedChurch, enabled: Bool) {
+        if enabled {
+            subscribedChurchIds.insert(saved.churchId)
+        } else {
+            subscribedChurchIds.remove(saved.churchId)
+        }
+        saved.notificationsEnabled = enabled
+
+        // Request push permission if first subscription
+        if enabled {
+            Task {
+                let mgr = NotificationManager.shared
+                if !mgr.isAuthorized {
+                    await mgr.requestPermission()
+                }
+            }
+        }
+
+        // Sync to backend
+        guard let jwt = authStore.jwt else { return }
+        Task {
+            do {
+                let payload = UserPreferencesPayload(
+                    subscribedChurches: Array(subscribedChurchIds)
+                )
+                _ = try await APIService.shared.updatePreferences(payload, jwt: jwt)
+            } catch {
+                print("Failed to update subscriptions: \(error)")
+            }
+        }
+    }
+
+    private func syncThemePreference(dark: Bool) {
+        guard let jwt = authStore.jwt else { return }
+        Task {
+            do {
+                let payload = UserPreferencesPayload(theme: dark ? "dark" : "light")
+                _ = try await APIService.shared.updatePreferences(payload, jwt: jwt)
+            } catch {
+                print("Failed to sync theme: \(error)")
+            }
+        }
     }
 
     // MARK: - Google sign-in action
